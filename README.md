@@ -37,9 +37,7 @@ No build step or package manager is required.
 │   ├── js/chart-custom.js           # About consulting chart
 │   └── img/…  video/…               # Page-specific art merged from clones
 ├── scripts/
-│   ├── audit-assets.py              # Check all *.html for missing assets/
-│   ├── prepare-*.py                 # One-off recovery helpers (historical)
-│   └── decode-emails.py             # Email decode utility (contact recovery)
+│   └── audit-assets.py              # Check all *.html for missing assets/
 ├── _reference/                      # Original demo HTML snapshots (gitignored)
 ├── .cursor/skills/website-design-system/   # Design tokens & UI rules
 ├── website-content/                 # Copy and sitemap for the real BMR site
@@ -111,4 +109,4 @@ Forms and newsletter blocks keep demo markup; they need a backend to submit.
 ## `_reference/` and `scripts/`
 
 - `_reference/` holds untouched demo HTML (`original_index6.html`, `about.html`, …). Listed in `.gitignore` — keep local, do not commit.
-- `scripts/prepare-*.py` are recovery-time tools; safe to ignore for day-to-day edits unless re-fetching from the demo.
+- `scripts/audit-assets.py` is optional QA only; the site does not depend on it at runtime.
