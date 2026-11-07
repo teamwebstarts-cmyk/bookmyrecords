@@ -13440,6 +13440,54 @@ footer .footer-btm .social-area li a:hover i {
 .home6-cover-area .eg-card4:hover .card-img .explore-btn {
   transform: translate(-50%, -50%) scale(1);
 }
+
+/* Why Choose Us — symmetric pl--95 / pr--95 */
+.banner-area6 > .container-fluid.one.pl--95.pr--95,
+#our-services > .container-fluid.one.pl--95.pr--95,
+#why-choose-us > .container-fluid.one.pl--95.pr--95 {
+  overflow-x: clip;
+}
+#why-choose-us .why-choose-cards > [class*="col-"] {
+  display: flex;
+}
+#why-choose-us .eg-card-3 {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+#why-choose-us .eg-card-3 .content {
+  flex-grow: 1;
+}
+#why-choose-us .eg-card-3 .sn-and-btn {
+  justify-content: flex-end;
+  align-items: center;
+  padding: 18px 20px;
+  min-height: 50px;
+}
+@media (min-width: 992px) {
+  #why-choose-us > .container-fluid.one > .row.g-lg-4 {
+    --bs-gutter-y: 0;
+  }
+  #why-choose-us .col-lg-5 {
+    padding-right: 48px;
+  }
+  #why-choose-us .section-title1.two h2 {
+    max-width: 650px;
+  }
+}
+@media (max-width: 991.98px) {
+  /* Full-width cards inside same column box as .home6-cover-area .col-lg-12 */
+  #why-choose-us .why-choose-cards {
+    --bs-gutter-x: 0;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  #why-choose-us .why-choose-cards > [class*="col-"] {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
 .home6-cover-area .scrollbar-and-slider-btn {
   gap: 20px;
   padding-top: 20px;

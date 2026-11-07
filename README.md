@@ -18,6 +18,7 @@ Open pages from the repo root, for example:
 | `/faq.html` | `faq.html` | FAQ (accordion) |
 | `/pricing.html` | `pricing.html` | Pricing |
 | `/services1.html` | `services1.html` | Service grid (style 01) |
+| `/service2.html` | `service2.html` | Service grid (style 02) |
 | `/service-details.html` | `service-details.html` | Service details |
 | `/terms-conditions.html` | `terms-conditions.html` | Terms & conditions |
 
@@ -29,8 +30,8 @@ No build step or package manager is required.
 .
 ├── index.html                       # Home 06
 ├── about.html, contact.html, faq.html, pricing.html
-├── services1.html, service-details.html, terms-conditions.html
-├── assets/                          # Shared CSS, JS, fonts, images, video (130 files)
+├── services1.html, service2.html, service-details.html, terms-conditions.html
+├── assets/                          # Shared CSS, JS, fonts, images, video
 │   ├── css/style.css                # Custom styles (all pages)
 │   ├── js/main.js                   # Shared interactions
 │   ├── js/chart.min.js              # Loaded on inner pages (demo parity)
@@ -63,6 +64,7 @@ Every page uses the same vendor + custom bundle:
 | **About** | `inner-pages/braadcrumb-bg2.jpg`, `about-mission-section-img.jpg`, `home2/about-img.jpg`, testimonial/people images, `video/video-bg2.mp4`, `js/chart-custom.js` |
 | **FAQ / Contact / Pricing / Terms** | `white-logo.svg`, `inner-pages/braadcrumb-bg5.jpg`; FAQ adds `faq-img.jpg` |
 | **Services1** | `braadcrumb-bg1.jpg`, `home2/services-01.jpg`–`06.jpg`, `shape-01.png`, `cover-left-vec.png` |
+| **Service2** | `braadcrumb-bg1.jpg`, `home4/services-img-01.jpg`–`06.jpg`, `right-arrow.png`, `people-01.png`–`06.png` |
 | **Service details** | `braadcrumb-bg6.jpg`, `service-details-solution-img.jpg`, `service-details-advantage-img.jpg` |
 
 Breadcrumb JPEGs use the template spelling `braadcrumb` in filenames.
@@ -88,6 +90,7 @@ Audits every `*.html` at the repo root (`src`, `href`, and inline `url(assets/..
 - Contact: map iframe (external), form markup (no local submit backend).
 - Service details: solution/advantage imagery, testimonial swiper.
 - Services1: six service cards and people row.
+- Service2: home4 service cards with hover arrows, six consultants.
 
 ## Where to edit
 
