@@ -3417,6 +3417,7 @@ body.tt-magic-cursor #magic-cursor {
   left: 50%;
   top: 24px;
   transform: translateX(-50%);
+  z-index: 999;
 }
 @media (max-width: 991px) {
   .header-area.style-4 {
@@ -3431,6 +3432,7 @@ body.tt-magic-cursor #magic-cursor {
   align-items: center;
   margin: 0px 4%;
   border: 1px solid #EEE;
+  background: var(--white-color);
   transition: all 0.8s ease-out 0s;
   gap: 30px;
 }
@@ -4152,6 +4154,39 @@ body.tt-magic-cursor #magic-cursor {
     justify-content: center;
     padding: 18px 37px;
     width: 100%;
+  }
+}
+
+/* Inner pages: style-4 header over breadcrumb (index keeps solid .header-wrap) */
+body:has(.breadcrumb-section) .header-area.style-4 .header-wrap {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+body:has(.breadcrumb-section) .header-area.style-4 .header-logo img,
+body:has(.breadcrumb-section) .header-area.style-4 .mobile-logo-wrap img {
+  filter: brightness(0) invert(1);
+}
+body:has(.breadcrumb-section) .header-area.style-4 .menu-wrap .main-menu ul > li > a {
+  color: var(--white-color);
+}
+body:has(.breadcrumb-section) .header-area.style-4 .menu-wrap .main-menu ul > li:hover > a {
+  border-color: rgba(255, 255, 255, 0.45);
+}
+body:has(.breadcrumb-section) .header-area.style-4 .menu-wrap .main-menu ul > li.active > a {
+  border-color: rgba(255, 255, 255, 0.65);
+}
+body:has(.breadcrumb-section) .header-area.style-4 .menu-wrap .main-menu ul > li i {
+  color: var(--white-color);
+}
+@media (max-width: 991px) {
+  body:has(.breadcrumb-section) .header-area.style-4 .menu-wrap .nav-right .mobile-menu-btn span {
+    background-color: var(--white-color);
+  }
+  body:has(.breadcrumb-section) .header-area.style-4 .menu-wrap .nav-right .mobile-menu-btn span::before,
+  body:has(.breadcrumb-section) .header-area.style-4 .menu-wrap .nav-right .mobile-menu-btn span::after {
+    background-color: var(--white-color);
   }
 }
 
