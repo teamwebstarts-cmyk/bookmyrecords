@@ -11798,7 +11798,7 @@ footer .footer-btm .social-area li a:hover i {
   line-height: 1;
 }
 .banner-area6 .banner-left-content .btn-group li.success-rate {
-  color: var(--title-color);
+  color: var(--paragraph-color);
   font-family: var(--font-montserrat);
   font-size: 16px;
   font-weight: 400;
@@ -11822,6 +11822,38 @@ footer .footer-btm .social-area li a:hover i {
   left: -20px;
   top: 50%;
   transform: translateY(-50%);
+}
+.banner-area6 .banner-left-content .btn-group li.success-rate.hero-stats-chip {
+  color: var(--paragraph-color);
+  padding: 12px 22px;
+  gap: 0;
+}
+.banner-area6 .banner-left-content .btn-group li.success-rate.hero-stats-chip .hero-stat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.banner-area6 .banner-left-content .btn-group li.success-rate.hero-stats-chip .hero-stat + .hero-stat {
+  margin-left: 28px;
+  padding-left: 28px;
+  border-left: 1px solid rgba(13, 23, 32, 0.12);
+}
+.banner-area6 .banner-left-content .btn-group li.success-rate.hero-stats-chip .hero-stat__value {
+  color: var(--primary-color);
+  font-family: var(--font-marcellus);
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1;
+}
+.banner-area6 .banner-left-content .btn-group li.success-rate.hero-stats-chip .hero-stat__value::after {
+  display: none;
+}
+.banner-area6 .banner-left-content .btn-group li.success-rate.hero-stats-chip .hero-stat__label {
+  color: var(--paragraph-color);
+  font-family: var(--font-montserrat);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.2;
 }
 .banner-area6 .banner-left-content .btn-group li a {
   color: var(--title-color);
