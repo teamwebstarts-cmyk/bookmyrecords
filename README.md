@@ -1,58 +1,114 @@
 # Project Guide
 
-A static business-consulting website. This guide helps agents and contributors find the right files, understand how the page is assembled, and run it locally.
+Static multi-page Aploxn template site at the repository root. Shared `assets/` backs every HTML file. This guide is for agents and contributors navigating the tree, running pages locally, and checking assets.
 
 ## Quick start
-
-Serve the repository root so relative asset paths resolve correctly:
 
 ```powershell
 python -m http.server 8765
 ```
 
-Open <http://localhost:8765/>. No package manager, build step, or compilation is required.
+Open pages from the repo root, for example:
+
+| URL | File | Role |
+|-----|------|------|
+| `/` or `/index.html` | `index.html` | Home 06 (main entry) |
+| `/about.html` | `about.html` | About |
+| `/contact.html` | `contact.html` | Contact |
+| `/faq.html` | `faq.html` | FAQ (accordion) |
+| `/pricing.html` | `pricing.html` | Pricing |
+| `/services1.html` | `services1.html` | Service grid (style 01) |
+| `/service-details.html` | `service-details.html` | Service details |
+| `/terms-conditions.html` | `terms-conditions.html` | Terms & conditions |
+
+No build step or package manager is required.
 
 ## Repository map
 
 ```text
 .
-├── index.html                         # Single-page site entry point and section markup
-├── assets/
-│   ├── css/
-│   │   ├── style.css                  # Main site styles and responsive rules
-│   │   ├── bootstrap.min.css           # Layout grid and framework styles
-│   │   ├── swiper-bundle.min.css       # Carousel styles
-│   │   ├── slick.css                   # Slick slider styles
-│   │   └── fonts/                      # Bootstrap Icons and Slick fonts
-│   ├── js/
-│   │   ├── main.js                    # Site interactions and slider configuration
-│   │   └── ...                         # jQuery and vendor libraries
-│   ├── fonts/                          # Boxicons font files
-│   ├── img/                            # Logos, section imagery, and illustrations
-│   └── video/                          # Background video assets
-├── .agents/skills/website-design-system/
-│   ├── SKILL.md                        # Design-system entry point and implementation rules
-│   └── references/                     # Detailed design and implementation references
-├── _reference/                         # Local-only reference material; excluded from Git
-└── README.md                           # This guide
+├── index.html                       # Home 06
+├── about.html, contact.html, faq.html, pricing.html
+├── services1.html, service-details.html, terms-conditions.html
+├── assets/                          # Shared CSS, JS, fonts, images, video (130 files)
+│   ├── css/style.css                # Custom styles (all pages)
+│   ├── js/main.js                   # Shared interactions
+│   ├── js/chart.min.js              # Loaded on inner pages (demo parity)
+│   ├── js/chart-custom.js           # About consulting chart
+│   └── img/…  video/…               # Page-specific art merged from clones
+├── scripts/
+│   ├── audit-assets.py              # Check all *.html for missing assets/
+│   ├── prepare-*.py                 # One-off recovery helpers (historical)
+│   └── decode-emails.py             # Email decode utility (contact recovery)
+├── _reference/                      # Original demo HTML snapshots (gitignored)
+├── .cursor/skills/website-design-system/   # Design tokens & UI rules
+├── website-content/                 # Copy and sitemap for the real BMR site
+├── tasks/                           # Agent task specs (e.g. clone.md)
+└── README.md
 ```
 
-## Where to make changes
+## Shared stack
 
-- **Page content and structure:** `index.html`. Sections are marked with start/end HTML comments. Asset URLs are relative to the repository root.
-- **Visual styling:** `assets/css/style.css`. It contains the custom component styles and responsive behavior; vendor stylesheets are separate. Follow the existing variables, class names, and section organization. Append new custom styles rather than modifying vendor files.
-- **Interactions:** `assets/js/main.js`. This initializes the page's menus, sliders, counters, cursor effects, and other behaviors. Vendor libraries are in the same directory; avoid editing them.
-- **Images, fonts, and video:** use the appropriate subdirectory under `assets/`. Keep filenames and letter casing aligned with references in HTML/CSS; paths are case-sensitive on Linux hosts.
-- **Design conventions:** start with `.agents/skills/website-design-system/SKILL.md`. Read the relevant file in `references/` for tokens, typography, layout, components, motion, responsive behavior, assets, or implementation guidelines.
+Every page uses the same vendor + custom bundle:
 
-## Working safely
+- **CSS:** Bootstrap, Swiper, Slick, Boxicons, Bootstrap Icons, `animate.min.css`, `style.css` (home also loads `aos.css`).
+- **JS:** jQuery 3.6, Popper, Bootstrap, Swiper, Slick, Waypoints, CounterUp, Isotope, Fancybox, GSAP (+ ScrollTrigger), parallax/smooth-scroll helpers, marquee, `main.js`.
+- **Paths:** Always `assets/...` relative to the repo root.
 
-1. Preserve the existing static architecture; there is no build system or dependency manifest.
-2. Keep paths relative to the repository root and verify referenced assets exist.
-3. Check the page at desktop and mobile widths after changing layout or behavior. Useful widths include 1440px, 991px, 767px, and 576px.
-4. Check the browser console and network panel for errors or missing assets.
-5. Keep `_reference/` local. It is intentionally listed in `.gitignore` and should not be committed.
+`style.css` and `main.js` are identical across all shipped pages (SHA-256 verified during merge). Clone folders duplicated the same files; only **35** extra images/scripts/videos were merged into root `assets/`.
 
-## Notes
+## Page-specific assets (merged into `assets/`)
 
-The site is a single page. Some navigation links point to pages not included in this repository. The `.cursor/skills/website-design-system/` directory contains the project-specific rules and source-derived references for maintaining a consistent UI.
+| Area | Notable files |
+|------|----------------|
+| **Home** (`index.html`) | `video/video-bg3.mp4`, `home6/*`, hero/blog/client assets |
+| **About** | `inner-pages/braadcrumb-bg2.jpg`, `about-mission-section-img.jpg`, `home2/about-img.jpg`, testimonial/people images, `video/video-bg2.mp4`, `js/chart-custom.js` |
+| **FAQ / Contact / Pricing / Terms** | `white-logo.svg`, `inner-pages/braadcrumb-bg5.jpg`; FAQ adds `faq-img.jpg` |
+| **Services1** | `braadcrumb-bg1.jpg`, `home2/services-01.jpg`–`06.jpg`, `shape-01.png`, `cover-left-vec.png` |
+| **Service details** | `braadcrumb-bg6.jpg`, `service-details-solution-img.jpg`, `service-details-advantage-img.jpg` |
+
+Breadcrumb JPEGs use the template spelling `braadcrumb` in filenames.
+
+## Local patches (all pages)
+
+- Cloudflare obfuscated emails replaced with plain `mailto:` addresses (`infoaploxn@gmail.com`, `info@gmail.com`, and contact-only variants where used).
+- Cloudflare `email-decode.min.js` removed from HTML.
+
+## Verification
+
+```powershell
+python scripts/audit-assets.py
+```
+
+Audits every `*.html` at the repo root (`src`, `href`, and inline `url(assets/...)`). Exit code `0` means no missing files. After the flatten merge, all listed pages reported **0 missing** refs.
+
+**Behavioral smoke checks (manual or browser):**
+
+- Home: Swiper sliders, marquee, counters, magic cursor (desktop), `video-bg3.mp4`.
+- About: testimonial swiper, CounterUp, Chart.js via `chart-custom.js`, `video-bg2.mp4`.
+- FAQ: seven Bootstrap accordions.
+- Contact: map iframe (external), form markup (no local submit backend).
+- Service details: solution/advantage imagery, testimonial swiper.
+- Services1: six service cards and people row.
+
+## Where to edit
+
+| Goal | Location |
+|------|----------|
+| Page markup | Matching `*.html` at repo root |
+| Global styles | `assets/css/style.css` (append; don’t edit vendor CSS) |
+| Shared behavior | `assets/js/main.js` |
+| New images/video | Under `assets/img/` or `assets/video/` |
+| Brand/content for BMR | `website-content/` (not wired into HTML yet) |
+| Visual conventions | `.cursor/skills/website-design-system/SKILL.md` |
+
+## Scope & nav
+
+Megamenu still links to other demo routes (`index2.html`, `blog-grid.html`, …) that are **not** in this repo. Shipped pages cross-link among the table above.
+
+Forms and newsletter blocks keep demo markup; they need a backend to submit.
+
+## `_reference/` and `scripts/`
+
+- `_reference/` holds untouched demo HTML (`original_index6.html`, `about.html`, …). Listed in `.gitignore` — keep local, do not commit.
+- `scripts/prepare-*.py` are recovery-time tools; safe to ignore for day-to-day edits unless re-fetching from the demo.
