@@ -15160,6 +15160,19 @@ footer .footer-btm .social-area li a:hover i {
     padding-top: 15px;
   }
 }
+.mission-section .mission-content-wrap .mission-content-top .section-title1.w-890 + h5 {
+  margin-top: 30px;
+}
+@media (max-width: 1199px) {
+  .mission-section .mission-content-wrap .mission-content-top .section-title1.w-890 + h5 {
+    margin-top: 25px;
+  }
+}
+@media (max-width: 576px) {
+  .mission-section .mission-content-wrap .mission-content-top .section-title1.w-890 + h5 {
+    margin-top: 20px;
+  }
+}
 .mission-section .mission-content-wrap .mission-content-top h5 {
   color: var(--title-color);
   font-family: var(--font-marcellus);
@@ -18333,4 +18346,75 @@ footer .footer-btm .social-area li a:hover i {
 }
 .contact-page .single-location ul {
   max-width: 100%;
+}
+
+/*=====================================
+ 67. About Page Section Rhythm
+========================================*/
+body.about-page .mission-section,
+body.about-page #our-people.home6-people-section {
+  padding-top: 130px;
+  padding-bottom: 130px;
+  margin-bottom: 0;
+}
+body.about-page .about-section2 {
+  margin-bottom: 0;
+}
+body.about-page .about-section2 .about-top {
+  padding-top: 130px;
+  padding-bottom: 130px;
+}
+body.about-page .about-section2 .about-top .about-content {
+  max-width: 100%;
+}
+body.about-page .about-section2 .about-top .section-title1.white h2 {
+  max-width: none;
+}
+body.about-page .contact-section2 {
+  padding-top: 130px;
+  padding-bottom: 130px;
+}
+body.about-page .contact-section2 .contact-content {
+  max-width: 1066px;
+}
+body.about-page .contact-section2 .contact-content h2 {
+  color: var(--title-color);
+  font-family: var(--font-marcellus);
+  font-size: 40px;
+  font-weight: 400;
+  margin-bottom: 0;
+  margin-top: 0;
+  max-width: 740px;
+  line-height: 1.25;
+}
+@media (max-width: 1199px) {
+  body.about-page .contact-section2 .contact-content h2 {
+    font-size: 30px;
+  }
+}
+body.about-page .contact-section2 .contact-content p {
+  color: var(--title-color);
+  font-family: var(--font-montserrat);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.65;
+  max-width: 560px;
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  body.about-page .mission-section,
+  body.about-page #our-people.home6-people-section,
+  body.about-page .about-section2 .about-top,
+  body.about-page .contact-section2 {
+    padding-top: 100px;
+    padding-bottom: 100px;
+  }
+}
+@media (max-width: 991px) {
+  body.about-page .mission-section,
+  body.about-page #our-people.home6-people-section,
+  body.about-page .about-section2 .about-top,
+  body.about-page .contact-section2 {
+    padding-top: 90px;
+    padding-bottom: 90px;
+  }
 } /*# sourceMappingURL=style.css.map */
