@@ -13738,6 +13738,36 @@ footer .footer-btm .social-area li a:hover i {
   background: rgba(255, 255, 255, 0.4);
   color: var(--title-color);
 }
+/* Home: process sits before About (not Event overlap) */
+#our-process.working-process-section.two {
+  padding: 100px 0 100px;
+}
+@media (max-width: 991px) {
+  #our-process.working-process-section.two {
+    padding-top: 90px;
+    padding-bottom: 90px;
+  }
+}
+#our-process > .container-fluid.one.pl--95.pr--95 {
+  overflow-x: clip;
+}
+/* Phone only: full-width step cards (tablet keeps col-sm-6 staggered layout) */
+@media (max-width: 575.98px) {
+  #our-process .our-process-steps {
+    --bs-gutter-x: 0;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  #our-process .our-process-steps > [class*="col-"] {
+    display: block !important;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  #our-process .our-process-steps .step-card1 {
+    max-width: none;
+    width: 100%;
+  }
+}
 
 /*=====================================
  53. Home6 Event Section
