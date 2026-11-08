@@ -16991,6 +16991,9 @@ footer .footer-btm .social-area li a:hover i {
   background-color: #dfebf7;
   padding: 100px 0;
 }
+#home-faqs.service-details-faq-section {
+  margin-bottom: 0;
+}
 @media (max-width: 991px) {
   .service-details-faq-section {
     padding: 90px 0;
