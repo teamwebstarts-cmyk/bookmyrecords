@@ -13444,8 +13444,43 @@ footer .footer-btm .social-area li a:hover i {
 /* Why Choose Us — symmetric pl--95 / pr--95 */
 .banner-area6 > .container-fluid.one.pl--95.pr--95,
 #our-services > .container-fluid.one.pl--95.pr--95,
-#why-choose-us > .container-fluid.one.pl--95.pr--95 {
+#why-choose-us > .container-fluid.one.pl--95.pr--95,
+#client-testimonials > .container-fluid.one.pl--95.pr--95 {
   overflow-x: clip;
+}
+#client-testimonials.testimonial-section {
+  padding-top: 100px;
+}
+@media (max-width: 991px) {
+  #client-testimonials.testimonial-section {
+    padding-top: 90px;
+  }
+}
+/* Match #our-process section title row (section-title1 one) */
+#our-process .col-lg-12 > .section-title1.one,
+#client-testimonials .col-lg-12 > .section-title1.one {
+  flex: 1 1 100%;
+  width: 100%;
+  max-width: 1066px;
+}
+#our-process .section-title1.one > h2,
+#client-testimonials .section-title1.one > h2 {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+#client-testimonials .testimonial-card .author-area .author-img {
+  width: 70px;
+  height: 70px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  overflow: hidden;
+}
+#client-testimonials .testimonial-card .author-area .author-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
 }
 #why-choose-us .why-choose-cards > [class*="col-"] {
   display: flex;
