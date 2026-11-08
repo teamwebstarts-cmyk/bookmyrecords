@@ -16994,6 +16994,32 @@ footer .footer-btm .social-area li a:hover i {
 #home-faqs.service-details-faq-section {
   margin-bottom: 0;
 }
+#home-contact-cta.contact-section2 .contact-content {
+  max-width: 1066px;
+}
+#home-contact-cta.contact-section2 .contact-content h2 {
+  color: var(--title-color);
+  font-family: var(--font-marcellus);
+  font-size: 40px;
+  font-weight: 400;
+  margin-bottom: 0;
+  margin-top: 0;
+  max-width: 740px;
+  line-height: 1.25;
+}
+@media (max-width: 1199px) {
+  #home-contact-cta.contact-section2 .contact-content h2 {
+    font-size: 30px;
+  }
+}
+#home-contact-cta.contact-section2 .contact-content p {
+  color: var(--title-color);
+  font-family: var(--font-montserrat);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.65;
+  max-width: 560px;
+}
 @media (max-width: 991px) {
   .service-details-faq-section {
     padding: 90px 0;
