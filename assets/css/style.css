@@ -18352,7 +18352,9 @@ footer .footer-btm .social-area li a:hover i {
  67. About Page Section Rhythm
 ========================================*/
 body.about-page .mission-section,
-body.about-page #our-people.home6-people-section {
+body.about-page #why-choose-us.solution-section,
+body.about-page #our-people.home6-people-section,
+body.about-page #client-testimonials.testimonial-section {
   padding-top: 130px;
   padding-bottom: 130px;
   margin-bottom: 0;
@@ -18402,7 +18404,9 @@ body.about-page .contact-section2 .contact-content p {
 }
 @media (min-width: 992px) and (max-width: 1199px) {
   body.about-page .mission-section,
+  body.about-page #why-choose-us.solution-section,
   body.about-page #our-people.home6-people-section,
+  body.about-page #client-testimonials.testimonial-section,
   body.about-page .about-section2 .about-top,
   body.about-page .contact-section2 {
     padding-top: 100px;
@@ -18411,7 +18415,9 @@ body.about-page .contact-section2 .contact-content p {
 }
 @media (max-width: 991px) {
   body.about-page .mission-section,
+  body.about-page #why-choose-us.solution-section,
   body.about-page #our-people.home6-people-section,
+  body.about-page #client-testimonials.testimonial-section,
   body.about-page .about-section2 .about-top,
   body.about-page .contact-section2 {
     padding-top: 90px;
