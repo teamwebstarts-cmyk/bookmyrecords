@@ -7264,6 +7264,13 @@ footer .footer-widget .contact-area .hotline-area {
 }
 footer .footer-widget .contact-area .hotline-area .icon {
   position: relative;
+  min-width: 35px;
+  height: 35px;
+  background-color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 footer .footer-widget .contact-area .hotline-area .icon::after {
   content: "";
@@ -7274,6 +7281,11 @@ footer .footer-widget .contact-area .hotline-area .icon::after {
   transform: translateY(-50%);
   right: -10px;
   background-color: rgba(255, 255, 255, 0.1);
+}
+footer .footer-widget .contact-area .hotline-area .icon i {
+  color: var(--white-color);
+  font-size: 18px;
+  line-height: 1;
 }
 footer .footer-widget .contact-area .hotline-area .icon svg {
   fill: #cacaca;
