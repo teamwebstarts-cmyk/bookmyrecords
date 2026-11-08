@@ -13475,8 +13475,8 @@ footer .footer-btm .social-area li a:hover i {
     max-width: 650px;
   }
 }
-@media (max-width: 991.98px) {
-  /* Full-width cards inside same column box as .home6-cover-area .col-lg-12 */
+@media (max-width: 767.98px) {
+  /* Phone: full-width cards, same bleed as services row */
   #why-choose-us .why-choose-cards {
     --bs-gutter-x: 0;
     margin-left: 0;
