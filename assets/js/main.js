@@ -101,12 +101,16 @@
         jQuery(this).parent().siblings().children('.active').removeClass('active');
     });
 
-    // sticky header
-
-    // window.addEventListener('scroll', function () {
-    //     const header = document.querySelector('header.header-area');
-    //     header.classList.toggle("sticky", window.scrollY > 0);
-    // });
+    // Style-4 fixed header: solid nav on scroll (inner pages with breadcrumb hero)
+    (function () {
+        const header = document.querySelector('header.header-area.style-4');
+        if (!header) return;
+        const onScroll = function () {
+            header.classList.toggle('is-stuck', window.scrollY > 60);
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+    })();
     // AOS
 
     //Counter up
