@@ -14179,6 +14179,34 @@ footer .footer-btm .social-area li a:hover i {
     background-position: 80%;
   }
 }
+/* Intro replaces breadcrumb trail — keep band height / bg crop aligned with default hero */
+.breadcrumb-section:has(.banner-intro) {
+  padding-bottom: 148px;
+}
+@media (max-width: 1499px) {
+  .breadcrumb-section:has(.banner-intro) {
+    padding-bottom: 118px;
+  }
+}
+@media (max-width: 991px) {
+  .breadcrumb-section:has(.banner-intro) {
+    padding-bottom: 98px;
+  }
+}
+@media (max-width: 767px) {
+  .breadcrumb-section:has(.banner-intro) {
+    padding-bottom: 88px;
+  }
+}
+@media (max-width: 576px) {
+  .breadcrumb-section:has(.banner-intro) {
+    padding-bottom: 80px;
+  }
+}
+.breadcrumb-section:has(.banner-intro) .banner-content h1 {
+  line-height: 1.12;
+  margin-bottom: 0;
+}
 .breadcrumb-section.people-details .banner-content h1 {
   margin-bottom: 0;
 }
@@ -14231,6 +14259,30 @@ footer .footer-btm .social-area li a:hover i {
 @media (max-width: 576px) {
   .breadcrumb-section .banner-content h1 {
     font-size: 40px;
+  }
+}
+.breadcrumb-section .banner-content .banner-intro {
+  color: rgba(255, 255, 255, 0.9);
+  font-family: var(--font-montserrat);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.55;
+  max-width: 720px;
+  margin: 14px 0 0;
+}
+@media (max-width: 991px) {
+  .breadcrumb-section .banner-content .banner-intro {
+    font-size: 17px;
+    max-width: 100%;
+    margin-top: 12px;
+    line-height: 1.55;
+  }
+}
+@media (max-width: 576px) {
+  .breadcrumb-section .banner-content .banner-intro {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-top: 10px;
   }
 }
 .breadcrumb-section .banner-content .breadcrumb-list {
@@ -18423,4 +18475,58 @@ body.about-page .contact-section2 .contact-content p {
     padding-top: 90px;
     padding-bottom: 90px;
   }
-} /*# sourceMappingURL=style.css.map */
+}
+
+/* Accounting outsourcing — service cards grid */
+#accounting-services .row.g-4 {
+  align-items: stretch;
+}
+#accounting-services .row.g-4 > [class*="col-"] {
+  display: flex;
+}
+#accounting-services .eg-card-2.style-2 {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  background-color: #f4f9fd;
+  border: 1px solid #dfebf7;
+  transition: background-color 0.35s ease, border-color 0.35s ease;
+}
+#accounting-services .eg-card-2.style-2 .icon svg {
+  fill: var(--primary-color);
+  opacity: 0.9;
+}
+#accounting-services .eg-card-2.style-2 .content h5 {
+  transition: color 0.35s ease;
+}
+#accounting-services .eg-card-2.style-2 .content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+#accounting-services .eg-card-2.style-2 .content p {
+  flex: 1;
+  margin-bottom: 0;
+}
+#accounting-services .eg-card-2.style-2:hover {
+  background-color: var(--white-color);
+  border-color: var(--primary-color);
+}
+#accounting-services .eg-card-2.style-2:hover .icon svg {
+  fill: var(--primary-color);
+  opacity: 1;
+}
+#accounting-services .eg-card-2.style-2:hover .content h5 {
+  color: var(--primary-color);
+}
+@media (min-width: 992px) {
+  #accounting-services .eg-card-2.style-2 {
+    min-height: 268px;
+  }
+}
+/*# sourceMappingURL=style.css.map */
