@@ -1,70 +1,115 @@
-# Aploxn — index6.html Clone (High-Fidelity Recovery)
+# Project Guide
 
-Source: https://demo.egenslab.com/html/aploxn/preview/index6.html
-Recovered: November 5, 2026
+Static multi-page Aploxn template site at the repository root. Shared `assets/` backs every HTML file. This guide is for agents and contributors navigating the tree, running pages locally, and checking assets.
 
-## What this is
+## Quick start
 
-A direct recovery of the original page. The cloned page reuses the ORIGINAL
-HTML, CSS, JavaScript, images, fonts, icon fonts and video — downloaded from
-the reference site — with only the minimal edits needed to run locally:
+```powershell
+python -m http.server 8765
+```
 
-1. Cloudflare-obfuscated emails decoded and repaired
-   (`infoaploxn@gmail.com` in header, `info@gmail.com` in the contact area
-   and footer) — the `email-decode.min.js` Cloudflare script was removed.
-2. No other functional or structural edits. Layout, interactions and assets
-   are byte-for-byte the original template stack.
+Open pages from the repo root, for example:
 
-## Running
+| URL | File | Role |
+|-----|------|------|
+| `/` or `/index.html` | `index.html` | Home 06 (main entry) |
+| `/about.html` | `about.html` | About |
+| `/contact.html` | `contact.html` | Contact |
+| `/faq.html` | `faq.html` | FAQ (accordion) |
+| `/pricing.html` | `pricing.html` | Pricing |
+| `/services1.html` | `services1.html` | Service grid (style 01) |
+| `/service2.html` | `service2.html` | Service grid (style 02) |
+| `/service-details.html` | `service-details.html` | Service details |
+| `/terms-conditions.html` | `terms-conditions.html` | Terms & conditions |
 
-The page is a static site. Serve it with any HTTP server from this directory::
+No build step or package manager is required.
 
-    python -m http.server 8765
-    # then open http://localhost:8765/index.html
+## Repository map
 
-(Opening `index.html` directly from disk also mostly works, but a server is
-recommended so video/fonts load exactly as deployed.)
+```text
+.
+├── index.html                       # Home 06
+├── about.html, contact.html, faq.html, pricing.html
+├── services1.html, service2.html, service-details.html, terms-conditions.html
+├── assets/                          # Shared CSS, JS, fonts, images, video
+│   ├── css/style.css                # Custom styles (all pages)
+│   ├── js/main.js                   # Shared interactions
+│   ├── js/chart.min.js              # Loaded on inner pages (demo parity)
+│   ├── js/chart-custom.js           # About consulting chart
+│   └── img/…  video/…               # Page-specific art merged from clones
+├── scripts/
+│   └── audit-assets.py              # Check all *.html for missing assets/
+├── _reference/                      # Original demo HTML snapshots (gitignored)
+├── .cursor/skills/website-design-system/   # Design tokens & UI rules
+├── website-content/                 # Copy and sitemap for the real BMR site
+├── tasks/                           # Agent task specs (e.g. clone.md)
+└── README.md
+```
 
-## Contents
+## Shared stack
 
-- `index.html` — the page (entry point)
-- `assets/css/` — 10 stylesheets (bootstrap, bootstrap-icons, swiper, slick,
-  animate, fancybox, boxicons, aos, main `style.css`) + `fonts/` (bootstrap
-  icons, slick icon font, ajax-loader)
-- `assets/js/` — 18 scripts (jQuery, popper, bootstrap, swiper, slick,
-  waypoints, AOS, counterup, isotope, fancybox, GSAP, ScrollTrigger,
-  simpleParallax, SmoothScroll, TweenMax, marquee, `main.js`)
-- `assets/fonts/` — boxicons font family (eot/ttf/woff/woff2/svg)
-- `assets/img/` — 51 images (home1/home2/home4/home5/home6 assets used by
-  this page, incl. all CSS background images)
-- `assets/video/video-bg3.mp4` — hero background video (19.7 MB)
-- `_reference/original_index6.html` — untouched original HTML as downloaded (gitignored)
+Every page uses the same vendor + custom bundle:
 
-## Verification performed
+- **CSS:** Bootstrap, Swiper, Slick, Boxicons, Bootstrap Icons, `animate.min.css`, `style.css` (home also loads `aos.css`).
+- **JS:** jQuery 3.6, Popper, Bootstrap, Swiper, Slick, Waypoints, CounterUp, Isotope, Fancybox, GSAP (+ ScrollTrigger), parallax/smooth-scroll helpers, marquee, `main.js`.
+- **Paths:** Always `assets/...` relative to the repo root.
 
-- Rendered locally in Chromium at 1440×900, 1280×800, 768×1024, 390×844.
-- 0 console errors, 0 failed network requests, 0 broken images.
-- All 5 icon/web fonts load; all 3 Swiper sliders advance via their controls.
-- Mobile menu opens (`show-menu`) and submenu accordion works.
-- Hover dropdown menu works on desktop.
-- Marquee runs (jQuery-marquee, 25 s loop), counters run (CounterUp),
-  back-to-top circle button scrolls to top; background video plays.
-- Section-by-section DOM geometry matches the original EXACTLY
-  (9 measured landmarks identical to the pixel at 1440×900; total page
-  height 9770 px on both; mobile height 16275 px on both).
-## Known differences (expected, non-design)
+`style.css` and `main.js` are identical across all shipped pages (SHA-256 verified during merge). Clone folders duplicated the same files; only **35** extra images/scripts/videos were merged into root `assets/`.
 
-- Pixel differences confined to JS-animated regions (banner service slider,
-  testimonial slider, event slider, bottom marquee strip, parallax images,
-  video frame). Two captures of the SAME page seconds apart differ in the
-  same regions because these elements move continuously.
-- Numerals rendered after CounterUp animation completes may show final
-  values vs. mid-animation values depending on capture timing.
-- The megamenu links point to template pages that are NOT part of this
-  single-page scope (per task scope restriction). Clicking them 404s
-  locally; the original navigates to sibling demo pages.
+## Page-specific assets (merged into `assets/`)
 
-## Unavailable resources
+| Area | Notable files |
+|------|----------------|
+| **Home** (`index.html`) | `video/video-bg3.mp4`, `home6/*`, hero/blog/client assets |
+| **About** | `inner-pages/braadcrumb-bg2.jpg`, `about-mission-section-img.jpg`, `home2/about-img.jpg`, testimonial/people images, `video/video-bg2.mp4`, `js/chart-custom.js` |
+| **FAQ / Contact / Pricing / Terms** | `white-logo.svg`, `inner-pages/braadcrumb-bg5.jpg`; FAQ adds `faq-img.jpg` |
+| **Services1** | `braadcrumb-bg1.jpg`, `home2/services-01.jpg`–`06.jpg`, `shape-01.png`, `cover-left-vec.png` |
+| **Service2** | `braadcrumb-bg1.jpg`, `home4/services-img-01.jpg`–`06.jpg`, `right-arrow.png`, `people-01.png`–`06.png` |
+| **Service details** | `braadcrumb-bg6.jpg`, `service-details-solution-img.jpg`, `service-details-advantage-img.jpg` |
 
-None. Every resource the page requests (63 HTML references + 29 CSS url()
-references) was recovered and verified present.
+Breadcrumb JPEGs use the template spelling `braadcrumb` in filenames.
+
+## Local patches (all pages)
+
+- Cloudflare obfuscated emails replaced with plain `mailto:` addresses (`infoaploxn@gmail.com`, `info@gmail.com`, and contact-only variants where used).
+- Cloudflare `email-decode.min.js` removed from HTML.
+
+## Verification
+
+```powershell
+python scripts/audit-assets.py
+```
+
+Audits every `*.html` at the repo root (`src`, `href`, and inline `url(assets/...)`). Exit code `0` means no missing files. After the flatten merge, all listed pages reported **0 missing** refs.
+
+**Behavioral smoke checks (manual or browser):**
+
+- Home: Swiper sliders, marquee, counters, magic cursor (desktop), `video-bg3.mp4`.
+- About: testimonial swiper, CounterUp, Chart.js via `chart-custom.js`, `video-bg2.mp4`.
+- FAQ: seven Bootstrap accordions.
+- Contact: map iframe (external), form markup (no local submit backend).
+- Service details: solution/advantage imagery, testimonial swiper.
+- Services1: six service cards and people row.
+- Service2: home4 service cards with hover arrows, six consultants.
+
+## Where to edit
+
+| Goal | Location |
+|------|----------|
+| Page markup | Matching `*.html` at repo root |
+| Global styles | `assets/css/style.css` (append; don’t edit vendor CSS) |
+| Shared behavior | `assets/js/main.js` |
+| New images/video | Under `assets/img/` or `assets/video/` |
+| Brand/content for BMR | `website-content/` (not wired into HTML yet) |
+| Visual conventions | `.cursor/skills/website-design-system/SKILL.md` |
+
+## Scope & nav
+
+Megamenu still links to other demo routes (`index2.html`, `blog-grid.html`, …) that are **not** in this repo. Shipped pages cross-link among the table above.
+
+Forms and newsletter blocks keep demo markup; they need a backend to submit.
+
+## `_reference/` and `scripts/`
+
+- `_reference/` holds untouched demo HTML (`original_index6.html`, `about.html`, …). Listed in `.gitignore` — keep local, do not commit.
+- `scripts/audit-assets.py` is optional QA only; the site does not depend on it at runtime.

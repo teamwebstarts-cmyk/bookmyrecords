@@ -5,7 +5,9 @@ How to extend the site at the repo root without breaking its design language. Ev
 ## Project structure (the only file that matters)
 
 ```
-├── index.html                  ← single page (Home 06). 1751 lines.
+├── index.html                  ← Home 06
+├── about.html, contact.html, faq.html, pricing.html
+├── services1.html, service-details.html, terms-conditions.html
 ├── assets/
 │   ├── css/
 │   │   ├── style.css           ← ALL custom styles (15,971 lines, numbered sections 01–68)
