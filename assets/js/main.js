@@ -101,12 +101,16 @@
         jQuery(this).parent().siblings().children('.active').removeClass('active');
     });
 
-    // sticky header
-
-    // window.addEventListener('scroll', function () {
-    //     const header = document.querySelector('header.header-area');
-    //     header.classList.toggle("sticky", window.scrollY > 0);
-    // });
+    // Style-4 fixed header: solid nav on scroll (inner pages with breadcrumb hero)
+    (function () {
+        const header = document.querySelector('header.header-area.style-4');
+        if (!header) return;
+        const onScroll = function () {
+            header.classList.toggle('is-stuck', window.scrollY > 60);
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+    })();
     // AOS
 
     //Counter up
@@ -1075,20 +1079,31 @@
 	});
 
 
-	// services Images
-	const serviceImgItem = document.querySelectorAll(".sevices-wrap .single-services ");
+	// services Images (cover-section2 hover preview — skip rows without .services-img)
+	const serviceImgItem = document.querySelectorAll(".sevices-wrap .single-services");
 
 	function followImageCursor(event, serviceImgItem) {
+	  const imgEl = serviceImgItem.querySelector(".services-img");
+	  if (!imgEl) {
+	    return;
+	  }
 	  const contentBox = serviceImgItem.getBoundingClientRect();
 	  const dx = event.clientX - contentBox.x;
 	  const dy = event.clientY - contentBox.y;
-	  serviceImgItem.children[2].style.transform = `translate(${dx}px, ${dy}px)`;
+	  imgEl.style.transform = `translate(${dx}px, ${dy}px)`;
 	}
-  
-	serviceImgItem.forEach((item, i) => {
+
+	serviceImgItem.forEach((item) => {
+	  if (!item.querySelector(".services-img")) {
+	    return;
+	  }
 	  item.addEventListener("mousemove", (event) => {
-		setInterval(followImageCursor(event, item), 100);
+	    followImageCursor(event, item);
 	  });
+	});
+
+	document.querySelectorAll("#who-we-help .single-services p").forEach((p) => {
+	  p.style.transform = "";
 	});
 		
 // scroll up button
