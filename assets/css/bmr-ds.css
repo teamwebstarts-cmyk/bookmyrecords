@@ -15,6 +15,9 @@
   /* Mid band: brand blue + surface (between light wash and footer navy) */
   --bmr-band: #dce8f6;
   --bmr-band: color-mix(in srgb, var(--bmr-primary) 16%, var(--bmr-surface));
+  /* Yellow section wash (How It Works) */
+  --bmr-band-yellow: #fff6d9;
+  --bmr-band-yellow: color-mix(in srgb, var(--bmr-accent-yellow) 18%, var(--bmr-surface));
   --bmr-success: #22c55e;
   --bmr-warning: #f59e0b;
   --bmr-error: #e53935;
@@ -76,21 +79,26 @@
 }
 
 #our-process.working-process-section.two {
-  background-color: var(--bmr-white);
+  background-color: var(--bmr-band-yellow);
 }
 
 #our-process.working-process-section.two .step-card1 span {
-  border: 1px solid var(--bmr-border);
-  background: var(--bmr-surface);
+  border: 1px solid
+    color-mix(in srgb, var(--bmr-accent-yellow) 40%, var(--bmr-white));
+  background: var(--bmr-white);
   color: var(--primary-color);
 }
 
 /* Homepage section bands — tinted brand blue (not surface wash or footer navy) */
-#why-choose-us.solution-section,
 #who-we-help.cover-section2,
 #our-people.home6-people-section,
 #home-faqs.service-details-faq-section {
   background-color: var(--bmr-band);
+}
+
+/* Home + About: Why Choose Us stays on white (no band tint) */
+#why-choose-us.solution-section {
+  background-color: var(--bmr-white);
 }
 
 /* Homepage only: bottom spacing as padding (mb-130 leaves white strip outside bg) */
@@ -129,8 +137,8 @@ body:not(.about-page) #our-people.home6-people-section {
 }
 
 #why-choose-us .eg-card-3 {
-  background-color: var(--bmr-white);
-  border-color: var(--bmr-border);
+  background-color: var(--bmr-band);
+  border-color: color-mix(in srgb, var(--bmr-primary) 14%, var(--bmr-white));
 }
 
 #who-we-help .who-we-help-cards .single-services {
@@ -152,16 +160,13 @@ body:not(.about-page) #our-people.home6-people-section {
   border: 1px solid var(--bmr-border);
 }
 
-#home-contact-cta.contact-section2 {
-  background: linear-gradient(
-    90deg,
-    rgba(11, 94, 215, 0.12) 0%,
-    var(--bmr-surface) 45%,
-    var(--bmr-white) 100%
-  );
+/* Yellow CTA band — home + about (avoid :not(#id) on other rules; it beats body.about-page) */
+#home-contact-cta.contact-section2,
+body.about-page .contact-section2 {
+  background: var(--bmr-band-yellow);
 }
 
-.contact-section2:not(#home-contact-cta) {
+body:not(.about-page) .contact-section2:not(#home-contact-cta) {
   background: linear-gradient(
     90deg,
     rgba(11, 94, 215, 0.12) 0%,
@@ -271,15 +276,6 @@ body.about-page #why-choose-us.solution-section .company-logo h2 {
   background: linear-gradient(180deg, var(--bmr-surface) 0%, var(--bmr-white) 100%);
   background-clip: text;
   -webkit-background-clip: text;
-}
-
-body.about-page .contact-section2 {
-  background: linear-gradient(
-    90deg,
-    rgba(11, 94, 215, 0.12) 0%,
-    var(--bmr-surface) 45%,
-    var(--bmr-white) 100%
-  );
 }
 
 /*=====================================
