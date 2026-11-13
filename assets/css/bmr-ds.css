@@ -160,11 +160,13 @@ body:not(.about-page) #our-people.home6-people-section {
   border: 1px solid var(--bmr-border);
 }
 
-#home-contact-cta.contact-section2 {
+/* Yellow CTA band — home + about (avoid :not(#id) on other rules; it beats body.about-page) */
+#home-contact-cta.contact-section2,
+body.about-page .contact-section2 {
   background: var(--bmr-band-yellow);
 }
 
-.contact-section2:not(#home-contact-cta) {
+body:not(.about-page) .contact-section2:not(#home-contact-cta) {
   background: linear-gradient(
     90deg,
     rgba(11, 94, 215, 0.12) 0%,
@@ -274,15 +276,6 @@ body.about-page #why-choose-us.solution-section .company-logo h2 {
   background: linear-gradient(180deg, var(--bmr-surface) 0%, var(--bmr-white) 100%);
   background-clip: text;
   -webkit-background-clip: text;
-}
-
-body.about-page .contact-section2 {
-  background: linear-gradient(
-    90deg,
-    rgba(11, 94, 215, 0.12) 0%,
-    var(--bmr-surface) 45%,
-    var(--bmr-white) 100%
-  );
 }
 
 /*=====================================
