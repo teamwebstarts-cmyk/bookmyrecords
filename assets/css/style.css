@@ -19801,6 +19801,22 @@ button.explore-btn.two.btn-hover {
   line-height: 1;
   white-space: nowrap;
 }
+#business-challenges .business-challenges-cards .eg-card-2.style-2 {
+  background-color: var(--bmr-band);
+  border: 1px solid
+    color-mix(in srgb, var(--bmr-primary) 22%, var(--bmr-white));
+  transition:
+    background-color 0.35s ease,
+    border-color 0.35s ease;
+}
+#business-challenges .business-challenges-cards .eg-card-2.style-2:hover {
+  background-color: color-mix(
+    in srgb,
+    var(--bmr-primary) 6%,
+    var(--bmr-band)
+  );
+  border-color: color-mix(in srgb, var(--bmr-primary) 38%, var(--bmr-white));
+}
 #business-challenges .business-challenges-cards .eg-card-2.style-2 .icon {
   min-height: 92px;
   justify-content: flex-start;
