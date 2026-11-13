@@ -71,6 +71,17 @@ There is **no package.json, no build step, no scss, no modules**. Page order of 
 
 The other template pages referenced by the menu (services1.html, about.html, blog-grid.html, …) are **not present** in the repo — the clone scope was deliberately this one page (README.md: "megamenu links point to template pages that are NOT part of this single-page scope"). When asked to build such pages, derive layouts from the CSS sections (55–68 cover Blog/About/Event/FAQ/People/Career/Pricing/Contact/Details pages) and the component catalog — the CSS for them already exists.
 
+## BMR brand overlay (Book My Records)
+
+Task spec: `tasks/change-ds.md`. Skill reference: `references/bmr-brand-system.md`.
+
+1. Link theme file **after** `style.css`: `assets/css/bmr-ds.css` on every HTML page.
+2. Remap `:root` `--primary-color`, `--title-color`, `--paragraph-color` to BMR tokens; only override hard-coded hex where the template does not use variables.
+3. Do **not** edit numbered sections in `style.css` until promoting the overlay.
+4. Do **not** add layout-only overrides (extra card padding, new shadows) unless explicitly in the brand spec.
+
+Branch: `feature/bmr-design-system` (preview home first, then other pages).
+
 ## Validation checklist before finishing any change
 
 1. `python -m http.server 8765` from the repo root; load `http://localhost:8765/index.html`.

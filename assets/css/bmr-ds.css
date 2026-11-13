@@ -1,0 +1,333 @@
+/*=====================================
+ BMR brand theme — site-wide (after style.css)
+ Remaps template CSS variables; patches hard-coded hex where needed.
+========================================*/
+
+:root {
+  --bmr-primary: #0b5ed7;
+  --bmr-primary-dark: #0846a8;
+  --bmr-accent-yellow: #ffc107;
+  --bmr-accent-yellow-deep: #e0aa00;
+  --bmr-surface: #f2f6fb;
+  --bmr-white: #ffffff;
+  --bmr-text: #1f2a44;
+  --bmr-border: #d9e2ec;
+  /* Mid band: brand blue + surface (between light wash and footer navy) */
+  --bmr-band: #dce8f6;
+  --bmr-band: color-mix(in srgb, var(--bmr-primary) 16%, var(--bmr-surface));
+  --bmr-success: #22c55e;
+  --bmr-warning: #f59e0b;
+  --bmr-error: #e53935;
+
+  --primary-color: var(--bmr-primary);
+  --title-color: var(--bmr-text);
+  --paragraph-color: #4a5568;
+}
+
+/* Section labels (template hard-codes #0d1720) */
+.sub-title span,
+.section-title1 > span {
+  color: var(--title-color);
+}
+
+/* Service cards */
+.eg-card4 .card-content > a {
+  border-color: var(--bmr-border);
+  color: var(--title-color);
+}
+
+.eg-card4 .card-content .title-and-btn h4 a {
+  color: var(--title-color);
+}
+
+/* Nav submenu accent line */
+.header-area.style-4 .menu-wrap .main-menu ul > li ul.sub-menu > li > a::before,
+.header-area.style-2 .menu-wrap .main-menu ul > li ul.sub-menu > li > a::before {
+  background: linear-gradient(90deg, #fff, var(--bmr-primary), #fff);
+}
+
+@media (max-width: 991px) {
+  .header-area.style-4 .menu-wrap .main-menu ul > li ul.sub-menu > li > a::before,
+  .header-area.style-2 .menu-wrap .main-menu ul > li ul.sub-menu > li > a::before {
+    background: linear-gradient(90deg, #525252, var(--bmr-primary), #525252);
+  }
+}
+
+/* Header frame */
+.header-area.style-4 .header-wrap,
+.header-area.style-2 .header-wrap {
+  border-color: var(--bmr-border);
+}
+
+/* Hero: tint overlay toward BMR surface (keeps bg texture) */
+.banner-area6 {
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(242, 246, 251, 0.9) 0%,
+      rgba(255, 255, 255, 0.94) 100%
+    ),
+    url(../img/home6/bacground-img.png);
+}
+
+/* Section bands (template beige / blue-gray → BMR) */
+.working-process-section.two:not(#our-process) {
+  background-color: var(--bmr-surface);
+}
+
+#our-process.working-process-section.two {
+  background-color: var(--bmr-white);
+}
+
+#our-process.working-process-section.two .step-card1 span {
+  border: 1px solid var(--bmr-border);
+  background: var(--bmr-surface);
+  color: var(--primary-color);
+}
+
+/* Homepage section bands — tinted brand blue (not surface wash or footer navy) */
+#why-choose-us.solution-section,
+#who-we-help.cover-section2,
+#our-people.home6-people-section,
+#home-faqs.service-details-faq-section {
+  background-color: var(--bmr-band);
+}
+
+/* Homepage only: bottom spacing as padding (mb-130 leaves white strip outside bg) */
+body:not(.about-page) #why-choose-us.solution-section,
+body:not(.about-page) #business-challenges.solution-section,
+body:not(.about-page) #our-people.home6-people-section {
+  margin-bottom: 0;
+  padding-bottom: 100px;
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  body:not(.about-page) #why-choose-us.solution-section,
+  body:not(.about-page) #business-challenges.solution-section,
+  body:not(.about-page) #our-people.home6-people-section {
+    padding-bottom: 80px;
+  }
+}
+
+@media (max-width: 991px) {
+  body:not(.about-page) #why-choose-us.solution-section,
+  body:not(.about-page) #business-challenges.solution-section,
+  body:not(.about-page) #our-people.home6-people-section {
+    padding-bottom: 70px;
+  }
+}
+
+/* Testimonials: band only on quote panel, not whole section */
+#client-testimonials .testimonial-wrap.two {
+  background-color: var(--bmr-band);
+}
+
+#why-choose-us.solution-section .company-logo h2 {
+  background: linear-gradient(180deg, var(--bmr-surface) 0%, var(--bmr-white) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+#why-choose-us .eg-card-3 {
+  background-color: var(--bmr-white);
+  border-color: var(--bmr-border);
+}
+
+#who-we-help .who-we-help-cards .single-services {
+  background-color: var(--bmr-white);
+  border: 1px solid var(--bmr-border);
+}
+
+#our-people .people-card1 .people-flip-box-layer.people-flip-box-front .content {
+  background-color: var(--bmr-white);
+}
+
+#home-faqs .faq-wrap .accordion .accordion-item,
+#home-faqs .faq-wrap .accordion .accordion-item .accordion-header,
+#home-faqs .faq-wrap .accordion .accordion-item .accordion-header .accordion-button {
+  background-color: var(--bmr-white);
+}
+
+#home-faqs .faq-wrap .accordion .accordion-item {
+  border: 1px solid var(--bmr-border);
+}
+
+#home-contact-cta.contact-section2 {
+  background: linear-gradient(
+    90deg,
+    rgba(11, 94, 215, 0.12) 0%,
+    var(--bmr-surface) 45%,
+    var(--bmr-white) 100%
+  );
+}
+
+.contact-section2:not(#home-contact-cta) {
+  background: linear-gradient(
+    90deg,
+    rgba(11, 94, 215, 0.12) 0%,
+    var(--bmr-surface) 45%,
+    var(--bmr-white) 100%
+  );
+}
+
+footer {
+  background-color: var(--bmr-text);
+}
+
+/* Template light-blue bands → BMR surface */
+.eg-card-3 {
+  background-color: var(--bmr-surface);
+  border-color: var(--bmr-surface);
+}
+
+.eg-card-3 .sn-and-btn {
+  border-color: var(--bmr-border);
+}
+
+.eg-card-3 .sn-and-btn .sl-no h5 {
+  background-color: var(--bmr-border);
+  color: var(--title-color);
+}
+
+.eg-card-3:hover {
+  border-color: var(--bmr-border);
+}
+
+.eg-card-2.style-2 {
+  border-color: var(--bmr-border);
+}
+
+.people-card1 .people-flip-box-layer.people-flip-box-front .content {
+  background-color: var(--bmr-surface);
+}
+
+.people-card1 .people-flip-box-layer.people-flip-box-back {
+  background-color: color-mix(in srgb, var(--bmr-primary) 8%, var(--bmr-surface));
+}
+
+.service-details-faq-section:not(#home-faqs),
+.testimonial-section2 .testimonial-wrap,
+.testimonial-section2 .testimonial-wrap.two {
+  background-color: var(--bmr-surface);
+}
+
+.people-section2 {
+  background-color: var(--bmr-surface);
+}
+
+.slider-btn-group .slider-btn {
+  border-color: var(--bmr-border);
+}
+
+.home6-cover-area .scrollbar-and-slider-btn .progress-pagination2 {
+  background-color: var(--bmr-surface);
+}
+
+footer .footer-widget .subscribed-area .form-inner {
+  background-color: var(--bmr-text);
+}
+
+/*=====================================
+ About page — mirror homepage BMR bands
+========================================*/
+body.about-page .about-section2 .about-top {
+  background-color: var(--bmr-text);
+}
+
+.logo-section {
+  background-color: var(--bmr-white);
+}
+
+.logo-section .logo-wrapper {
+  border-color: var(--bmr-border);
+}
+
+.logo-section .logo-wrapper .logo-title {
+  border-color: var(--bmr-border);
+}
+
+body.about-page .mission-section {
+  background-color: var(--bmr-white);
+}
+
+body.about-page #why-choose-us.solution-section {
+  background-color: var(--bmr-white);
+}
+
+body.about-page #our-people.home6-people-section {
+  background-color: var(--bmr-band);
+}
+
+body.about-page #why-choose-us .eg-card-3 {
+  background-color: var(--bmr-white);
+  border-color: var(--bmr-border);
+}
+
+body.about-page #our-people .people-card1 .people-flip-box-layer.people-flip-box-front .content {
+  background-color: var(--bmr-white);
+}
+
+body.about-page #why-choose-us.solution-section .company-logo h2 {
+  background: linear-gradient(180deg, var(--bmr-surface) 0%, var(--bmr-white) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+body.about-page .contact-section2 {
+  background: linear-gradient(
+    90deg,
+    rgba(11, 94, 215, 0.12) 0%,
+    var(--bmr-surface) 45%,
+    var(--bmr-white) 100%
+  );
+}
+
+/*=====================================
+ Contact page
+========================================*/
+body.page-contact .contect-section6 {
+  background-color: var(--bmr-band);
+  background-image: none;
+}
+
+body.page-contact .contact-form-area.two {
+  background-color: var(--bmr-white);
+  border: 1px solid var(--bmr-border);
+  padding: 48px 56px;
+}
+
+@media (max-width: 991px) {
+  body.page-contact .contact-form-area.two {
+    padding: 32px 24px;
+  }
+}
+
+body.page-contact .contact-form-area.two .form-inner input,
+body.page-contact .contact-form-area.two .form-inner textarea,
+body.page-contact .contact-form-area.two .form-inner select {
+  border-color: var(--bmr-border);
+}
+
+body.page-contact .contact-page {
+  background-color: var(--bmr-white);
+}
+
+body.page-contact .contact-page .single-location {
+  border-color: var(--bmr-border);
+  background-color: var(--bmr-white);
+}
+
+body.page-contact .contact-page .single-location ul li .icon {
+  border-color: var(--bmr-border);
+}
+
+/* Focus ring (accessibility) */
+a:focus-visible,
+button:focus-visible,
+.primary-btn1:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--bmr-primary);
+  outline-offset: 2px;
+}
