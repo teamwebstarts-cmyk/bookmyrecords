@@ -19532,4 +19532,23 @@ button.explore-btn.two.btn-hover {
     max-width: calc(326px - var(--who-we-help-content-shift));
   }
 }
+/*=====================================
+ 60. BMR Hero revamp — nudge copy column up (laptop → large)
+========================================*/
+@media (min-width: 992px) {
+  .banner-area6.banner-area6--revamp
+    > .container-fluid.one.pl--95.pr--95
+    > .row.align-items-center
+    > .col-lg-12 {
+    margin-top: 12px;
+  }
+}
+@media (min-width: 992px) and (max-height: 820px) {
+  .banner-area6.banner-area6--revamp
+    > .container-fluid.one.pl--95.pr--95
+    > .row.align-items-center
+    > .col-lg-12 {
+    margin-top: -6px;
+  }
+}
 /*# sourceMappingURL=style.css.map */
