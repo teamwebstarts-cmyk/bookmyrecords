@@ -25,7 +25,7 @@ Visual language extracted from the **Book My Record Analysis** brand reference. 
 
 ### Semantic mapping onto template variables
 
-On the home preview, `assets/css/bmr-ds-home.css` (loaded only from `index.html`) overrides `:root`:
+On the live site, `assets/css/bmr-ds.css` (loaded after `style.css` on every page) overrides `:root`:
 
 ```css
 --primary-color: var(--bmr-primary);
@@ -71,7 +71,7 @@ Keep Marcellus + Montserrat stacks unchanged unless product asks otherwise.
 
 ## 6. Implementation (rollout)
 
-1. Link theme CSS **after** `style.css`: `assets/css/bmr-ds-home.css` on `index.html` → later `bmr-ds.css` site-wide.
+1. Link theme CSS **after** `style.css`: `assets/css/bmr-ds.css` on every HTML page.
 2. Remap `:root` (`--primary-color`, `--title-color`, `--paragraph-color`); only patch selectors where hex is hard-coded.
 3. **Do not** bulk-edit `style.css` numbered sections until the overlay is approved.
 4. Avoid layout-only overrides (extra padding, shadows, radii) unless the brand spec requires them.

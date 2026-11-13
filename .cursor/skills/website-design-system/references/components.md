@@ -2,7 +2,7 @@
 
 Every component below exists in the codebase; CSS line refs = `assets/css/style.css`, HTML refs = `index.html`. Copy these as bases — do not redesign.
 
-When BMR theme CSS is loaded (`bmr-ds-home.css`), components use remapped `--primary-color` / `--title-color`; see `bmr-brand-system.md`.
+When BMR theme CSS is loaded (`bmr-ds.css`), components use remapped `--primary-color` / `--title-color`; see `bmr-brand-system.md`.
 
 ## Buttons & links
 

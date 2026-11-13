@@ -3992,8 +3992,8 @@ body.tt-magic-cursor #magic-cursor {
 .header-area.style-4 .header-logo img.bmr-header-logo,
 .header-area.style-4 .mobile-logo-wrap img.bmr-header-logo {
   width: auto;
-  max-width: min(300px, 52vw);
-  max-height: 76px;
+  max-width: min(268px, 48vw);
+  max-height: 64px;
   height: auto;
   object-fit: contain;
   display: block;
@@ -4001,16 +4001,16 @@ body.tt-magic-cursor #magic-cursor {
 @media (max-width: 1399px) {
   .header-area.style-4 .header-logo img,
   .header-area.style-4 .header-logo img.bmr-header-logo {
-    max-width: min(280px, 56vw);
-    max-height: 68px;
+    max-width: min(235px, 52vw);
+    max-height: 56px;
   }
 }
 @media (max-width: 576px) {
   .header-area.style-4 .header-logo img,
   .header-area.style-4 .header-logo img.bmr-header-logo,
   .header-area.style-4 .mobile-logo-wrap img.bmr-header-logo {
-    max-width: min(240px, 62vw);
-    max-height: 60px;
+    max-width: min(200px, 58vw);
+    max-height: 50px;
   }
 }
 .header-area.style-4 .menu-close-btn i {
@@ -13561,6 +13561,11 @@ footer .footer-btm .social-area li a:hover i {
   font-weight: 400;
   line-height: 26px;
   margin: 0;
+  min-height: 78px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
 }
 .home6-cover-area .eg-card4 .card-img {
   position: relative;
@@ -13610,6 +13615,23 @@ footer .footer-btm .social-area li a:hover i {
 #our-services > .container-fluid.one.pl--95.pr--95,
 #why-choose-us > .container-fluid.one.pl--95.pr--95,
 #who-we-help > .container-fluid.one.pl--95.pr--95,
+#business-challenges.solution-section {
+  margin-bottom: 0;
+}
+#who-we-help.cover-section2 > .left-vec {
+  transform: translateX(-25%);
+}
+#business-challenges > .container-fluid.one.pl--95.pr--95 {
+  overflow-x: clip;
+}
+#business-challenges .company-logo,
+#business-challenges .right-shape {
+  display: none !important;
+}
+#business-challenges .col-lg-12.d-flex.align-items-center {
+  flex-direction: column;
+  align-items: stretch !important;
+}
 #business-challenges > .container-fluid.one.pl--95.pr--95,
 #client-testimonials > .container-fluid.one.pl--95.pr--95 {
   overflow-x: clip;
@@ -13665,10 +13687,32 @@ footer .footer-btm .social-area li a:hover i {
   }
 }
 /* Static audience rows — no cover-section2 hover image / CTA column */
+#who-we-help .who-we-help-cards-align {
+  width: 100%;
+  max-width: none;
+}
+@media (min-width: 992px) {
+  /* Same start column as h2 / .who-we-help-heading-col (1066px title row, 740px text col) */
+  #who-we-help .who-we-help-cards-align {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+  }
+  #who-we-help .who-we-help-cards-lead {
+    display: block;
+    flex: 0 0 max(0px, min(100%, 1066px) - 740px);
+    width: max(0px, min(100%, 1066px) - 740px);
+    max-width: 326px;
+  }
+  #who-we-help .who-we-help-cards-inner {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+}
 #who-we-help .who-we-help-cards {
   width: 100%;
-  max-width: 1066px;
-  margin-left: auto;
+  max-width: none;
+  margin-left: 0;
 }
 #who-we-help .who-we-help-cards .single-services {
   display: grid;
@@ -13722,6 +13766,9 @@ footer .footer-btm .social-area li a:hover i {
   visibility: hidden !important;
 }
 @media (max-width: 991px) {
+  #who-we-help .who-we-help-cards-lead {
+    display: none;
+  }
   #who-we-help .who-we-help-cards {
     margin-left: 0;
     max-width: none;
@@ -13760,8 +13807,7 @@ footer .footer-btm .social-area li a:hover i {
 #our-process .col-lg-12 > .our-process-header,
 #who-we-help .col-lg-12 > .who-we-help-header,
 #business-challenges .col-lg-12 > .business-challenges-header,
-#client-testimonials .col-lg-12 > .client-testimonials-header,
-#home-faqs .col-lg-12 > .home-faqs-header {
+#client-testimonials .col-lg-12 > .client-testimonials-header {
   flex: 1 1 100%;
   width: 100%;
   max-width: 1066px;
@@ -13934,6 +13980,30 @@ footer .footer-btm .social-area li a:hover i {
   margin: 0;
   padding-top: 10px;
   max-width: 100%;
+}
+#our-people .col-lg-12.d-flex > .section-title1.two {
+  margin-left: auto;
+  margin-right: auto;
+}
+#our-people .section-title1.two {
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+#our-people .section-title1.two .section-title-sub {
+  text-align: center;
+  max-width: 740px;
+  width: 100%;
+}
+#our-people .section-title1.two > h2 {
+  text-align: center;
+  max-width: none;
+  width: auto;
+}
+@media (min-width: 992px) {
+  #our-people .section-title1.two > h2 {
+    white-space: nowrap;
+  }
 }
 @media (max-width: 767px) {
   #why-choose-us .section-title1.two .section-title-sub,
@@ -14245,6 +14315,18 @@ footer .footer-btm .social-area li a:hover i {
 }
 #our-process > .container-fluid.one.pl--95.pr--95 {
   overflow-x: clip;
+}
+#our-process .our-process-steps .step-card1 {
+  max-width: 400px;
+  width: 100%;
+}
+#our-process .our-process-steps .step-card1 p {
+  min-height: 120px;
+}
+@media (min-width: 1400px) {
+  #our-process .our-process-steps .step-card1 {
+    max-width: 420px;
+  }
 }
 /* Phone only: full-width step cards (tablet keeps col-sm-6 staggered layout) */
 #our-people > .container-fluid.one.pl--95.pr--95 {
@@ -19071,5 +19153,216 @@ body.about-page .contact-section2 .contact-content p {
 #business-challenges .business-challenges-cards .eg-card-2.style-2 .content p {
   flex: 1;
   margin-bottom: 0;
+}
+
+/*=====================================
+ 55. BMR Project Walkthrough Section
+========================================*/
+#project-walkthrough.project-walkthrough-section {
+  padding-top: 90px;
+}
+@media (max-width: 991px) {
+  #project-walkthrough.project-walkthrough-section {
+    padding-top: 80px;
+  }
+}
+@media (max-width: 767px) {
+  #project-walkthrough.project-walkthrough-section {
+    padding-top: 70px;
+  }
+}
+#project-walkthrough .section-title1.two {
+  align-items: center;
+  text-align: center;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+#project-walkthrough .section-title1.two h2 {
+  max-width: 100%;
+  text-align: center;
+}
+#project-walkthrough .section-title1.two .section-title-sub {
+  color: var(--paragraph-color);
+  font-family: var(--font-montserrat);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 30px;
+  margin: 0 auto;
+  padding-top: 10px;
+  max-width: 720px;
+  text-align: center;
+}
+@media (max-width: 767px) {
+  #project-walkthrough .section-title1.two .section-title-sub {
+    font-size: 15px;
+    line-height: 26px;
+  }
+}
+#project-walkthrough .project-walkthrough-video {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #eee;
+  width: 100%;
+  min-height: 560px;
+  height: 75vh;
+  max-height: 820px;
+}
+#project-walkthrough .project-walkthrough-video__media,
+#project-walkthrough .project-walkthrough-video video {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 560px;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+@media (max-width: 991px) {
+  #project-walkthrough .project-walkthrough-video {
+    min-height: 460px;
+    height: 68vh;
+    max-height: 640px;
+  }
+  #project-walkthrough .project-walkthrough-video__media,
+  #project-walkthrough .project-walkthrough-video video {
+    min-height: 460px;
+  }
+}
+#project-walkthrough .project-walkthrough-video__overlay {
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(13, 23, 32, 0.22);
+  padding: 30px;
+}
+#project-walkthrough .project-walkthrough-video__play {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  color: var(--white-color);
+  text-decoration: none;
+  transition: color 0.35s;
+}
+#project-walkthrough .project-walkthrough-video__play-icon {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  background-color: rgba(255, 255, 255, 0.12);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  line-height: 1;
+  transition: background-color 0.35s, border-color 0.35s, transform 0.35s;
+}
+#project-walkthrough .project-walkthrough-video__play-icon i {
+  margin-left: 4px;
+}
+#project-walkthrough .project-walkthrough-video__play-label {
+  font-family: var(--font-montserrat);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1;
+}
+#project-walkthrough .project-walkthrough-video__play:hover {
+  color: var(--white-color);
+}
+#project-walkthrough .project-walkthrough-video__play:hover .project-walkthrough-video__play-icon {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  transform: scale(1.05);
+}
+@media (max-width: 767px) {
+  #project-walkthrough .project-walkthrough-video {
+    min-height: 300px;
+    height: 52vw;
+    max-height: 480px;
+  }
+  #project-walkthrough .project-walkthrough-video__media,
+  #project-walkthrough .project-walkthrough-video video {
+    min-height: 300px;
+  }
+  #project-walkthrough .project-walkthrough-video__play-icon {
+    width: 64px;
+    height: 64px;
+    font-size: 28px;
+  }
+}
+#project-walkthrough .logo-section {
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: 60px;
+  margin-bottom: 0;
+}
+@media (max-width: 767px) {
+  #project-walkthrough .logo-section {
+    margin-top: 40px;
+  }
+}
+#project-walkthrough + #our-services.home6-cover-area {
+  padding-top: 90px;
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  #project-walkthrough + #our-services.home6-cover-area {
+    padding-top: 80px;
+  }
+}
+@media (max-width: 991px) {
+  #project-walkthrough + #our-services.home6-cover-area {
+    padding-top: 70px;
+  }
+}
+/*=====================================
+ 56. BMR Home section header CTAs (Home 6 pattern)
+========================================*/
+button.primary-btn1.btn-hover,
+button.explore-btn.two.btn-hover {
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+button.explore-btn.two.btn-hover {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: transparent;
+  text-align: left;
+}
+#home-faqs .col-lg-12.d-flex > .section-title1.two {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 1066px;
+}
+#our-services .col-lg-12.d-flex > .explore-btn.two,
+#why-choose-us .col-lg-5 > .explore-btn.two,
+#our-process .col-lg-12.d-flex > .primary-btn1,
+#who-we-help .col-lg-12.d-flex > .explore-btn.two,
+#business-challenges .col-lg-12.d-flex > .explore-btn.two,
+#our-people .col-lg-12.d-flex > .primary-btn1,
+#client-testimonials .col-lg-12.d-flex > .primary-btn1,
+#home-faqs .col-lg-12.d-flex > .explore-btn.two {
+  flex-shrink: 0;
+  align-self: flex-end;
+}
+/*=====================================
+ 57. BMR Our Services — primary row + slider
+========================================*/
+#our-services .our-services-primary {
+  margin-bottom: 40px;
+}
+#our-services .our-services-primary .eg-card4 {
+  height: 100%;
+}
+#our-services .our-services-slider-row {
+  margin-top: 0;
+}
+@media (min-width: 992px) {
+  #our-services .our-services-primary {
+    margin-bottom: 60px;
+  }
 }
 /*# sourceMappingURL=style.css.map */

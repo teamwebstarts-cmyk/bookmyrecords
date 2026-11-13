@@ -75,7 +75,7 @@ The other template pages referenced by the menu (services1.html, about.html, blo
 
 Task spec: `tasks/change-ds.md`. Skill reference: `references/bmr-brand-system.md`.
 
-1. Link theme file **after** `style.css`: `assets/css/bmr-ds-home.css` (home) or future `bmr-ds.css` (site-wide).
+1. Link theme file **after** `style.css`: `assets/css/bmr-ds.css` on every HTML page.
 2. Remap `:root` `--primary-color`, `--title-color`, `--paragraph-color` to BMR tokens; only override hard-coded hex where the template does not use variables.
 3. Do **not** edit numbered sections in `style.css` until promoting the overlay.
 4. Do **not** add layout-only overrides (extra card padding, new shadows) unless explicitly in the brand spec.

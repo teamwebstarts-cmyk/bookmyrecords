@@ -31,7 +31,7 @@ Reverse-engineered design language of the cloned site (`index.html` — Home 06 
 
 Core palette (template): primary `#2E448D`, dark title `#0D1720`, body text `#566064`, light surfaces `#F4F9FD / #E8F1FB / #DFEBF7 / #DAE6F2`, dark surfaces `#0A141D / #14202B / #272727`, beige accents `#EFEAE6 / #FDF8F4`, muted-on-dark `#CACACA`, hairline border `#EEE` and `rgba(13,23,32,0.078)`. Signature dropdown shadow: `0px 30px 80px rgba(8, 0, 42, 0.08)`.
 
-**BMR brand layer (Book My Records):** When the site should match client brand (`tasks/change-ds.md`), read `references/bmr-brand-system.md` first. Primary `#0B5ED7`, text `#1F2A44`, surfaces `#F2F6FB`, borders `#D9E2EC`, accent yellow `#FFC107` (sparse). Home preview: `assets/css/bmr-ds-home.css` remaps `:root` after `style.css` — do not rewrite template `style.css` blocks until approved.
+**BMR brand layer (Book My Records):** When the site should match client brand (`tasks/change-ds.md`), read `references/bmr-brand-system.md` first. Primary `#0B5ED7`, text `#1F2A44`, surfaces `#F2F6FB`, borders `#D9E2EC`, accent yellow `#FFC107` (sparse). Site-wide: `assets/css/bmr-ds.css` remaps `:root` after `style.css` — do not rewrite template `style.css` blocks until approved.
 
 Typography: **Marcellus (serif, weight 400) for headings/display**, **Montserrat (300–900) for everything else**. Body 16px / line-height 30px. Hero H1 75px → 40px across breakpoints. UI labels 14px/600, meta text 12–13px/500.
 
