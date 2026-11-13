@@ -2,6 +2,8 @@
 
 All values extracted from `assets/css/style.css`. Line numbers refer to that file unless noted.
 
+**Book My Records brand overrides** are documented in `bmr-brand-system.md` and applied via `:root` remaps in `assets/css/bmr-ds.css` site-wide (not by replacing this file).
+
 ## 1. CSS variables (extracted, style.css:82–89)
 
 ```css

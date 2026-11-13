@@ -1,6 +1,6 @@
 ---
 name: website-design-system
-description: Aploxn business-consulting design system (static HTML + Bootstrap 5 + jQuery + Swiper + GSAP, single custom stylesheet assets/css/style.css). Use when creating or modifying any page, section, card, form, or animation in this static site so new UI is visually and behaviorally indistinguishable from the existing site.
+description: Aploxn template + Book My Records (BMR) brand layer for this static site. Use when styling or building pages/components. Template tokens live in style.css; BMR rollout uses body.bmr-ds and overlay CSS (see references/bmr-brand-system.md).
 ---
 
 # Aploxn Design System
@@ -29,7 +29,9 @@ Reverse-engineered design language of the cloned site (`index.html` — Home 06 
 }
 ```
 
-Core palette: primary `#2E448D`, dark title `#0D1720`, body text `#566064`, light surfaces `#F4F9FD / #E8F1FB / #DFEBF7 / #DAE6F2`, dark surfaces `#0A141D / #14202B / #272727`, beige accents `#EFEAE6 / #FDF8F4`, muted-on-dark `#CACACA`, hairline border `#EEE` and `rgba(13,23,32,0.078)`. Signature dropdown shadow: `0px 30px 80px rgba(8, 0, 42, 0.08)`.
+Core palette (template): primary `#2E448D`, dark title `#0D1720`, body text `#566064`, light surfaces `#F4F9FD / #E8F1FB / #DFEBF7 / #DAE6F2`, dark surfaces `#0A141D / #14202B / #272727`, beige accents `#EFEAE6 / #FDF8F4`, muted-on-dark `#CACACA`, hairline border `#EEE` and `rgba(13,23,32,0.078)`. Signature dropdown shadow: `0px 30px 80px rgba(8, 0, 42, 0.08)`.
+
+**BMR brand layer (Book My Records):** When the site should match client brand (`tasks/change-ds.md`), read `references/bmr-brand-system.md` first. Primary `#0B5ED7`, text `#1F2A44`, surfaces `#F2F6FB`, borders `#D9E2EC`, accent yellow `#FFC107` (sparse). Site-wide: `assets/css/bmr-ds.css` remaps `:root` after `style.css` — do not rewrite template `style.css` blocks until approved.
 
 Typography: **Marcellus (serif, weight 400) for headings/display**, **Montserrat (300–900) for everything else**. Body 16px / line-height 30px. Hero H1 75px → 40px across breakpoints. UI labels 14px/600, meta text 12–13px/500.
 
@@ -45,6 +47,7 @@ Use it whenever creating or editing anything visual in this repo (site files at 
 ## How to reference the reference files
 
 - `references/design-tokens.md` — colors, radii, shadows, borders, CSS variables + line references. Start here for any styling.
+- `references/bmr-brand-system.md` — BMR palette, component rules, rollout via `body.bmr-ds` overlay CSS.
 - `references/typography.md` — font loading, scale, heading recipes.
 - `references/layout-and-spacing.md` — containers, section skeleton, spacing utilities, clip-path patterns.
 - `references/components.md` — reproducible specs for every existing component (headers, banners, cards, testimonial, people, steps, blog, map counters, forms, footer) with line references.
