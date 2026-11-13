@@ -4924,8 +4924,14 @@ body:has(.breadcrumb-section) .header-area.style-4 .header-wrap {
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
 }
-body:has(.breadcrumb-section) .header-area.style-4 .header-logo img:not(.bmr-header-logo),
-body:has(.breadcrumb-section) .header-area.style-4 .mobile-logo-wrap img:not(.bmr-header-logo) {
+body:has(.breadcrumb-section)
+  .header-area.style-4
+  .header-logo
+  img:not(.bmr-header-logo),
+body:has(.breadcrumb-section)
+  .header-area.style-4
+  .mobile-logo-wrap
+  img:not(.bmr-header-logo) {
   filter: brightness(0) invert(1);
 }
 body:has(.breadcrumb-section)
@@ -4997,7 +5003,10 @@ body:has(.breadcrumb-section) .header-area.style-4.is-stuck .header-wrap {
   backdrop-filter: none;
 }
 body:has(.breadcrumb-section) .header-area.style-4.is-stuck .header-logo img,
-body:has(.breadcrumb-section) .header-area.style-4.is-stuck .mobile-logo-wrap img {
+body:has(.breadcrumb-section)
+  .header-area.style-4.is-stuck
+  .mobile-logo-wrap
+  img {
   filter: none;
 }
 body:has(.breadcrumb-section)
@@ -13731,6 +13740,9 @@ footer .footer-btm .social-area li a:hover i {
   transition: none;
 }
 #who-we-help .who-we-help-cards .single-services .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 24px 20px;
   border-right: 1px solid rgba(13, 23, 32, 0.08);
 }
@@ -13757,6 +13769,46 @@ footer .footer-btm .social-area li a:hover i {
   fill: var(--paragraph-color);
   animation: none;
   transform: none;
+}
+#who-we-help
+  .who-we-help-cards
+  .single-services
+  .icon
+  img.who-we-help-card-icon {
+  display: block;
+  width: 74px;
+  height: 74px;
+  max-width: none;
+  object-fit: contain;
+  transform: none;
+}
+#who-we-help
+  .who-we-help-cards
+  .single-services
+  .icon
+  img.who-we-help-card-icon[src$="icon-small-growing-shop.png"],
+#who-we-help
+  .who-we-help-cards
+  .single-services
+  .icon
+  img.who-we-help-card-icon[src$="icon-established-badge.png"],
+#who-we-help
+  .who-we-help-cards
+  .single-services
+  .icon
+  img.who-we-help-card-icon[src$="icon-individuals-nri.png"],
+#who-we-help
+  .who-we-help-cards
+  .single-services
+  .icon
+  img.who-we-help-card-icon[src$="icon-ngos-nonprofit.png"],
+#who-we-help
+  .who-we-help-cards
+  .single-services
+  .icon
+  img.who-we-help-card-icon[src$="icon-professionals-consultants.png"] {
+  transform: scale(1.4);
+  transform-origin: center center;
 }
 #who-we-help .who-we-help-cards .single-services:hover h5 a,
 #who-we-help .who-we-help-cards .single-services h5 a {
@@ -13836,7 +13888,9 @@ footer .footer-btm .social-area li a:hover i {
 #client-testimonials .client-testimonials-sub-gutter {
   display: none;
 }
-#client-testimonials .client-testimonials-sub-row > .client-testimonials-heading-col {
+#client-testimonials
+  .client-testimonials-sub-row
+  > .client-testimonials-heading-col {
   flex: 0 1 740px;
   max-width: 740px;
   width: 100%;
@@ -13886,7 +13940,9 @@ footer .footer-btm .social-area li a:hover i {
   #home-faqs .section-title1.one > h2 {
     margin-bottom: 0;
   }
-  #client-testimonials .client-testimonials-sub-row > .client-testimonials-heading-col,
+  #client-testimonials
+    .client-testimonials-sub-row
+    > .client-testimonials-heading-col,
   #home-faqs .home-faqs-sub-row > .home-faqs-heading-col {
     flex: 1 1 100%;
     max-width: none;
@@ -14010,6 +14066,23 @@ footer .footer-btm .social-area li a:hover i {
   align-items: center;
   padding: 18px 20px;
   min-height: 50px;
+}
+#why-choose-us .eg-card-3 .sn-and-btn > svg.why-choose-card-icon {
+  fill: none;
+  stroke: var(--primary-color);
+  stroke-width: 1.65;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+#why-choose-us .eg-card-3 .sn-and-btn > img.why-choose-card-icon {
+  display: block;
+  flex-shrink: 0;
+  width: 74px;
+  height: 74px;
+  max-width: none;
+  object-fit: contain;
+  transform: scale(1.4);
+  transform-origin: center center;
 }
 @media (min-width: 992px) {
   #why-choose-us > .container-fluid.one > .row.g-lg-4 {
@@ -14343,10 +14416,16 @@ footer .footer-btm .social-area li a:hover i {
   flex: 1 1 auto;
   min-height: 100%;
 }
-#our-people .people-card1 .people-flip-box-layer.people-flip-box-front .people-img {
+#our-people
+  .people-card1
+  .people-flip-box-layer.people-flip-box-front
+  .people-img {
   flex-shrink: 0;
 }
-#our-people .people-card1 .people-flip-box-layer.people-flip-box-front .content {
+#our-people
+  .people-card1
+  .people-flip-box-layer.people-flip-box-front
+  .content {
   flex: 1 1 auto;
 }
 #our-people .people-card1 .people-flip-box-front .content h5 {
@@ -14390,7 +14469,11 @@ footer .footer-btm .social-area li a:hover i {
   overflow-x: hidden;
   padding-right: 20px;
 }
-#our-people .people-card1 .people-flip-box-layer.people-flip-box-front .people-img img {
+#our-people
+  .people-card1
+  .people-flip-box-layer.people-flip-box-front
+  .people-img
+  img {
   width: 100%;
   -o-object-fit: cover;
   object-fit: cover;
@@ -15724,16 +15807,28 @@ footer .footer-btm .social-area li a:hover i {
     padding-top: 15px;
   }
 }
-.mission-section .mission-content-wrap .mission-content-top .section-title1.w-890 + h5 {
+.mission-section
+  .mission-content-wrap
+  .mission-content-top
+  .section-title1.w-890
+  + h5 {
   margin-top: 30px;
 }
 @media (max-width: 1199px) {
-  .mission-section .mission-content-wrap .mission-content-top .section-title1.w-890 + h5 {
+  .mission-section
+    .mission-content-wrap
+    .mission-content-top
+    .section-title1.w-890
+    + h5 {
     margin-top: 25px;
   }
 }
 @media (max-width: 576px) {
-  .mission-section .mission-content-wrap .mission-content-top .section-title1.w-890 + h5 {
+  .mission-section
+    .mission-content-wrap
+    .mission-content-top
+    .section-title1.w-890
+    + h5 {
     margin-top: 20px;
   }
 }
@@ -19030,7 +19125,9 @@ body.about-page .contact-section2 .contact-content p {
   gap: 24px;
   background-color: #f4f9fd;
   border: 1px solid #dfebf7;
-  transition: background-color 0.35s ease, border-color 0.35s ease;
+  transition:
+    background-color 0.35s ease,
+    border-color 0.35s ease;
 }
 #accounting-services .eg-card-2.style-2 .icon svg {
   fill: var(--primary-color);
@@ -19077,7 +19174,9 @@ body.about-page .contact-section2 .contact-content p {
 #business-challenges .business-challenges-sub-gutter {
   display: none;
 }
-#business-challenges .business-challenges-sub-row > .business-challenges-heading-col {
+#business-challenges
+  .business-challenges-sub-row
+  > .business-challenges-heading-col {
   flex: 0 1 740px;
   max-width: 740px;
   width: 100%;
@@ -19101,7 +19200,9 @@ body.about-page .contact-section2 .contact-content p {
   #business-challenges .section-title1.one > h2 {
     margin-bottom: 0;
   }
-  #business-challenges .business-challenges-sub-row > .business-challenges-heading-col {
+  #business-challenges
+    .business-challenges-sub-row
+    > .business-challenges-heading-col {
     flex: 1 1 100%;
     max-width: none;
   }
@@ -19140,6 +19241,28 @@ body.about-page .contact-section2 .contact-content p {
 /*=====================================
  55. BMR Project Walkthrough Section
 ========================================*/
+#project-walkthrough .section-title1.two > span {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  padding: 7px 14px;
+  border: 1px solid
+    color-mix(in srgb, var(--bmr-accent-yellow, #ffc107) 42%, #ffffff);
+  border-radius: 16px;
+  background-color: color-mix(
+    in srgb,
+    var(--bmr-accent-yellow, #ffc107) 24%,
+    #ffffff
+  );
+  color: var(--primary-color);
+  font-family: var(--font-montserrat);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+}
+#project-walkthrough .section-title1.two h2 span {
+  color: var(--primary-color);
+}
 @media (min-width: 992px) {
   #project-walkthrough > .container-fluid.one > .row.g-lg-4 {
     --bs-gutter-y: 0;
@@ -19209,7 +19332,10 @@ body.about-page .contact-section2 .contact-content p {
   justify-content: center;
   font-size: 34px;
   line-height: 1;
-  transition: background-color 0.35s, border-color 0.35s, transform 0.35s;
+  transition:
+    background-color 0.35s,
+    border-color 0.35s,
+    transform 0.35s;
 }
 #project-walkthrough .project-walkthrough-video__play-icon i {
   margin-left: 4px;
@@ -19223,7 +19349,9 @@ body.about-page .contact-section2 .contact-content p {
 #project-walkthrough .project-walkthrough-video__play:hover {
   color: var(--white-color);
 }
-#project-walkthrough .project-walkthrough-video__play:hover .project-walkthrough-video__play-icon {
+#project-walkthrough
+  .project-walkthrough-video__play:hover
+  .project-walkthrough-video__play-icon {
   background-color: var(--primary-color);
   border-color: var(--primary-color);
   transform: scale(1.05);
@@ -19249,6 +19377,21 @@ body.about-page .contact-section2 .contact-content p {
   padding-bottom: 0;
   margin-top: 60px;
   margin-bottom: 0;
+}
+#project-walkthrough .logo-section .logo-wrapper .logo-title {
+  background-color: color-mix(
+    in srgb,
+    var(--primary-color) 14%,
+    var(--bmr-surface, #f2f6fb)
+  );
+  border-right: 1px solid color-mix(in srgb, var(--primary-color) 22%, #eeeeee);
+}
+@media (max-width: 767px) {
+  #project-walkthrough .logo-section .logo-wrapper .logo-title {
+    border-right: unset;
+    border-bottom: 1px solid
+      color-mix(in srgb, var(--primary-color) 22%, #eeeeee);
+  }
 }
 @media (max-width: 767px) {
   #project-walkthrough .logo-section {
@@ -19290,11 +19433,75 @@ button.explore-btn.two.btn-hover {
 /*=====================================
  57. BMR Our Services — primary row + slider
 ========================================*/
+#our-services.home6-cover-area {
+  background-color: color-mix(
+    in srgb,
+    var(--primary-color) 10%,
+    var(--bmr-surface, #f2f6fb)
+  );
+  margin-bottom: 0;
+}
+#our-services.home6-cover-area .scrollbar-and-slider-btn .progress-pagination2 {
+  background-color: color-mix(in srgb, var(--primary-color) 12%, #ffffff);
+}
+#our-services .section-title1.two > span {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  padding: 7px 14px;
+  border: 1px solid
+    color-mix(in srgb, var(--bmr-accent-yellow, #ffc107) 42%, #ffffff);
+  border-radius: 16px;
+  background-color: color-mix(
+    in srgb,
+    var(--bmr-accent-yellow, #ffc107) 24%,
+    #ffffff
+  );
+  color: var(--primary-color);
+  font-family: var(--font-montserrat);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+}
+#our-services .eg-card4 .card-content > a {
+  color: var(--primary-color);
+  font-weight: 600;
+  border: 1px solid
+    color-mix(in srgb, var(--bmr-accent-yellow, #ffc107) 42%, #ffffff);
+  background-color: color-mix(
+    in srgb,
+    var(--bmr-accent-yellow, #ffc107) 24%,
+    #ffffff
+  );
+}
+#our-services .eg-card4 .card-content > a:hover {
+  color: var(--title-color);
+  border-color: color-mix(
+    in srgb,
+    var(--bmr-accent-yellow-deep, #e0aa00) 50%,
+    #ffffff
+  );
+  background-color: color-mix(
+    in srgb,
+    var(--bmr-accent-yellow, #ffc107) 32%,
+    #ffffff
+  );
+}
 #our-services .our-services-primary {
   margin-bottom: 40px;
 }
 #our-services .our-services-primary .eg-card4 {
   height: 100%;
+}
+#our-services .our-services-primary .eg-card4 .card-img {
+  width: 100%;
+  aspect-ratio: 587 / 291;
+}
+#our-services .our-services-primary .eg-card4 .card-img img {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: cover;
 }
 #our-services .our-services-slider-row {
   margin-top: 0;
@@ -19346,27 +19553,19 @@ button.explore-btn.two.btn-hover {
   gap: 8px;
   padding: 7px 14px;
   margin-bottom: 28px;
-  border: 1px solid rgba(46, 68, 141, 0.12);
+  border: 1px solid
+    color-mix(in srgb, var(--bmr-accent-yellow, #ffc107) 42%, #ffffff);
   border-radius: 16px;
-  background-color: rgba(255, 255, 255, 0.75);
+  background-color: color-mix(
+    in srgb,
+    var(--bmr-accent-yellow, #ffc107) 24%,
+    #ffffff
+  );
   color: var(--primary-color);
   font-family: var(--font-montserrat);
   font-size: 14px;
   font-weight: 600;
   line-height: 1;
-}
-.banner-area6.banner-area6--revamp .hero-eyebrow__icon {
-  display: inline-flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  color: var(--primary-color);
-  line-height: 0;
-}
-.banner-area6.banner-area6--revamp .hero-eyebrow__icon svg.hero-eyebrow__growth {
-  display: block;
-  width: 18px;
-  height: 18px;
 }
 @media (min-width: 992px) {
   .banner-area6.banner-area6--revamp .banner-left-content h1 {
@@ -19389,6 +19588,9 @@ button.explore-btn.two.btn-hover {
 .banner-area6.banner-area6--revamp .banner-left-content .quate-text {
   margin-bottom: 36px;
   max-width: 520px;
+}
+.banner-area6.banner-area6--revamp .banner-left-content .quate-text .icon svg {
+  fill: var(--bmr-accent-yellow, #ffc107);
 }
 .banner-area6.banner-area6--revamp .banner-left-content .quate-text .content p {
   color: var(--paragraph-color);
@@ -19429,7 +19631,9 @@ button.explore-btn.two.btn-hover {
   font-weight: 600;
   line-height: 1;
   text-decoration: none;
-  transition: color 0.35s, border-color 0.35s;
+  transition:
+    color 0.35s,
+    border-color 0.35s;
 }
 .banner-area6.banner-area6--revamp .hero-explore-services svg {
   fill: var(--primary-color);
@@ -19454,7 +19658,9 @@ button.explore-btn.two.btn-hover {
   align-items: center;
   gap: 14px;
 }
-.banner-area6.banner-area6--revamp .hero-trust-stats__item + .hero-trust-stats__item {
+.banner-area6.banner-area6--revamp
+  .hero-trust-stats__item
+  + .hero-trust-stats__item {
   margin-left: 28px;
   padding-left: 28px;
   border-left: 1px solid rgba(13, 23, 32, 0.12);
@@ -19497,7 +19703,9 @@ button.explore-btn.two.btn-hover {
   .banner-area6.banner-area6--revamp .banner-left-content h1 {
     font-size: 48px;
   }
-  .banner-area6.banner-area6--revamp .hero-trust-stats__item + .hero-trust-stats__item {
+  .banner-area6.banner-area6--revamp
+    .hero-trust-stats__item
+    + .hero-trust-stats__item {
     margin-left: 0;
     padding-left: 0;
     border-left: none;
@@ -19521,10 +19729,7 @@ button.explore-btn.two.btn-hover {
   }
   #who-we-help .who-we-help-cards-lead {
     flex: 0 0
-      max(
-        0px,
-        min(100%, 1066px) - 740px - var(--who-we-help-content-shift)
-      );
+      max(0px, min(100%, 1066px) - 740px - var(--who-we-help-content-shift));
     width: max(
       0px,
       min(100%, 1066px) - 740px - var(--who-we-help-content-shift)
@@ -19550,5 +19755,119 @@ button.explore-btn.two.btn-hover {
     > .col-lg-12 {
     margin-top: -6px;
   }
+}
+/*=====================================
+ 61. BMR Why Choose Us — yellow chip + cards on band tint (bmr-ds)
+========================================*/
+#why-choose-us .section-title1.two > span {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  padding: 7px 14px;
+  border: 1px solid
+    color-mix(in srgb, var(--bmr-accent-yellow, #ffc107) 42%, #ffffff);
+  border-radius: 16px;
+  background-color: color-mix(
+    in srgb,
+    var(--bmr-accent-yellow, #ffc107) 24%,
+    #ffffff
+  );
+  color: var(--primary-color);
+  font-family: var(--font-montserrat);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+}
+/*=====================================
+ 62. BMR Business Challenges — yellow chip + custom card icons
+========================================*/
+#business-challenges .section-title1.one > span {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 7px 14px;
+  border: 1px solid
+    color-mix(in srgb, var(--bmr-accent-yellow, #ffc107) 42%, #ffffff);
+  border-radius: 16px;
+  background-color: color-mix(
+    in srgb,
+    var(--bmr-accent-yellow, #ffc107) 24%,
+    #ffffff
+  );
+  color: var(--primary-color);
+  font-family: var(--font-montserrat);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+#business-challenges .business-challenges-cards .eg-card-2.style-2 .icon {
+  min-height: 92px;
+  justify-content: flex-start;
+}
+#business-challenges
+  .business-challenges-cards
+  .eg-card-2.style-2
+  .icon
+  svg {
+  width: 92px;
+  height: 92px;
+  flex-shrink: 0;
+}
+#business-challenges
+  .business-challenges-cards
+  .eg-card-2.style-2
+  .icon
+  img.business-challenges-card-icon {
+  display: block;
+  width: 92px;
+  height: 92px;
+  max-width: none;
+  object-fit: contain;
+  flex-shrink: 0;
+  transform: none;
+}
+#business-challenges
+  .business-challenges-cards
+  .eg-card-2.style-2:hover
+  .icon
+  img.business-challenges-card-icon,
+#business-challenges
+  .business-challenges-cards
+  .eg-card-2.style-2:hover
+  .icon
+  svg {
+  transform: none;
+}
+/*=====================================
+ 63. BMR Home — yellow section chips (Experts, Testimonials, FAQs)
+========================================*/
+#our-people .section-title1.two > span,
+#client-testimonials .section-title1.one > span,
+#home-faqs .sub-title > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 14px;
+  border: 1px solid
+    color-mix(in srgb, var(--bmr-accent-yellow, #ffc107) 42%, #ffffff);
+  border-radius: 16px;
+  background-color: color-mix(
+    in srgb,
+    var(--bmr-accent-yellow, #ffc107) 24%,
+    #ffffff
+  );
+  color: var(--primary-color);
+  font-family: var(--font-montserrat);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+#our-people .section-title1.two > span {
+  align-self: center;
+}
+#client-testimonials .section-title1.one > span {
+  flex-shrink: 0;
 }
 /*# sourceMappingURL=style.css.map */
