@@ -18,6 +18,19 @@
   /* Yellow section wash (How It Works) */
   --bmr-band-yellow: #fff6d9;
   --bmr-band-yellow: color-mix(in srgb, var(--bmr-accent-yellow) 18%, var(--bmr-surface));
+  --bmr-process-gold: #ffb000;
+  --bmr-process-wash: color-mix(
+    in srgb,
+    var(--bmr-process-gold) 30%,
+    var(--bmr-band-yellow)
+  );
+  --bmr-gold-band-gradient: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--bmr-process-gold) 22%, var(--bmr-white)) 0%,
+    color-mix(in srgb, var(--bmr-process-gold) 38%, var(--bmr-band-yellow)) 40%,
+    color-mix(in srgb, var(--bmr-process-gold) 48%, var(--bmr-band-yellow)) 58%,
+    color-mix(in srgb, var(--bmr-process-gold) 26%, var(--bmr-white)) 100%
+  );
   --bmr-success: #22c55e;
   --bmr-warning: #f59e0b;
   --bmr-error: #e53935;
@@ -79,12 +92,13 @@
 }
 
 #our-process.working-process-section.two {
-  background-color: var(--bmr-band-yellow);
+  background-color: var(--bmr-process-wash);
+  background-image: var(--bmr-gold-band-gradient);
 }
 
 #our-process.working-process-section.two .step-card1 span {
   border: 1px solid
-    color-mix(in srgb, var(--bmr-accent-yellow) 40%, var(--bmr-white));
+    color-mix(in srgb, var(--bmr-process-gold) 32%, var(--bmr-white));
   background: var(--bmr-white);
   color: var(--primary-color);
 }
@@ -146,6 +160,29 @@ body:not(.about-page) #our-people.home6-people-section {
   border: 1px solid var(--bmr-border);
 }
 
+#who-we-help .who-we-help-cards .single-services:first-child .icon {
+  border-top: none;
+}
+
+#who-we-help .who-we-help-cards .single-services {
+  grid-template-columns: 122px minmax(200px, 280px) minmax(0, 1fr);
+}
+
+#who-we-help .who-we-help-cards .single-services .icon {
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 991px) {
+  #who-we-help .who-we-help-cards .single-services {
+    grid-template-columns: 122px minmax(160px, 240px) minmax(0, 1fr);
+  }
+}
+
+#business-challenges .business-challenges-cards {
+  justify-content: flex-start;
+}
+
 #our-people .people-card1 .people-flip-box-layer.people-flip-box-front .content {
   background-color: var(--bmr-white);
 }
@@ -160,8 +197,12 @@ body:not(.about-page) #our-people.home6-people-section {
   border: 1px solid var(--bmr-border);
 }
 
-/* Yellow CTA band — home + about (avoid :not(#id) on other rules; it beats body.about-page) */
-#home-contact-cta.contact-section2,
+/* Golden CTA band — home (matches #our-process); About keeps yellow wash */
+#home-contact-cta.contact-section2 {
+  background-color: var(--bmr-process-wash);
+  background-image: var(--bmr-gold-band-gradient);
+}
+
 body.about-page .contact-section2 {
   background: var(--bmr-band-yellow);
 }
@@ -251,6 +292,19 @@ body.about-page .about-section2 .about-top {
   border-color: var(--bmr-border);
 }
 
+#project-walkthrough .logo-section .logo-wrapper .logo-title {
+  background-color: color-mix(
+    in srgb,
+    var(--primary-color) 10%,
+    var(--bmr-surface, #f2f6fb)
+  );
+  border-right: none;
+}
+
+#project-walkthrough .logo-section .logo-wrapper .logo-title h6 {
+  color: #000000;
+}
+
 body.about-page .mission-section {
   background-color: var(--bmr-white);
 }
@@ -326,4 +380,128 @@ textarea:focus-visible,
 select:focus-visible {
   outline: 2px solid var(--bmr-primary);
   outline-offset: 2px;
+}
+
+/* Header wordmark — larger logo, tighter logo cell (keeps bar height ~same) */
+.header-area.style-4 .header-logo,
+.header-area.style-2 .header-logo {
+  padding: 4px 14px;
+}
+@media (max-width: 1399px) {
+  .header-area.style-4 .header-logo,
+  .header-area.style-2 .header-logo {
+    padding: 4px 12px;
+  }
+}
+@media (max-width: 1199px) {
+  .header-area.style-4 .header-logo,
+  .header-area.style-2 .header-logo {
+    padding: 4px 10px;
+  }
+}
+.header-area.style-4 .header-logo img.bmr-header-logo,
+.header-area.style-4 .mobile-logo-wrap img.bmr-header-logo,
+.header-area.style-2 .header-logo img.bmr-header-logo,
+.header-area.style-2 .mobile-logo-wrap img.bmr-header-logo {
+  max-width: min(360px, 58vw);
+  max-height: 86px;
+}
+@media (max-width: 1399px) {
+  .header-area.style-4 .header-logo img.bmr-header-logo,
+  .header-area.style-4 .mobile-logo-wrap img.bmr-header-logo,
+  .header-area.style-2 .header-logo img.bmr-header-logo,
+  .header-area.style-2 .mobile-logo-wrap img.bmr-header-logo {
+    max-width: min(320px, 60vw);
+    max-height: 76px;
+  }
+}
+@media (max-width: 576px) {
+  .header-area.style-4 .header-logo img.bmr-header-logo,
+  .header-area.style-2 .header-logo img.bmr-header-logo {
+    max-width: min(248px, 66vw);
+    max-height: 58px;
+  }
+}
+
+/* Slide-out menu sidebar — logo only (not top header bar) */
+@media (max-width: 991px) {
+  .header-area.style-4 .menu-wrap .main-menu .mobile-logo-area,
+  .header-area.style-2 .menu-wrap .main-menu .mobile-logo-area {
+    justify-content: flex-start !important;
+    align-items: center;
+    width: 100%;
+  }
+
+  .header-area.style-4 .menu-wrap .main-menu .mobile-logo-wrap,
+  .header-area.style-2 .menu-wrap .main-menu .mobile-logo-wrap {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    margin-right: auto;
+  }
+
+  .header-area.style-4 .menu-wrap .main-menu .mobile-logo-wrap img.bmr-header-logo,
+  .header-area.style-2 .menu-wrap .main-menu .mobile-logo-wrap img.bmr-header-logo {
+    max-width: 100%;
+    max-height: 92px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+}
+
+/* Why Choose Us — card icon row */
+#why-choose-us .eg-card-3 .sn-and-btn {
+  border-top: none;
+  padding: 9px 10px;
+}
+
+#why-choose-us .eg-card-3 .sn-and-btn > img.why-choose-card-icon {
+  width: 132px;
+  height: 132px;
+}
+
+@media (max-width: 1399px) {
+  #why-choose-us .eg-card-3 .sn-and-btn > img.why-choose-card-icon {
+    width: 118px;
+    height: 118px;
+  }
+}
+
+@media (max-width: 575px) {
+  #why-choose-us .eg-card-3 .sn-and-btn > img.why-choose-card-icon {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+/* Hero revamp — mobile through laptop (image visible; light blue tint, not white wash) */
+@media (max-width: 1399px) {
+  .banner-area6.banner-area6--revamp {
+    background-color: var(--bmr-band, #dce8f6);
+    background-image:
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--bmr-primary, #0b5ed7) 14%, transparent) 0%,
+        color-mix(in srgb, var(--bmr-band, #dce8f6) 22%, transparent) 55%,
+        color-mix(in srgb, var(--bmr-primary, #0b5ed7) 10%, transparent) 100%
+      ),
+      url(../img/home6/hero-bg-sm.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+  }
+}
+
+@media (max-width: 767px) {
+  .banner-area6.banner-area6--revamp {
+    background-image:
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--bmr-primary, #0b5ed7) 12%, transparent) 0%,
+        color-mix(in srgb, var(--bmr-band, #dce8f6) 18%, transparent) 100%
+      ),
+      url(../img/home6/hero-bg-sm.jpg);
+    background-position: center top;
+  }
 }
