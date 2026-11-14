@@ -18,6 +18,19 @@
   /* Yellow section wash (How It Works) */
   --bmr-band-yellow: #fff6d9;
   --bmr-band-yellow: color-mix(in srgb, var(--bmr-accent-yellow) 18%, var(--bmr-surface));
+  --bmr-process-gold: #ffb000;
+  --bmr-process-wash: color-mix(
+    in srgb,
+    var(--bmr-process-gold) 30%,
+    var(--bmr-band-yellow)
+  );
+  --bmr-gold-band-gradient: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--bmr-process-gold) 22%, var(--bmr-white)) 0%,
+    color-mix(in srgb, var(--bmr-process-gold) 38%, var(--bmr-band-yellow)) 40%,
+    color-mix(in srgb, var(--bmr-process-gold) 48%, var(--bmr-band-yellow)) 58%,
+    color-mix(in srgb, var(--bmr-process-gold) 26%, var(--bmr-white)) 100%
+  );
   --bmr-success: #22c55e;
   --bmr-warning: #f59e0b;
   --bmr-error: #e53935;
@@ -79,12 +92,13 @@
 }
 
 #our-process.working-process-section.two {
-  background-color: var(--bmr-band-yellow);
+  background-color: var(--bmr-process-wash);
+  background-image: var(--bmr-gold-band-gradient);
 }
 
 #our-process.working-process-section.two .step-card1 span {
   border: 1px solid
-    color-mix(in srgb, var(--bmr-accent-yellow) 40%, var(--bmr-white));
+    color-mix(in srgb, var(--bmr-process-gold) 32%, var(--bmr-white));
   background: var(--bmr-white);
   color: var(--primary-color);
 }
@@ -146,6 +160,10 @@ body:not(.about-page) #our-people.home6-people-section {
   border: 1px solid var(--bmr-border);
 }
 
+#business-challenges .business-challenges-cards {
+  justify-content: flex-start;
+}
+
 #our-people .people-card1 .people-flip-box-layer.people-flip-box-front .content {
   background-color: var(--bmr-white);
 }
@@ -160,8 +178,12 @@ body:not(.about-page) #our-people.home6-people-section {
   border: 1px solid var(--bmr-border);
 }
 
-/* Yellow CTA band — home + about (avoid :not(#id) on other rules; it beats body.about-page) */
-#home-contact-cta.contact-section2,
+/* Golden CTA band — home (matches #our-process); About keeps yellow wash */
+#home-contact-cta.contact-section2 {
+  background-color: var(--bmr-process-wash);
+  background-image: var(--bmr-gold-band-gradient);
+}
+
 body.about-page .contact-section2 {
   background: var(--bmr-band-yellow);
 }
@@ -326,4 +348,72 @@ textarea:focus-visible,
 select:focus-visible {
   outline: 2px solid var(--bmr-primary);
   outline-offset: 2px;
+}
+
+/* Header wordmark — larger logo, tighter logo cell (keeps bar height ~same) */
+.header-area.style-4 .header-logo,
+.header-area.style-2 .header-logo {
+  padding: 4px 14px;
+}
+@media (max-width: 1399px) {
+  .header-area.style-4 .header-logo,
+  .header-area.style-2 .header-logo {
+    padding: 4px 12px;
+  }
+}
+@media (max-width: 1199px) {
+  .header-area.style-4 .header-logo,
+  .header-area.style-2 .header-logo {
+    padding: 4px 10px;
+  }
+}
+.header-area.style-4 .header-logo img.bmr-header-logo,
+.header-area.style-4 .mobile-logo-wrap img.bmr-header-logo,
+.header-area.style-2 .header-logo img.bmr-header-logo,
+.header-area.style-2 .mobile-logo-wrap img.bmr-header-logo {
+  max-width: min(360px, 58vw);
+  max-height: 86px;
+}
+@media (max-width: 1399px) {
+  .header-area.style-4 .header-logo img.bmr-header-logo,
+  .header-area.style-4 .mobile-logo-wrap img.bmr-header-logo,
+  .header-area.style-2 .header-logo img.bmr-header-logo,
+  .header-area.style-2 .mobile-logo-wrap img.bmr-header-logo {
+    max-width: min(320px, 60vw);
+    max-height: 76px;
+  }
+}
+@media (max-width: 576px) {
+  .header-area.style-4 .header-logo img.bmr-header-logo,
+  .header-area.style-4 .mobile-logo-wrap img.bmr-header-logo,
+  .header-area.style-2 .header-logo img.bmr-header-logo,
+  .header-area.style-2 .mobile-logo-wrap img.bmr-header-logo {
+    max-width: min(248px, 66vw);
+    max-height: 58px;
+  }
+}
+
+/* Why Choose Us — card icon row */
+#why-choose-us .eg-card-3 .sn-and-btn {
+  border-top: none;
+  padding: 9px 10px;
+}
+
+#why-choose-us .eg-card-3 .sn-and-btn > img.why-choose-card-icon {
+  width: 132px;
+  height: 132px;
+}
+
+@media (max-width: 1399px) {
+  #why-choose-us .eg-card-3 .sn-and-btn > img.why-choose-card-icon {
+    width: 118px;
+    height: 118px;
+  }
+}
+
+@media (max-width: 575px) {
+  #why-choose-us .eg-card-3 .sn-and-btn > img.why-choose-card-icon {
+    width: 100px;
+    height: 100px;
+  }
 }
