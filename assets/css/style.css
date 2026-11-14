@@ -19350,18 +19350,20 @@ body.about-page .contact-section2 .contact-content p {
   margin-bottom: 0;
 }
 #project-walkthrough .logo-section .logo-wrapper .logo-title {
-  background-color: color-mix(
-    in srgb,
-    var(--primary-color) 14%,
-    var(--bmr-surface, #f2f6fb)
-  );
-  border-right: 1px solid color-mix(in srgb, var(--primary-color) 22%, #eeeeee);
+  background-color: var(--primary-color);
+  border-right: 1px solid color-mix(in srgb, var(--primary-color) 78%, #000000);
+}
+#project-walkthrough .logo-section .logo-wrapper .logo-title h6 {
+  color: var(--bmr-white, #ffffff);
+}
+#project-walkthrough .logo-section .logo-wrapper .logo-title h6 svg,
+#project-walkthrough .logo-section .logo-wrapper .logo-title h6 svg path {
+  fill: currentColor;
 }
 @media (max-width: 767px) {
   #project-walkthrough .logo-section .logo-wrapper .logo-title {
     border-right: unset;
-    border-bottom: 1px solid
-      color-mix(in srgb, var(--primary-color) 22%, #eeeeee);
+    border-bottom: 1px solid color-mix(in srgb, var(--primary-color) 78%, #000000);
   }
 }
 @media (max-width: 767px) {
