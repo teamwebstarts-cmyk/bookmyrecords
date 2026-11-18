@@ -22,7 +22,7 @@ Open pages from the repo root, for example:
 | `/service-details.html` | `service-details.html` | Service details |
 | `/terms-conditions.html` | `terms-conditions.html` | Terms & conditions |
 
-No build step or package manager is required.
+One dependency is required for server-side PDF generation: `npm install` (only `pdf-lib`). No build step.
 
 ## Repository map
 
@@ -74,10 +74,37 @@ Breadcrumb JPEGs use the template spelling `braadcrumb` in filenames.
 - Cloudflare obfuscated emails replaced with plain `mailto:` addresses (`infoaploxn@gmail.com`, `info@gmail.com`, and contact-only variants where used).
 - Cloudflare `email-decode.min.js` removed from HTML.
 
+## AI / PDF / booking flow
+
+The checkup backend is provider-agnostic. Copy `.env.example` to `.env` and set:
+
+```
+AI_BASE_URL, AI_MODEL, AI_API_KEY, AI_MOCK_MODE   # OpenAI-compatible provider
+CAL_EVENT_SLUG, CAL_WEBHOOK_SECRET                 # Cal.com booking
+STORAGE_ENABLED, STORAGE_DRIVER, SUPABASE_*       # local filesystem or Supabase
+RESEND_API_KEY, OWNER_EMAIL, TELEGRAM_*            # owner notification
+```
+
+Local run: `node server.js` loads `.env` directly. New endpoints:
+
+| Route | Purpose |
+|---|---|
+| `POST /api/checkup/submit` | store report + generate PDF + alert owner (idempotent on `report_id`) |
+| `POST /api/checkup/booking` | client-side booking fallback |
+| `POST /api/checkup/booking-webhook` | Cal.com `BOOKING_CREATED` webhook |
+| `GET /api/checkup/report/:id/status` | safe status + PDF link (used by browser poller) |
+| `GET /api/checkup/report/:id/pdf` | stored PDF download |
+| `GET /api/checkup/report/:id` | full stored record, requires `x-admin-token` header (`ADMIN_TOKEN`) |
+
+See `AI_DEEPSEEK_PDF_STORAGE_BOOKING_PLAN.md` for the full architecture and decisions.
+
 ## Verification
 
 ```powershell
 python scripts/audit-assets.py
+npm test              # all five suites, including verify_ai_flow.js
+npm run test:live     # adds a real provider call
+npm run smoke         # spawn server, exercise the full HTTP flow
 ```
 
 Audits every `*.html` at the repo root (`src`, `href`, and inline `url(assets/...)`). Exit code `0` means no missing files. After the flatten merge, all listed pages reported **0 missing** refs.

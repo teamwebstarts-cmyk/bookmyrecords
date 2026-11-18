@@ -1,0 +1,234 @@
+/* ==========================================================
+   Book My Records Analytics — Global Soft Scroll Animations
+   Lightweight entrance + interaction system. Respects
+   prefers-reduced-motion. No dependencies.
+   ========================================================== */
+
+/* ── Respect reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .bmr-reveal,
+  .bmr-reveal--left,
+  .bmr-reveal--right,
+  .bmr-reveal--scale,
+  .bmr-reveal--fade,
+  .bmr-stagger > * {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ── Base reveal state (hidden) ── */
+.bmr-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.bmr-reveal--left {
+  opacity: 0;
+  transform: translateX(-36px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.bmr-reveal--right {
+  opacity: 0;
+  transform: translateX(36px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.bmr-reveal--scale {
+  opacity: 0;
+  transform: scale(0.94) translateY(16px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.bmr-reveal--fade {
+  opacity: 0;
+  transition: opacity 0.7s ease;
+  will-change: opacity;
+}
+
+/* ── Visible state (triggered by JS IntersectionObserver) ── */
+.bmr-reveal.is-visible,
+.bmr-reveal--left.is-visible,
+.bmr-reveal--right.is-visible,
+.bmr-reveal--scale.is-visible,
+.bmr-reveal--fade.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── Delay utilities ── */
+.bmr-delay-1 { transition-delay: 0.08s; }
+.bmr-delay-2 { transition-delay: 0.16s; }
+.bmr-delay-3 { transition-delay: 0.24s; }
+.bmr-delay-4 { transition-delay: 0.32s; }
+.bmr-delay-5 { transition-delay: 0.42s; }
+.bmr-delay-6 { transition-delay: 0.52s; }
+
+/* ── Stagger group ── */
+/* Parent gets .bmr-stagger — children animate in sequence */
+.bmr-stagger > * {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.bmr-stagger.is-visible > * {
+  opacity: 1;
+  transform: none;
+}
+
+/* Auto stagger delays for up to 10 children */
+.bmr-stagger.is-visible > *:nth-child(1)  { transition-delay: 0.00s; }
+.bmr-stagger.is-visible > *:nth-child(2)  { transition-delay: 0.08s; }
+.bmr-stagger.is-visible > *:nth-child(3)  { transition-delay: 0.16s; }
+.bmr-stagger.is-visible > *:nth-child(4)  { transition-delay: 0.24s; }
+.bmr-stagger.is-visible > *:nth-child(5)  { transition-delay: 0.32s; }
+.bmr-stagger.is-visible > *:nth-child(6)  { transition-delay: 0.40s; }
+.bmr-stagger.is-visible > *:nth-child(7)  { transition-delay: 0.48s; }
+.bmr-stagger.is-visible > *:nth-child(8)  { transition-delay: 0.56s; }
+.bmr-stagger.is-visible > *:nth-child(9)  { transition-delay: 0.64s; }
+.bmr-stagger.is-visible > *:nth-child(10) { transition-delay: 0.72s; }
+
+/* ── Counter number animation ── */
+.bmr-count-up {
+  display: inline-block;
+  transition: opacity 0.3s;
+}
+
+/* ── Section heading accent line ── */
+.bmr-section-line {
+  display: block;
+  width: 48px;
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #0864ed, #13c89a);
+  margin: 0 auto 20px;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
+}
+
+.bmr-section-line.is-visible {
+  transform: scaleX(1);
+}
+
+/* ── Card hover micro-interactions ── */
+.bmr-hover-lift {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s ease;
+}
+
+.bmr-hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 40px rgba(8, 100, 237, 0.12);
+}
+
+/* ── Existing site cards lift on hover ── */
+.single-service:hover,
+.single-pricing:hover,
+.bmr-pillar-item:hover,
+.single-testimonial:hover,
+.single-counter:hover,
+.single-blog:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(8, 100, 237, 0.10);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s ease;
+}
+
+/* Only apply lift if element isn't already in a transform state */
+.single-service,
+.single-pricing,
+.bmr-pillar-item,
+.single-testimonial,
+.single-counter,
+.single-blog {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s ease;
+}
+
+/* ── Shimmer effect for highlighted numbers ── */
+@keyframes bmr-shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+.bmr-shimmer-text {
+  background: linear-gradient(
+    90deg,
+    #0864ed 0%,
+    #13c89a 40%,
+    #0864ed 60%,
+    #13c89a 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: bmr-shimmer 4s linear infinite;
+}
+
+/* ── Soft pulse on CTA buttons ── */
+@keyframes bmr-cta-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(8, 100, 237, 0.30); }
+  50%       { box-shadow: 0 0 0 8px rgba(8, 100, 237, 0); }
+}
+
+.bmr-cta-pulse {
+  animation: bmr-cta-pulse 2.8s ease-in-out infinite;
+}
+
+/* ── Floating ambient blob animation ── */
+@keyframes bmr-blob-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(20px, -15px) scale(1.04); }
+  66%       { transform: translate(-12px, 10px) scale(0.97); }
+}
+
+.bmr-blob {
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.08;
+  animation: bmr-blob-drift 14s ease-in-out infinite;
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+}
+
+/* ── Line separator reveal ── */
+.bmr-line-reveal {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(8,100,237,0.2), transparent);
+  transform: scaleX(0);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: center;
+}
+
+.bmr-line-reveal.is-visible {
+  transform: scaleX(1);
+}
+
+/* ── Image reveal with clip ── */
+.bmr-img-reveal {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bmr-img-reveal.is-visible {
+  clip-path: inset(0 0% 0 0);
+}

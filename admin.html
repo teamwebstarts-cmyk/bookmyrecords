@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Book My Records</title>
+  <link rel="icon" href="assets/img/sm-logo.svg" type="image/svg+xml">
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/css/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0b5ed7;
+      --primary-dark: #091a32;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --border: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+    }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    /* Auth Modal / Card */
+    .auth-wrapper {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: linear-gradient(135deg, #091a32 0%, #102a4e 100%);
+    }
+    .auth-card {
+      background: var(--surface);
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      width: 100%;
+      max-width: 420px;
+      padding: 36px;
+    }
+    /* Dashboard Layout */
+    .dashboard-header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 32px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .kpi-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .kpi-value {
+      font-size: 1.85rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-top: 4px;
+    }
+    .leads-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .table thead th {
+      background: #f1f5f9;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+    }
+    .table tbody td {
+      padding: 14px 16px;
+      vertical-align: middle;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 0.92rem;
+    }
+    .badge-appointment-yes {
+      background: #dcfce7;
+      color: #15803d;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+    }
+    .badge-appointment-no {
+      background: #f1f5f9;
+      color: #64748b;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+    }
+    .score-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+    .score-moderate {
+      background: #fef3c7;
+      color: #b45309;
+      border: 2px solid #fde68a;
+    }
+    .score-critical {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 2px solid #fecaca;
+    }
+    .score-good {
+      background: #dcfce7;
+      color: #15803d;
+      border: 2px solid #bbf7d0;
+    }
+    .btn-pdf {
+      background: #eff6ff;
+      color: var(--primary);
+      border: 1px solid #bfdbfe;
+      font-weight: 600;
+      font-size: 0.85rem;
+      border-radius: 6px;
+      padding: 6px 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-pdf:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+    .btn-refresh {
+      background: #fff;
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.88rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. LOGIN SCREEN (shown if not authenticated) -->
+  <div id="login-view" class="auth-wrapper">
+    <div class="auth-card text-center">
+      <img src="assets/img/logo/logo.png" alt="Book My Records" style="height: 38px; margin-bottom: 24px;">
+      <h4 class="fw-bold mb-2">Admin Portal</h4>
+      <p class="text-muted small mb-4">Enter master password to access leads and appointments</p>
+      
+      <form id="login-form" onsubmit="handleLogin(event)">
+        <div class="mb-3 text-start">
+          <label class="form-label small fw-semibold text-muted">Admin Password</label>
+          <div class="input-group">
+            <input type="password" id="admin-pass" class="form-control py-2" placeholder="••••••••" required autofocus>
+            <button class="btn btn-outline-secondary" type="button" onclick="togglePassVisibility()">
+              <i class="bi bi-eye" id="pass-eye-icon"></i>
+            </button>
+          </div>
+          <div id="login-error" class="text-danger small mt-2 d-none">Invalid password. Please check.</div>
+        </div>
+        <button type="submit" id="login-btn" class="btn btn-primary w-100 py-2 fw-semibold">
+          Access Dashboard
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. MAIN ADMIN DASHBOARD -->
+  <div id="dashboard-view" class="d-none">
+    
+    <!-- Top Header -->
+    <header class="dashboard-header d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center gap-3">
+        <img src="assets/img/logo/logo.png" alt="Book My Records" style="height: 32px;">
+        <span class="badge bg-light text-dark border px-2 py-1">Admin Portal</span>
+      </div>
+      <div class="d-flex align-items-center gap-3">
+        <button class="btn btn-refresh" onclick="fetchLeads()">
+          <i class="bi bi-arrow-clockwise me-1"></i> Refresh
+        </button>
+        <button class="btn btn-outline-danger btn-sm px-3" onclick="handleLogout()">
+          <i class="bi bi-box-arrow-right me-1"></i> Logout
+        </button>
+      </div>
+    </header>
+
+    <div class="container-fluid px-4 py-4">
+      
+      <!-- KPI Metric Cards -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-4">
+          <div class="kpi-card">
+            <div class="kpi-title"><i class="bi bi-file-earmark-person me-1"></i> Total Health Checkups</div>
+            <div class="kpi-value" id="kpi-total">0</div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="kpi-card">
+            <div class="kpi-title"><i class="bi bi-calendar-check me-1 text-success"></i> Consultations Booked</div>
+            <div class="kpi-value text-success" id="kpi-booked">0</div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="kpi-card">
+            <div class="kpi-title"><i class="bi bi-file-earmark-pdf me-1 text-primary"></i> Reports Generated</div>
+            <div class="kpi-value text-primary" id="kpi-reports">0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls: Search & Filters -->
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+        <div class="d-flex gap-2 align-items-center">
+          <div class="input-group" style="width: 320px;">
+            <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+            <input type="text" id="search-input" class="form-control border-start-0" placeholder="Search company, phone, name..." oninput="filterTable()">
+          </div>
+          <select id="filter-status" class="form-select" style="width: 200px;" onchange="filterTable()">
+            <option value="all">All Submissions</option>
+            <option value="booked">Appointments Booked Only</option>
+            <option value="pending">No Appointment Yet</option>
+          </select>
+        </div>
+        <div class="text-muted small" id="record-count-label">Showing 0 records</div>
+      </div>
+
+      <!-- Leads & Submissions Table -->
+      <div class="leads-card">
+        <div class="table-responsive">
+          <table class="table mb-0">
+            <thead>
+              <tr>
+                <th>Date & ID</th>
+                <th>Company & Contact</th>
+                <th>Industry & Turnover</th>
+                <th>AI Health Score</th>
+                <th>PDF Report</th>
+                <th>Appointment Status</th>
+              </tr>
+            </thead>
+            <tbody id="leads-tbody">
+              <tr>
+                <td colspan="6" class="text-center py-5 text-muted">Loading leads from database...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Detail Modal -->
+  <div class="modal fade" id="leadDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold" id="modalCompany">Company Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modalBody">
+          <!-- Populated dynamically -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/bootstrap.min.js"></script>
+  <script>
+    let allLeads = [];
+    let currentToken = localStorage.getItem('bmr_admin_token') || '';
+
+    // Check auth on load
+    window.addEventListener('DOMContentLoaded', () => {
+      if (currentToken) {
+        showDashboard();
+      } else {
+        showLogin();
+      }
+    });
+
+    function togglePassVisibility() {
+      const input = document.getElementById('admin-pass');
+      const icon = document.getElementById('pass-eye-icon');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'bi bi-eye-slash';
+      } else {
+        input.type = 'password';
+        icon.className = 'bi bi-eye';
+      }
+    }
+
+    function showLogin() {
+      document.getElementById('login-view').classList.remove('d-none');
+      document.getElementById('dashboard-view').classList.add('d-none');
+    }
+
+    function showDashboard() {
+      document.getElementById('login-view').classList.add('d-none');
+      document.getElementById('dashboard-view').classList.remove('d-none');
+      fetchLeads();
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('bmr_admin_token');
+      currentToken = '';
+      showLogin();
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const pass = document.getElementById('admin-pass').value.trim();
+      const btn = document.getElementById('login-btn');
+      const err = document.getElementById('login-error');
+      
+      btn.disabled = true;
+      btn.textContent = 'Verifying...';
+      err.classList.add('d-none');
+
+      try {
+        const res = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: pass })
+        });
+        const data = await res.json();
+        if (res.ok && data.ok) {
+          currentToken = data.token;
+          localStorage.setItem('bmr_admin_token', currentToken);
+          showDashboard();
+        } else {
+          err.classList.remove('d-none');
+        }
+      } catch (e) {
+        err.textContent = 'Server connection error. Please try again.';
+        err.classList.remove('d-none');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Access Dashboard';
+      }
+    }
+
+    async function fetchLeads() {
+      const tbody = document.getElementById('leads-tbody');
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center py-5 text-muted"><div class="spinner-border spinner-border-sm text-primary me-2"></div>Loading latest submissions...</td></tr>';
+      
+      try {
+        const res = await fetch('/api/admin/leads', {
+          headers: {
+            'x-admin-token': currentToken,
+            'Authorization': 'Bearer ' + currentToken
+          }
+        });
+        if (res.status === 401) {
+          handleLogout();
+          return;
+        }
+        const data = await res.json();
+        allLeads = data.leads || [];
+        updateKpis(allLeads);
+        renderTable(allLeads);
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-danger"><i class="bi bi-exclamation-triangle me-1"></i> Failed to load leads: ${err.message}</td></tr>`;
+      }
+    }
+
+    function updateKpis(leads) {
+      document.getElementById('kpi-total').textContent = leads.length;
+      const bookedCount = leads.filter(l => l.booking && (l.booking.start_time || l.booking.booked_at || l.status === 'booked')).length;
+      document.getElementById('kpi-booked').textContent = bookedCount;
+      const reportCount = leads.filter(l => l.report).length;
+      document.getElementById('kpi-reports').textContent = reportCount;
+    }
+
+    function renderTable(leads) {
+      const tbody = document.getElementById('leads-tbody');
+      document.getElementById('record-count-label').textContent = `Showing ${leads.length} records`;
+
+      if (leads.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center py-5 text-muted">No submissions found yet.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = leads.map(l => {
+        const sub = l.submission || {};
+        const meta = (l.report && l.report.meta) || {};
+        const scores = l.scores || (l.report && l.report.scores) || {};
+        const booking = l.booking || {};
+
+        const company = sub.company_name || meta.company_name || 'N/A';
+        const contact = sub.contact_name || 'N/A';
+        const email = sub.contact_email || 'N/A';
+        const phone = sub.contact_phone || 'N/A';
+        const industry = sub.industry || meta.industry || 'N/A';
+        const turnover = sub.turnover_band || meta.turnover_band || 'N/A';
+
+        const score = scores.overall_score !== undefined ? Math.round(scores.overall_score) : null;
+        let scoreClass = 'score-moderate';
+        if (score !== null) {
+          if (score >= 70) scoreClass = 'score-good';
+          else if (score < 50) scoreClass = 'score-critical';
+        }
+
+        const dateStr = l.created_at ? new Date(l.created_at).toLocaleDateString('en-IN', {
+          day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+        }) : 'Recent';
+
+        // Appointment status check
+        const isBooked = !!(booking.start_time || booking.booked_at || l.status === 'booked');
+        let appointmentBadge = isBooked 
+          ? `<span class="badge-appointment-yes"><i class="bi bi-check-circle-fill"></i> Booked<br><small class="fw-normal text-muted">${booking.start_time ? new Date(booking.start_time).toLocaleString('en-IN', {dateStyle:'short', timeStyle:'short'}) : 'Slot confirmed'}</small></span>`
+          : `<span class="badge-appointment-no"><i class="bi bi-clock"></i> Not Booked</span>`;
+
+        // PDF URL check
+        const pdfUrl = l.pdf && l.pdf.stored 
+          ? (l.pdf.url || `/api/checkup/report/${l.report_id}/pdf`)
+          : `/api/checkup/report/${l.report_id}/pdf`;
+
+        return `
+          <tr>
+            <td>
+              <div class="fw-semibold text-dark">${dateStr}</div>
+              <code class="small text-muted">${l.report_id || ''}</code>
+            </td>
+            <td>
+              <div class="fw-bold text-dark cursor-pointer text-primary" style="cursor: pointer;" onclick="viewLeadDetail('${l.report_id}')">
+                ${escapeHtml(company)} <i class="bi bi-box-arrow-up-right small"></i>
+              </div>
+              <div class="small text-muted">${escapeHtml(contact)}</div>
+              <div class="small"><i class="bi bi-telephone text-muted me-1"></i><a href="tel:${phone}" class="text-decoration-none">${phone}</a></div>
+              <div class="small"><i class="bi bi-envelope text-muted me-1"></i><a href="mailto:${email}" class="text-decoration-none">${email}</a></div>
+            </td>
+            <td>
+              <div>${escapeHtml(industry)}</div>
+              <div class="small text-muted">${escapeHtml(turnover)}</div>
+            </td>
+            <td>
+              ${score !== null ? `
+                <div class="score-badge ${scoreClass}">
+                  ${score}
+                </div>
+                <div class="small text-muted mt-1">${scores.risk_band || ''}</div>
+              ` : '<span class="text-muted small">N/A</span>'}
+            </td>
+            <td>
+              <a href="${pdfUrl}" target="_blank" rel="noopener noreferrer" class="btn-pdf">
+                <i class="bi bi-file-earmark-pdf"></i> View PDF
+              </a>
+            </td>
+            <td>
+              ${appointmentBadge}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterTable() {
+      const q = document.getElementById('search-input').value.toLowerCase().trim();
+      const status = document.getElementById('filter-status').value;
+
+      const filtered = allLeads.filter(l => {
+        const sub = l.submission || {};
+        const meta = (l.report && l.report.meta) || {};
+        const matchQuery = !q || 
+          (sub.company_name || meta.company_name || '').toLowerCase().includes(q) ||
+          (sub.contact_name || '').toLowerCase().includes(q) ||
+          (sub.contact_phone || '').includes(q) ||
+          (sub.contact_email || '').toLowerCase().includes(q) ||
+          (l.report_id || '').toLowerCase().includes(q);
+
+        const isBooked = !!(l.booking && (l.booking.start_time || l.booking.booked_at || l.status === 'booked'));
+        let matchStatus = true;
+        if (status === 'booked') matchStatus = isBooked;
+        if (status === 'pending') matchStatus = !isBooked;
+
+        return matchQuery && matchStatus;
+      });
+
+      renderTable(filtered);
+    }
+
+    function viewLeadDetail(reportId) {
+      const lead = allLeads.find(l => l.report_id === reportId);
+      if (!lead) return;
+
+      const sub = lead.submission || {};
+      const rep = lead.report || {};
+      const booking = lead.booking || {};
+
+      document.getElementById('modalCompany').textContent = sub.company_name || 'Lead Details';
+      document.getElementById('modalBody').innerHTML = `
+        <div class="row g-3">
+          <div class="col-md-6">
+            <h6 class="fw-bold text-muted small text-uppercase">Contact Profile</h6>
+            <p class="mb-1"><strong>Name:</strong> ${escapeHtml(sub.contact_name || 'N/A')}</p>
+            <p class="mb-1"><strong>Phone:</strong> ${escapeHtml(sub.contact_phone || 'N/A')}</p>
+            <p class="mb-1"><strong>Email:</strong> ${escapeHtml(sub.contact_email || 'N/A')}</p>
+            <p class="mb-1"><strong>Turnover:</strong> ${escapeHtml(sub.turnover_band || 'N/A')}</p>
+            <p class="mb-1"><strong>Industry:</strong> ${escapeHtml(sub.industry || 'N/A')}</p>
+          </div>
+          <div class="col-md-6">
+            <h6 class="fw-bold text-muted small text-uppercase">Appointment Status</h6>
+            <p class="mb-1"><strong>Status:</strong> ${lead.status || 'Pending'}</p>
+            <p class="mb-1"><strong>Slot:</strong> ${booking.start_time ? new Date(booking.start_time).toLocaleString('en-IN') : 'Not scheduled'}</p>
+            <p class="mb-1"><strong>Booking Source:</strong> ${booking.source || 'N/A'}</p>
+            ${booking.meeting_url ? `<p class="mb-1"><strong>Meeting Link:</strong> <a href="${booking.meeting_url}" target="_blank">Open Link</a></p>` : ''}
+          </div>
+          <div class="col-12 mt-3">
+            <h6 class="fw-bold text-muted small text-uppercase">Current Challenges / Notes</h6>
+            <div class="p-3 bg-light rounded">${escapeHtml(sub.notes || 'No challenges mentioned')}</div>
+          </div>
+          <div class="col-12 mt-3">
+            <h6 class="fw-bold text-muted small text-uppercase">AI Executive Summary</h6>
+            <div class="p-3 bg-light rounded">${escapeHtml(rep.executive_summary || 'N/A')}</div>
+          </div>
+        </div>
+      `;
+
+      const modal = new bootstrap.Modal(document.getElementById('leadDetailModal'));
+      modal.show();
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+  </script>
+  <a href="tel:+919669693315" class="d-none" aria-hidden="true">BMR Helpline</a>
+</body>
+</html>

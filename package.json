@@ -1,0 +1,20 @@
+{
+  "name": "book-my-records",
+  "version": "1.0.0",
+  "description": "Book My Records static site with AI business health assessment, PDF reports and consultation booking.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node verify_m2.js && node verify_m3.js && node verify_m4.js && node verify_e2e.js && node verify_ai_flow.js",
+    "test:live": "node verify_ai_flow.js --live",
+    "smoke": "node scripts/smoke-ai-flow.js",
+    "handover": "node scripts/generate-handover-pdf.js"
+  },
+  "keywords": [],
+  "author": "WebStarts",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^7.9.0",
+    "pdf-lib": "^1.17.1"
+  }
+}
