@@ -110,7 +110,6 @@
 
 /* ── 4. Card Tactile Micro-Interactions (Hover Elevation & Glow) ── */
 .bmr-pillar-item,
-.step-card1,
 .single-services,
 .eg-card-2,
 .service-card1,
@@ -134,7 +133,6 @@
 }
 
 .bmr-pillar-item:hover,
-.step-card1:hover,
 .single-services:hover,
 .eg-card-2:hover,
 .service-card1:hover,
@@ -171,14 +169,41 @@
   transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* ── 5. Process Step Numbers ("01", "02", "03") Soft Pulse ── */
+/* ── 5. Process Step Cards & Numbers ("01", "02", "03") Clean Interaction ── */
+/* Keep step-card1 transparent with zero box-shadow to prevent square artifacts */
+.step-card1 {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+}
+
+.step-card1:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+.step-card1 h3 {
+  transition: color 0.25s ease;
+}
+
+.step-card1:hover h3 {
+  color: #0864ed !important;
+}
+
 .step-card1 span {
-  display: inline-block;
-  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease, color 0.3s ease !important;
 }
 
 .step-card1:hover span {
+  transform: scale(1.1) !important;
   color: #0864ed !important;
+  box-shadow: 0 6px 16px rgba(8, 100, 237, 0.18) !important;
+  border-color: rgba(8, 100, 237, 0.4) !important;
 }
 
 /* ── 6. Section Subtitle Pill Floating Motion ── */
