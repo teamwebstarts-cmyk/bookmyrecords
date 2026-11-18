@@ -8,6 +8,7 @@
 'use strict';
 
 (function () {
+  const API_BASE = (typeof window !== 'undefined' && window.BMR_API_URL) ? window.BMR_API_URL.replace(/\/+$/, '') : '';
   const TOTAL_INTAKE_STEPS = 2;   // Profile → Documents; step 3 is Analysis
   const ANALYSIS_STEP = 3;
   const NOTES_MAX = 400;

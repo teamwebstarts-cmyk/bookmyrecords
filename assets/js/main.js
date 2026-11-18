@@ -114,10 +114,12 @@
   // AOS
 
   //Counter up
-  $(".counter").counterUp({
-    delay: 10,
-    time: 1000,
-  });
+  if ($.fn && $.fn.counterUp) {
+    $(".counter").counterUp({
+      delay: 10,
+      time: 1000,
+    });
+  }
 
   $(".sidebar-button").on("click", function () {
     $(this).toggleClass("active");
