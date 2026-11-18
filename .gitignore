@@ -13,3 +13,5 @@ storage/reports/
 storage/submissions/
 .DS_Store
 
+.vercel
+.env*
