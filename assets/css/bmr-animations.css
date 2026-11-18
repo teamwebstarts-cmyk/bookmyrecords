@@ -1,10 +1,10 @@
 /* ==========================================================
-   Book My Records Analytics — Global Soft Scroll Animations
-   Lightweight entrance + interaction system. Respects
-   prefers-reduced-motion. No dependencies.
+   Book My Records Analytics — Artisan Soft Motion & Interaction
+   Modern, subtle, non-intrusive animations & micro-interactions
+   "Salt in a recipe: invisible when done well, alive and tactile"
    ========================================================== */
 
-/* ── Respect reduced motion ── */
+/* ── 0. Respect Reduced Motion Gracefully ── */
 @media (prefers-reduced-motion: reduce) {
   .bmr-reveal,
   .bmr-reveal--left,
@@ -12,52 +12,65 @@
   .bmr-reveal--scale,
   .bmr-reveal--fade,
   .bmr-stagger > * {
-    opacity: 1 !important;
     transform: none !important;
-    transition: none !important;
+    transition: opacity 0.3s ease !important;
   }
 }
 
-/* ── Base reveal state (hidden) ── */
+/* ── 1. Scroll-Driven Reading Progress Bar ("Artistic Touch") ── */
+.bmr-scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, #0864ed 0%, #20c5ec 50%, #13c89a 100%);
+  z-index: 99999;
+  pointer-events: none;
+  box-shadow: 0 0 10px rgba(32, 197, 236, 0.55);
+  transition: width 0.12s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* ── 2. Ultra-Soft Scroll Reveal System (Delicate 14px travel) ── */
 .bmr-reveal {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(14px);
+  transition: opacity 0.52s cubic-bezier(0.2, 0.8, 0.2, 1),
+              transform 0.52s cubic-bezier(0.2, 0.8, 0.2, 1);
   will-change: opacity, transform;
 }
 
 .bmr-reveal--left {
   opacity: 0;
-  transform: translateX(-36px);
-  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateX(-16px);
+  transition: opacity 0.52s cubic-bezier(0.2, 0.8, 0.2, 1),
+              transform 0.52s cubic-bezier(0.2, 0.8, 0.2, 1);
   will-change: opacity, transform;
 }
 
 .bmr-reveal--right {
   opacity: 0;
-  transform: translateX(36px);
-  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateX(16px);
+  transition: opacity 0.52s cubic-bezier(0.2, 0.8, 0.2, 1),
+              transform 0.52s cubic-bezier(0.2, 0.8, 0.2, 1);
   will-change: opacity, transform;
 }
 
 .bmr-reveal--scale {
   opacity: 0;
-  transform: scale(0.94) translateY(16px);
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: scale(0.97) translateY(10px);
+  transition: opacity 0.52s cubic-bezier(0.2, 0.8, 0.2, 1),
+              transform 0.52s cubic-bezier(0.2, 0.8, 0.2, 1);
   will-change: opacity, transform;
 }
 
 .bmr-reveal--fade {
   opacity: 0;
-  transition: opacity 0.7s ease;
+  transition: opacity 0.55s ease;
   will-change: opacity;
 }
 
-/* ── Visible state (triggered by JS IntersectionObserver) ── */
+/* Revealed active states */
 .bmr-reveal.is-visible,
 .bmr-reveal--left.is-visible,
 .bmr-reveal--right.is-visible,
@@ -67,21 +80,12 @@
   transform: none;
 }
 
-/* ── Delay utilities ── */
-.bmr-delay-1 { transition-delay: 0.08s; }
-.bmr-delay-2 { transition-delay: 0.16s; }
-.bmr-delay-3 { transition-delay: 0.24s; }
-.bmr-delay-4 { transition-delay: 0.32s; }
-.bmr-delay-5 { transition-delay: 0.42s; }
-.bmr-delay-6 { transition-delay: 0.52s; }
-
-/* ── Stagger group ── */
-/* Parent gets .bmr-stagger — children animate in sequence */
+/* ── 3. Cascading Card Stagger (Delicate 12px rise) ── */
 .bmr-stagger > * {
   opacity: 0;
-  transform: translateY(22px);
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(14px);
+  transition: opacity 0.48s cubic-bezier(0.2, 0.8, 0.2, 1),
+              transform 0.48s cubic-bezier(0.2, 0.8, 0.2, 1);
   will-change: opacity, transform;
 }
 
@@ -90,145 +94,200 @@
   transform: none;
 }
 
-/* Auto stagger delays for up to 10 children */
+/* Velvety 50ms stagger delay increments */
 .bmr-stagger.is-visible > *:nth-child(1)  { transition-delay: 0.00s; }
-.bmr-stagger.is-visible > *:nth-child(2)  { transition-delay: 0.08s; }
-.bmr-stagger.is-visible > *:nth-child(3)  { transition-delay: 0.16s; }
-.bmr-stagger.is-visible > *:nth-child(4)  { transition-delay: 0.24s; }
-.bmr-stagger.is-visible > *:nth-child(5)  { transition-delay: 0.32s; }
-.bmr-stagger.is-visible > *:nth-child(6)  { transition-delay: 0.40s; }
-.bmr-stagger.is-visible > *:nth-child(7)  { transition-delay: 0.48s; }
-.bmr-stagger.is-visible > *:nth-child(8)  { transition-delay: 0.56s; }
-.bmr-stagger.is-visible > *:nth-child(9)  { transition-delay: 0.64s; }
-.bmr-stagger.is-visible > *:nth-child(10) { transition-delay: 0.72s; }
+.bmr-stagger.is-visible > *:nth-child(2)  { transition-delay: 0.05s; }
+.bmr-stagger.is-visible > *:nth-child(3)  { transition-delay: 0.10s; }
+.bmr-stagger.is-visible > *:nth-child(4)  { transition-delay: 0.15s; }
+.bmr-stagger.is-visible > *:nth-child(5)  { transition-delay: 0.20s; }
+.bmr-stagger.is-visible > *:nth-child(6)  { transition-delay: 0.25s; }
+.bmr-stagger.is-visible > *:nth-child(7)  { transition-delay: 0.30s; }
+.bmr-stagger.is-visible > *:nth-child(8)  { transition-delay: 0.35s; }
+.bmr-stagger.is-visible > *:nth-child(9)  { transition-delay: 0.40s; }
+.bmr-stagger.is-visible > *:nth-child(10) { transition-delay: 0.45s; }
+.bmr-stagger.is-visible > *:nth-child(11) { transition-delay: 0.50s; }
+.bmr-stagger.is-visible > *:nth-child(12) { transition-delay: 0.55s; }
 
-/* ── Counter number animation ── */
-.bmr-count-up {
-  display: inline-block;
-  transition: opacity 0.3s;
-}
-
-/* ── Section heading accent line ── */
-.bmr-section-line {
-  display: block;
-  width: 48px;
-  height: 3px;
-  border-radius: 2px;
-  background: linear-gradient(90deg, #0864ed, #13c89a);
-  margin: 0 auto 20px;
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
-}
-
-.bmr-section-line.is-visible {
-  transform: scaleX(1);
-}
-
-/* ── Card hover micro-interactions ── */
-.bmr-hover-lift {
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.3s ease;
-}
-
-.bmr-hover-lift:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 16px 40px rgba(8, 100, 237, 0.12);
-}
-
-/* ── Existing site cards lift on hover ── */
-.single-service:hover,
-.single-pricing:hover,
-.bmr-pillar-item:hover,
-.single-testimonial:hover,
-.single-counter:hover,
-.single-blog:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(8, 100, 237, 0.10);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.3s ease;
-}
-
-/* Only apply lift if element isn't already in a transform state */
+/* ── 4. Card Tactile Micro-Interactions (Hover Elevation & Glow) ── */
+.bmr-pillar-item,
+.step-card1,
+.single-services,
+.eg-card-2,
+.service-card1,
+.service-card2,
+.services-card1,
+.services-card2,
+.services-item,
 .single-service,
 .single-pricing,
-.bmr-pillar-item,
+.pricing-plan-card,
 .single-testimonial,
 .single-counter,
-.single-blog {
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.3s ease;
+.single-blog,
+.bmr-compact-form-card,
+.contact-info-wrap,
+.bmr-channel-card,
+.accordion-item {
+  transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 0.32s ease,
+              border-color 0.32s ease !important;
 }
 
-/* ── Shimmer effect for highlighted numbers ── */
-@keyframes bmr-shimmer {
-  0%   { background-position: -200% center; }
-  100% { background-position:  200% center; }
+.bmr-pillar-item:hover,
+.step-card1:hover,
+.single-services:hover,
+.eg-card-2:hover,
+.service-card1:hover,
+.service-card2:hover,
+.services-card1:hover,
+.services-card2:hover,
+.services-item:hover,
+.single-service:hover,
+.single-pricing:hover,
+.pricing-plan-card:hover,
+.single-testimonial:hover,
+.single-counter:hover,
+.single-blog:hover,
+.bmr-channel-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 14px 30px -4px rgba(8, 100, 237, 0.10), 0 4px 10px rgba(0, 0, 0, 0.03) !important;
 }
 
-.bmr-shimmer-text {
-  background: linear-gradient(
-    90deg,
-    #0864ed 0%,
-    #13c89a 40%,
-    #0864ed 60%,
-    #13c89a 100%
-  );
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: bmr-shimmer 4s linear infinite;
+/* Subtle card icon interactive response */
+.bmr-pillar-item:hover .bmr-pillar-icon svg,
+.step-card1:hover span,
+.single-services:hover .icon img,
+.eg-card-2:hover .icon img,
+.single-service:hover .icon img,
+.service-item:hover .icon img {
+  transform: scale(1.08) translateY(-2px);
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* ── Soft pulse on CTA buttons ── */
-@keyframes bmr-cta-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(8, 100, 237, 0.30); }
-  50%       { box-shadow: 0 0 0 8px rgba(8, 100, 237, 0); }
+.bmr-pillar-icon svg,
+.single-services .icon img,
+.eg-card-2 .icon img,
+.single-service .icon img {
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.bmr-cta-pulse {
-  animation: bmr-cta-pulse 2.8s ease-in-out infinite;
+/* ── 5. Process Step Numbers ("01", "02", "03") Soft Pulse ── */
+.step-card1 span {
+  display: inline-block;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.3s ease;
 }
 
-/* ── Floating ambient blob animation ── */
-@keyframes bmr-blob-drift {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33%       { transform: translate(20px, -15px) scale(1.04); }
-  66%       { transform: translate(-12px, 10px) scale(0.97); }
+.step-card1:hover span {
+  color: #0864ed !important;
 }
 
-.bmr-blob {
-  border-radius: 50%;
-  filter: blur(60px);
-  opacity: 0.08;
-  animation: bmr-blob-drift 14s ease-in-out infinite;
+/* ── 6. Section Subtitle Pill Floating Motion ── */
+@keyframes bmr-pill-drift {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-3px); }
+}
+
+.section-title1 span:first-child,
+.section-top span:first-child,
+.section-title .sub-title,
+.bmr-hero__eyebrow {
+  animation: bmr-pill-drift 5s ease-in-out infinite;
+}
+
+/* ── 7. Video Play Button Ripple Pulse ── */
+@keyframes bmr-play-ripple {
+  0% {
+    box-shadow: 0 0 0 0 rgba(8, 100, 237, 0.45);
+  }
+  70% {
+    box-shadow: 0 0 0 16px rgba(8, 100, 237, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(8, 100, 237, 0);
+  }
+}
+
+.project-walkthrough-video__play,
+.video-wrap .play-btn,
+.video-btn {
+  animation: bmr-play-ripple 2.6s infinite;
+  transition: transform 0.3s ease;
+}
+
+.project-walkthrough-video__play:hover,
+.video-wrap .play-btn:hover,
+.video-btn:hover {
+  transform: scale(1.08);
+}
+
+/* ── 8. Tactile Button Physics ── */
+.btn-primary,
+.btn-secondary,
+.bmr-button--primary,
+.bmr-button--secondary,
+.header-btn,
+.eg-btn {
+  transition: transform 0.24s cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 0.24s ease,
+              background-color 0.24s ease !important;
+}
+
+.btn-primary:hover,
+.btn-secondary:hover,
+.bmr-button--primary:hover,
+.bmr-button--secondary:hover,
+.header-btn:hover,
+.eg-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 20px rgba(8, 100, 237, 0.20) !important;
+}
+
+.btn-primary:active,
+.btn-secondary:active,
+.bmr-button--primary:active,
+.bmr-button--secondary:active,
+.header-btn:active,
+.eg-btn:active {
+  transform: translateY(0) scale(0.98) !important;
+}
+
+/* ── 9. Form Input Interactive Halo ── */
+.form-control:focus,
+.bmr-form-group input:focus,
+.bmr-form-group select:focus,
+.bmr-form-group textarea:focus {
+  border-color: #0864ed !important;
+  box-shadow: 0 0 0 3.5px rgba(8, 100, 237, 0.14) !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* ── 10. FAQ Accordion Item Highlight ── */
+.accordion-item {
+  border-radius: 12px !important;
+  overflow: hidden;
+  margin-bottom: 12px;
+  border: 1px solid rgba(8, 100, 237, 0.10) !important;
+}
+
+.accordion-item:hover {
+  border-color: rgba(8, 100, 237, 0.28) !important;
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: #f3f7fd !important;
+  color: #0864ed !important;
+  box-shadow: none !important;
+}
+
+/* ── 11. Subtle Ambient Vector Floating Parallax ── */
+@keyframes bmr-ambient-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-8px) rotate(1deg); }
+}
+
+.left-vec,
+.right-vec,
+.cover-left-vec {
+  animation: bmr-ambient-float 9s ease-in-out infinite;
   pointer-events: none;
-  position: absolute;
-  z-index: 0;
-}
-
-/* ── Line separator reveal ── */
-.bmr-line-reveal {
-  display: block;
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(8,100,237,0.2), transparent);
-  transform: scaleX(0);
-  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-  transform-origin: center;
-}
-
-.bmr-line-reveal.is-visible {
-  transform: scaleX(1);
-}
-
-/* ── Image reveal with clip ── */
-.bmr-img-reveal {
-  clip-path: inset(0 100% 0 0);
-  transition: clip-path 0.75s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.bmr-img-reveal.is-visible {
-  clip-path: inset(0 0% 0 0);
 }

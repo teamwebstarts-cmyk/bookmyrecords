@@ -1,121 +1,81 @@
 /**
- * Book My Records Analytics — Global Soft Scroll Animation Engine
- * Lightweight IntersectionObserver-based reveal system.
- * Covers: .bmr-reveal variants, .bmr-stagger, .bmr-count-up,
- *         .bmr-section-line, .bmr-line-reveal, .bmr-img-reveal
+ * Book My Records Analytics — Artisan Soft Motion & Interaction Engine
+ * Ultra-lightweight, 60fps, GPU-composited scroll & tactile micro-interactions.
+ * Non-intrusive: "Invisible when done well, alive and tactile."
  */
 (function () {
   'use strict';
 
-  // ── Respect prefers-reduced-motion ──────────────────────────────────────
-  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  if (prefersReduced) {
-    // Make everything instantly visible
-    document.addEventListener('DOMContentLoaded', function () {
-      document.querySelectorAll(
-        '.bmr-reveal, .bmr-reveal--left, .bmr-reveal--right, ' +
-        '.bmr-reveal--scale, .bmr-reveal--fade, .bmr-stagger, ' +
-        '.bmr-section-line, .bmr-line-reveal, .bmr-img-reveal'
-      ).forEach(function (el) {
-        el.classList.add('is-visible');
-      });
-    });
-    return;
-  }
-
-  // ── Utility: create a single IntersectionObserver ───────────────────────
-  function makeObserver(selector, threshold, callback) {
-    if (!('IntersectionObserver' in window)) {
-      // Fallback: show everything
-      document.querySelectorAll(selector).forEach(function (el) {
-        el.classList.add('is-visible');
-      });
-      return null;
+  // ── 1. Create & Manage Scroll-Driven Progress Bar ──────────────────────────
+  function initProgressBar() {
+    var bar = document.querySelector('.bmr-scroll-progress');
+    if (!bar) {
+      bar = document.createElement('div');
+      bar.className = 'bmr-scroll-progress';
+      bar.setAttribute('aria-hidden', 'true');
+      document.body.prepend(bar);
     }
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          callback(entry.target);
-          io.unobserve(entry.target); // fire once
-        }
-      });
-    }, { threshold: threshold, rootMargin: '0px 0px -48px 0px' });
 
-    document.querySelectorAll(selector).forEach(function (el) {
-      io.observe(el);
-    });
-    return io;
+    var ticking = false;
+    function updateProgress() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
+      var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      var progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      bar.style.width = Math.min(Math.max(progress, 0), 100).toFixed(2) + '%';
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        window.requestAnimationFrame(updateProgress);
+        ticking = true;
+      }
+    }, { passive: true });
+
+    updateProgress();
   }
 
-  // ── 1. Generic reveal elements ───────────────────────────────────────────
-  var revealSelector = [
-    '.bmr-reveal',
-    '.bmr-reveal--left',
-    '.bmr-reveal--right',
-    '.bmr-reveal--scale',
-    '.bmr-reveal--fade',
-    '.bmr-section-line',
-    '.bmr-line-reveal',
-    '.bmr-img-reveal'
-  ].join(', ');
+  // ── 2. Counter Animation for Metrics ──────────────────────────────────────
+  function animateNumber(el) {
+    var raw = el.dataset.bmrTarget || el.textContent.trim();
+    var numMatch = raw.match(/([0-9.,]+)/);
+    if (!numMatch) return;
 
-  makeObserver(revealSelector, 0.10, function (el) {
-    el.classList.add('is-visible');
-  });
-
-  // ── 2. Stagger groups ────────────────────────────────────────────────────
-  makeObserver('.bmr-stagger', 0.08, function (el) {
-    el.classList.add('is-visible');
-  });
-
-  // ── 3. Count-up numbers ──────────────────────────────────────────────────
-  function animateCount(el) {
-    var target = parseFloat(el.dataset.target || el.textContent.replace(/[^0-9.]/g, ''));
-    var suffix = el.dataset.suffix || el.textContent.replace(/[0-9.]/g, '').trim();
-    var duration = parseInt(el.dataset.duration || '1800', 10);
-    var start = null;
-    var startVal = 0;
-    var isFloat = target % 1 !== 0;
+    var targetNum = parseFloat(numMatch[1].replace(/,/g, ''));
+    var prefix = raw.slice(0, raw.indexOf(numMatch[1]));
+    var suffix = raw.slice(raw.indexOf(numMatch[1]) + numMatch[1].length);
+    var duration = 1400; // Snappy 1.4s
+    var startTime = null;
 
     function step(timestamp) {
-      if (!start) start = timestamp;
-      var progress = Math.min((timestamp - start) / duration, 1);
-      // Ease out cubic
-      var eased = 1 - Math.pow(1 - progress, 3);
-      var current = startVal + (target - startVal) * eased;
-      el.textContent = (isFloat ? current.toFixed(1) : Math.floor(current)) + suffix;
-      if (progress < 1) requestAnimationFrame(step);
-      else el.textContent = target + suffix;
+      if (!startTime) startTime = timestamp;
+      var progress = Math.min((timestamp - startTime) / duration, 1);
+      // Smooth ease-out exponential
+      var ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+      var current = targetNum * ease;
+      el.textContent = prefix + (targetNum % 1 !== 0 ? current.toFixed(1) : Math.round(current)) + suffix;
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      } else {
+        el.textContent = raw;
+      }
     }
-    requestAnimationFrame(step);
+    window.requestAnimationFrame(step);
   }
 
-  makeObserver('.bmr-count-up', 0.5, animateCount);
-
-  // ── 4. Add .bmr-reveal to common site sections automatically ─────────────
-  // This retrofits existing HTML without touching each file's markup.
+  // ── 3. DOM Classification for Site-Wide Soft Reveals ──────────────────────
   document.addEventListener('DOMContentLoaded', function () {
+    initProgressBar();
 
-    // Section titles / sub-titles
+    // A. Section Titles & Subtitles (Glide up 14px)
     var headingSelectors = [
-      '.section-title h2',
-      '.section-title h3',
-      '.section-title p',
-      '.section-title .sub-title',
-      '.section-title .title',
-      '.section-title1 h2',
-      '.section-title1 h3',
-      '.section-title1 h4',
-      '.section-title1 p',
-      '.section-title1 .sub-title',
-      '.section-title1 .section-title-sub',
-      '.section-top h2',
-      '.section-top p',
-      '.section-top .sub-title',
-      '.area-title h2',
-      '.area-title h3',
-      '.area-title p'
+      '.section-title',
+      '.section-title1',
+      '.section-top',
+      '.area-title',
+      '.who-we-help-header',
+      '.business-challenges-header',
+      '.client-testimonials-header'
     ];
     headingSelectors.forEach(function (sel) {
       document.querySelectorAll(sel).forEach(function (el) {
@@ -125,25 +85,27 @@
       });
     });
 
-    // Service / pillar cards → stagger their parent row
-    [
+    // B. Card Grids & Lists (Stagger children in cascade)
+    var staggerContainers = [
+      '.bmr-pillars-row',
+      '.who-we-help-cards',
+      '.sevices-wrap',
+      '.business-challenges-cards',
+      '.our-process-steps',
       '.service-area .row',
-      '.pillar-area .row',
-      '.why-choose-us .row',
-      '.features-area .row',
-      '.bmr-pillars__grid',
-      '.bmr-channels-grid',
-      '.bmr-pricing-grid',
-      '.blog-area .row',
+      '.service-area6 .row',
+      '.services-wrapper .row',
+      '.pricing-area .row',
+      '.pricing-section .row',
+      '.testimonial-section .row',
+      '.testimonial-area .row',
       '.team-area .row',
       '.counter-area .row',
-      '.testimonial-area .row',
-      '.bmr-pillars-row',
-      '.pricing-area .row',
-      '.faq-area .row',
-      '.service-area6 .row',
-      '.choose-area .row'
-    ].forEach(function (sel) {
+      '.blog-area .row',
+      '.accordion',
+      '.faq-wrap'
+    ];
+    staggerContainers.forEach(function (sel) {
       document.querySelectorAll(sel).forEach(function (row) {
         if (!row.classList.contains('bmr-stagger')) {
           row.classList.add('bmr-stagger');
@@ -151,120 +113,82 @@
       });
     });
 
-    // Individual cards (non-stagger fallback)
-    [
-      '.single-service',
-      '.single-pricing',
-      '.single-counter',
-      '.single-blog',
-      '.single-team',
-      '.single-testimonial',
-      '.bmr-pillar-item',
-      '.bmr-channel-card',
-      '.bmr-trust-pill',
-      '.accordion-item',
-      '.faq-item'
-    ].forEach(function (sel) {
-      document.querySelectorAll(sel).forEach(function (el) {
-        if (!el.closest('.bmr-stagger') && !el.classList.contains('bmr-reveal')) {
-          el.classList.add('bmr-reveal');
-        }
-      });
-    });
-
-    // CTA sections / banners
-    [
-      '.cta-area',
-      '.bmr-cta-section',
-      '.bmr-contact-section',
-      '.bmr-compact-form-card',
-      '.contact-info-wrap',
-      '.map-area'
-    ].forEach(function (sel) {
-      document.querySelectorAll(sel).forEach(function (el) {
-        if (!el.classList.contains('bmr-reveal') && !el.classList.contains('bmr-reveal--scale')) {
-          el.classList.add('bmr-reveal--scale');
-        }
-      });
-    });
-
-    // Images inside content sections
-    document.querySelectorAll('.about-img, .service-img, .hero-img, .team-img').forEach(function (el) {
+    // C. Content side-by-side blocks (Left image, Right content)
+    document.querySelectorAll('.about-img, .project-walkthrough-video, .video-wrapper').forEach(function (el) {
       if (!el.classList.contains('bmr-reveal--left')) {
         el.classList.add('bmr-reveal--left');
       }
     });
 
-    // Content text blocks beside images
-    document.querySelectorAll('.about-content, .service-content').forEach(function (el) {
+    document.querySelectorAll('.about-content, .contact-info-wrap').forEach(function (el) {
       if (!el.classList.contains('bmr-reveal--right')) {
         el.classList.add('bmr-reveal--right');
       }
     });
 
-    // Footer columns
-    document.querySelectorAll('.footer-widget').forEach(function (el, i) {
-      el.classList.add('bmr-reveal');
-      el.style.transitionDelay = (i * 0.08) + 's';
+    // D. CTA Sections & Big Cards (Soft scale reveal)
+    document.querySelectorAll('.bmr-cta-section, .bmr-contact-section, .cta-area').forEach(function (el) {
+      if (!el.classList.contains('bmr-reveal--scale')) {
+        el.classList.add('bmr-reveal--scale');
+      }
     });
 
-    // Now re-observe everything that was just classified
-    var allReveal = document.querySelectorAll(
+    // E. Footer Columns (Staggered fade in)
+    document.querySelectorAll('.footer-area .footer-widget, footer .footer-widget').forEach(function (el, i) {
+      el.classList.add('bmr-reveal');
+      el.style.transitionDelay = (i * 0.06) + 's';
+    });
+
+    // ── 4. Unified IntersectionObserver for Reveal Execution ─────────────────
+    var revealElements = document.querySelectorAll(
       '.bmr-reveal, .bmr-reveal--left, .bmr-reveal--right, ' +
       '.bmr-reveal--scale, .bmr-reveal--fade, .bmr-stagger'
     );
 
     if (!('IntersectionObserver' in window)) {
-      allReveal.forEach(function (el) { el.classList.add('is-visible'); });
+      revealElements.forEach(function (el) { el.classList.add('is-visible'); });
       return;
     }
 
-    var globalIO = new IntersectionObserver(function (entries) {
+    var observer = new IntersectionObserver(function (entries, io) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
           entry.target.classList.add('is-visible');
-          globalIO.unobserve(entry.target);
+
+          // Trigger counter animation if inside visible container
+          entry.target.querySelectorAll('.bmr-counter-val, .single-counter h2, .count').forEach(function (counterEl) {
+            if (!counterEl.dataset.counted) {
+              counterEl.dataset.counted = 'true';
+              animateNumber(counterEl);
+            }
+          });
+
+          io.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    }, {
+      threshold: 0.08,
+      rootMargin: '0px 0px -36px 0px' // Reveals slightly before bottom of screen
+    });
 
-    allReveal.forEach(function (el) {
-      // Don't re-observe elements that are already visible (above fold)
+    revealElements.forEach(function (el) {
       var rect = el.getBoundingClientRect();
+      // If element is already in the viewport upon initial load, reveal immediately
       if (rect.top < window.innerHeight && rect.bottom > 0) {
         el.classList.add('is-visible');
       } else {
-        globalIO.observe(el);
+        observer.observe(el);
       }
     });
 
-    // ── 5. Soft parallax on scroll for section backgrounds ──────────────
-    var parallaxEls = document.querySelectorAll('[data-bmr-parallax]');
-    if (parallaxEls.length > 0) {
-      var ticking = false;
-      window.addEventListener('scroll', function () {
-        if (!ticking) {
-          requestAnimationFrame(function () {
-            parallaxEls.forEach(function (el) {
-              var speed = parseFloat(el.dataset.bmrParallax || 0.15);
-              var rect = el.getBoundingClientRect();
-              var offset = (window.innerHeight / 2 - rect.top) * speed;
-              el.style.transform = 'translateY(' + offset.toFixed(1) + 'px)';
-            });
-            ticking = false;
-          });
-          ticking = true;
-        }
-      }, { passive: true });
+    // ── 5. Magnetic Back-to-Top Button ───────────────────────────────────────
+    var backToTop = document.querySelector('.scroll-top, .back-to-top, .scroll-up');
+    if (backToTop) {
+      backToTop.addEventListener('click', function (e) {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
     }
 
-    // ── 6. Soft CTA button pulse on hover ───────────────────────────────
-    document.querySelectorAll('.btn-primary, .bmr-button--primary').forEach(function (btn) {
-      if (!btn.classList.contains('bmr-cta-pulse')) {
-        btn.classList.add('bmr-cta-pulse');
-      }
-    });
-
   }); // end DOMContentLoaded
-
 })();

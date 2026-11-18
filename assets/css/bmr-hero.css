@@ -34,12 +34,15 @@
   color: var(--bmr-navy);
   font-family: 'Plus Jakarta Sans', var(--font-montserrat, Montserrat), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  font-synthesis: none;
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  min-height: 820px;
-  padding: 135px 0 100px;
+  min-height: 860px;
+  padding: 135px 0 120px;
   background:
     radial-gradient(ellipse 65% 55% at 50% 38%, rgba(255, 255, 255, 0.99) 0%, rgba(255, 255, 255, 0.92) 48%, rgba(245, 249, 255, 0.35) 100%),
     linear-gradient(135deg, #f7faff 0%, #ffffff 50%, #f0f6ff 100%);
@@ -128,15 +131,21 @@
   max-width: 1100px;
   margin: 32px 0 0;
   color: var(--bmr-navy);
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: clamp(38px, 4.4vw, 64px);
-  font-weight: 800;
-  line-height: 1.14;
-  letter-spacing: -0.035em;
+  font-weight: 750;
+  line-height: 1.16;
+  letter-spacing: -0.018em;
   text-wrap: balance;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-synthesis: none;
 }
 
 .bmr-hero__title-line {
   display: block;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .bmr-hero__title-line--navy {
@@ -149,6 +158,9 @@
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 1px 1px rgba(8, 100, 237, 0.05));
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 /* Sub-Description */
@@ -378,50 +390,74 @@
 
 /* Card 1: Report (Top-Left) */
 .bmr-visual--report {
-  top: 92px;
-  left: 3.5%;
-  transform: translate3d(var(--shift-x, 0px), var(--shift-y, 0px), 0) rotate(-8deg);
+  top: 80px;
+  left: 3.2%;
+  width: 142px;
+  height: 142px;
+  transform: translate3d(var(--shift-x, 0px), var(--shift-y, 0px), 0) rotate(-6.5deg);
 }
-.bmr-visual--report .bmr-visual__glass {
+.bmr-visual--report .bmr-svg-standalone {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 8px 18px rgba(37, 111, 221, 0.08));
+  animation: bmr-float-1 5.4s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
   animation-delay: -0.6s;
-  animation-duration: 5.8s;
+  will-change: transform;
 }
 
 /* Card 2: Shield (Top-Right) */
 .bmr-visual--shield {
-  top: 78px;
-  right: 3.8%;
-  transform: translate3d(var(--shift-x, 0px), var(--shift-y, 0px), 0) rotate(8deg);
+  top: 75px;
+  right: 4.2%;
+  width: 132px;
+  height: 125px;
+  transform: translate3d(var(--shift-x, 0px), var(--shift-y, 0px), 0) rotate(7.5deg);
 }
-.bmr-visual--shield .bmr-visual__glass {
+.bmr-visual--shield .bmr-svg-standalone {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 14px 28px rgba(37, 111, 221, 0.12));
+  animation: bmr-float-2 6.0s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
   animation-delay: -2.1s;
-  animation-duration: 6.2s;
+  will-change: transform;
 }
 
-/* Card 3: Coins (Bottom-Left) */
+/* Card 3: Coins / Database Storage (Bottom-Left) */
 .bmr-visual--coins {
-  top: 310px;
-  left: 8.2%;
-  width: 130px;
-  height: 130px;
-  transform: translate3d(var(--shift-x, 0px), var(--shift-y, 0px), 0) rotate(-7deg);
+  top: 305px;
+  left: 7.8%;
+  width: 144px;
+  height: 128px;
+  transform: translate3d(var(--shift-x, 0px), var(--shift-y, 0px), 0) rotate(-5deg);
 }
-.bmr-visual--coins .bmr-visual__glass {
+.bmr-visual--coins .bmr-svg-standalone {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 14px 28px rgba(37, 111, 221, 0.12));
+  animation: bmr-float-3 6.4s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
   animation-delay: -3.5s;
-  animation-duration: 6.6s;
+  will-change: transform;
 }
 
 /* Card 4: Growth (Bottom-Right) */
 .bmr-visual--growth {
   top: 305px;
-  right: 8.0%;
-  width: 136px;
-  height: 136px;
-  transform: translate3d(var(--shift-x, 0px), var(--shift-y, 0px), 0) rotate(7deg);
+  right: 7.6%;
+  width: 144px;
+  height: 128px;
+  transform: translate3d(var(--shift-x, 0px), var(--shift-y, 0px), 0) rotate(5.5deg);
 }
-.bmr-visual--growth .bmr-visual__glass {
+.bmr-visual--growth .bmr-svg-standalone {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 14px 28px rgba(15, 159, 138, 0.14));
+  animation: bmr-float-4 5.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
   animation-delay: -1.4s;
-  animation-duration: 5.6s;
+  will-change: transform;
 }
 
 /* Rising Chart Bars Animation */
@@ -570,14 +606,51 @@
 }
 
 /* ==========================================================
-   Keyframe Animations
+   Organic Soft Floating Keyframe Animations
+   Gentle sine-wave vertical bob + micro-tilt sway
    ========================================================== */
+@keyframes bmr-float-1 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(0, -9px, 0) rotate(1deg);
+  }
+}
+
+@keyframes bmr-float-2 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(0, -11px, 0) rotate(-1.2deg);
+  }
+}
+
+@keyframes bmr-float-3 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(0, -10px, 0) rotate(1.4deg);
+  }
+}
+
+@keyframes bmr-float-4 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(0, -12px, 0) rotate(-1deg);
+  }
+}
+
 @keyframes bmr-float {
   0%, 100% {
     transform: translate3d(0, 0, 0);
   }
   50% {
-    transform: translate3d(0, -11px, 0);
+    transform: translate3d(0, -10px, 0);
   }
 }
 
@@ -971,5 +1044,111 @@
   }
   .bmr-visual {
     transform: none !important;
+  }
+}
+
+
+/* ==========================================================
+   Detailed Glassmorphic Orbit Nodes ('The Two Dots')
+   High-detail concentric rings, inner jewel core, soft breathing pulse
+   ========================================================== */
+
+.bmr-orbit-node {
+  position: absolute;
+  z-index: 4;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1.5px solid rgba(110, 175, 255, 0.45);
+  box-shadow: 
+    0 4px 14px rgba(8, 100, 237, 0.14),
+    0 0 0 4px rgba(110, 175, 255, 0.12),
+    inset 0 1px 2px rgba(255, 255, 255, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+  animation: bmr-node-breathe 4s ease-in-out infinite;
+}
+
+.bmr-orbit-node:hover {
+  transform: scale(1.22);
+  box-shadow: 
+    0 6px 20px rgba(8, 100, 237, 0.25),
+    0 0 0 6px rgba(19, 200, 154, 0.20),
+    inset 0 1px 3px rgba(255, 255, 255, 1);
+}
+
+/* Concentric micro-ring inside node */
+.bmr-orbit-node__ring {
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  border: 1px dashed rgba(8, 100, 237, 0.30);
+  animation: bmr-node-spin 14s linear infinite;
+}
+
+/* Glowing center core jewel */
+.bmr-orbit-node__core {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0864ed 0%, #13c89a 100%);
+  box-shadow: 0 0 8px rgba(8, 100, 237, 0.65);
+  animation: bmr-node-glow 2.5s ease-in-out infinite alternate;
+}
+
+/* Node Right: attached to growth card top-right corner */
+.bmr-orbit-node--growth {
+  top: -12px;
+  right: -12px;
+  animation-delay: -1.2s;
+}
+
+/* Node Left: attached to coins card top-left corner */
+.bmr-orbit-node--coins {
+  top: -12px;
+  left: -12px;
+  animation-delay: -2.8s;
+}
+
+/* Node Animations */
+@keyframes bmr-node-breathe {
+  0%, 100% {
+    transform: scale(1) translateY(0);
+    box-shadow: 
+      0 4px 14px rgba(8, 100, 237, 0.14),
+      0 0 0 4px rgba(110, 175, 255, 0.12),
+      inset 0 1px 2px rgba(255, 255, 255, 1);
+  }
+  50% {
+    transform: scale(1.08) translateY(-3px);
+    box-shadow: 
+      0 8px 22px rgba(8, 100, 237, 0.22),
+      0 0 0 7px rgba(110, 175, 255, 0.18),
+      inset 0 1px 2px rgba(255, 255, 255, 1);
+  }
+}
+
+@keyframes bmr-node-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes bmr-node-glow {
+  0% {
+    opacity: 0.75;
+    transform: scale(0.9);
+    box-shadow: 0 0 4px rgba(8, 100, 237, 0.4);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.15);
+    box-shadow: 0 0 10px rgba(19, 200, 154, 0.8);
   }
 }

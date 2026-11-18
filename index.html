@@ -6,6 +6,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <!-- Bootstrap CSS -->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icon CSS -->
@@ -131,125 +136,482 @@
       <div class="bmr-hero__ambient bmr-hero__ambient--left" aria-hidden="true"></div>
       <div class="bmr-hero__ambient bmr-hero__ambient--right" aria-hidden="true"></div>
 
-      <svg class="bmr-hero__orbit" viewBox="0 0 1600 470" preserveAspectRatio="none" aria-hidden="true">
-        <!-- Outer dashed orbit rings -->
-        <ellipse class="bmr-orbit--outer" cx="200" cy="230" rx="125" ry="150" />
-        <ellipse class="bmr-orbit--outer" cx="1400" cy="230" rx="125" ry="150" />
-        <!-- Inner tighter orbit rings -->
-        <ellipse class="bmr-orbit--inner" cx="200" cy="230" rx="90" ry="110" />
-        <ellipse class="bmr-orbit--inner" cx="1400" cy="230" rx="90" ry="110" />
-        <!-- Travelling satellite dots (animated via CSS) -->
-        <circle class="bmr-orbit--dot" cx="75" cy="230" r="4" />
-        <circle class="bmr-orbit--dot" cx="1525" cy="230" r="4" />
-        <circle class="bmr-orbit--dot-inner" cx="110" cy="230" r="3" />
-        <circle class="bmr-orbit--dot-inner" cx="1310" cy="230" r="3" />
-      </svg>
-
       <div class="bmr-hero__inner">
         <!-- Floating decorative cards with inline SVG illustrations -->
         <div class="bmr-hero__visuals" aria-hidden="true">
           <!-- Card 1: Report (Top-Left) -->
           <div class="bmr-visual bmr-visual--report" data-parallax="0.7">
-            <div class="bmr-visual__glass">
-              <svg viewBox="0 0 120 120" role="presentation">
-                <defs>
-                  <linearGradient id="reportPaper" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0" stop-color="#ffffff" />
-                    <stop offset="1" stop-color="#eaf3ff" />
-                  </linearGradient>
-                  <linearGradient id="reportBlue" x1="0" y1="0" x2="0.9" y2="1">
-                    <stop offset="0" stop-color="#4ea4ff" />
-                    <stop offset="1" stop-color="#185be8" />
-                  </linearGradient>
-                  <linearGradient id="reportPurple" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0" stop-color="#8c6cff" />
-                    <stop offset="1" stop-color="#5636df" />
-                  </linearGradient>
-                </defs>
-                <path d="M27 13h49l20 20v70a7 7 0 0 1-7 7H27a7 7 0 0 1-7-7V20a7 7 0 0 1 7-7Z" fill="url(#reportPaper)" stroke="#d8e8ff" stroke-width="1.5" />
-                <path d="M76 13v18a3 3 0 0 0 3 3h17" fill="#dceaff" />
-                <path d="M31 39h22M31 47h16" stroke="#c5dcfb" stroke-width="4" stroke-linecap="round" />
-                <path d="M31 68 45 59l9 5 18-20" fill="none" stroke="#2c83f4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="m65 44 8-1-2 8" fill="none" stroke="#2c83f4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-                <rect x="30" y="77" width="15" height="19" rx="3" fill="url(#reportPurple)" />
-                <rect x="50" y="70" width="15" height="26" rx="3" fill="#6274ef" />
-                <rect x="70" y="62" width="15" height="34" rx="3" fill="url(#reportBlue)" />
-                <path d="M30 101h55" stroke="#d7e7fb" stroke-width="3" stroke-linecap="round" />
-              </svg>
-            </div>
+            <svg width="240" height="240" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Analytics report icon" class="bmr-svg-standalone">
+              <defs>
+                <!-- Background curve -->
+                <linearGradient id="pa-curve" x1="46" y1="168" x2="74" y2="240" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#bfd0ee" stop-opacity="0"/>
+                  <stop offset="0.3" stop-color="#bfd0ee" stop-opacity="0.95"/>
+                  <stop offset="1" stop-color="#bfd0ee" stop-opacity="0.25"/>
+                </linearGradient>
+
+                <!-- Card layers -->
+                <linearGradient id="pa-card-outer" x1="30" y1="34" x2="190" y2="194" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#ffffff"/>
+                  <stop offset="0.6" stop-color="#edf3fc"/>
+                  <stop offset="1" stop-color="#d6e3f6"/>
+                </linearGradient>
+                <linearGradient id="pa-card-inner" x1="110" y1="41" x2="110" y2="187" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#ffffff"/>
+                  <stop offset="1" stop-color="#f1f6fd"/>
+                </linearGradient>
+                <linearGradient id="pa-shine" x1="40" y1="40" x2="110" y2="110" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#ffffff" stop-opacity="0.95"/>
+                  <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+                </linearGradient>
+
+                <!-- Blue triangle (corner) gradients -->
+                <linearGradient id="pa-tri" x1="158" y1="28" x2="200" y2="80" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#4f7cf0"/>
+                  <stop offset="1" stop-color="#2c55e0"/>
+                </linearGradient>
+                <linearGradient id="pa-tri-hi" x1="159" y1="31" x2="190" y2="50" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#90b4ff"/>
+                  <stop offset="1" stop-color="#4f7cf0"/>
+                </linearGradient>
+
+                <!-- Text lines -->
+                <linearGradient id="pa-lines" x1="58" y1="0" x2="112" y2="0" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#7ea3f5"/>
+                  <stop offset="1" stop-color="#c4d6fa"/>
+                </linearGradient>
+
+                <!-- Arrow -->
+                <linearGradient id="pa-arrow" x1="62" y1="112" x2="166" y2="62" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#8fb3f8"/>
+                  <stop offset="1" stop-color="#3f6cee"/>
+                </linearGradient>
+
+                <!-- Bars -->
+                <linearGradient id="pa-bar1" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#b061f2"/>
+                  <stop offset="1" stop-color="#5c5cf0"/>
+                </linearGradient>
+                <linearGradient id="pa-bar2" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#7a95f8"/>
+                  <stop offset="1" stop-color="#4747e0"/>
+                </linearGradient>
+                <linearGradient id="pa-bar3" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#f65a7c"/>
+                  <stop offset="0.55" stop-color="#d45ab8"/>
+                  <stop offset="1" stop-color="#7459f0"/>
+                </linearGradient>
+                <linearGradient id="pa-gloss" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="#ffffff" stop-opacity="0.45"/>
+                  <stop offset="0.55" stop-color="#ffffff" stop-opacity="0"/>
+                </linearGradient>
+                <linearGradient id="pa-grid" x1="56" y1="0" x2="170" y2="0" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#d5e1f5" stop-opacity="0"/>
+                  <stop offset="0.2" stop-color="#d5e1f5"/>
+                  <stop offset="0.8" stop-color="#d5e1f5"/>
+                  <stop offset="1" stop-color="#d5e1f5" stop-opacity="0"/>
+                </linearGradient>
+
+                <!-- Filters -->
+                <filter id="pa-card-shadow" x="-30%" y="-30%" width="160%" height="170%" color-interpolation-filters="sRGB">
+                  <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#6b8fc4" flood-opacity="0.16"/>
+                </filter>
+                <filter id="pa-bar-shadow" x="-40%" y="-20%" width="180%" height="160%" color-interpolation-filters="sRGB">
+                  <feDropShadow dx="0" dy="5" stdDeviation="3.5" flood-color="#5b5ff0" flood-opacity="0.32"/>
+                </filter>
+                <filter id="pa-line-shadow" x="-20%" y="-40%" width="150%" height="220%" color-interpolation-filters="sRGB">
+                  <feDropShadow dx="0" dy="4" stdDeviation="2.5" flood-color="#4f7cf0" flood-opacity="0.38"/>
+                </filter>
+                <filter id="pa-tri-shadow" x="-40%" y="-40%" width="190%" height="190%" color-interpolation-filters="sRGB">
+                  <feDropShadow dx="-2" dy="6" stdDeviation="4.5" flood-color="#3d63e6" flood-opacity="0.38"/>
+                </filter>
+                <filter id="pa-dot-shadow" x="-100%" y="-100%" width="300%" height="300%" color-interpolation-filters="sRGB">
+                  <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" flood-color="#4f7cf0" flood-opacity="0.4"/>
+                </filter>
+                <filter id="pa-blur" x="-50%" y="-300%" width="200%" height="700%">
+                  <feGaussianBlur stdDeviation="6"/>
+                </filter>
+
+                <clipPath id="pa-bars-clip">
+                  <rect x="62"  y="128" width="26" height="32" rx="6"/>
+                  <rect x="100" y="112" width="26" height="48" rx="6"/>
+                  <rect x="138" y="84"  width="26" height="76" rx="6"/>
+                </clipPath>
+              </defs>
+
+              <!-- Faint background curve + small node -->
+              <path d="M50 164 C 22 190, 28 224, 72 240"
+                    stroke="url(#pa-curve)" stroke-width="1.3" stroke-linecap="round"/>
+              <circle cx="50" cy="164" r="2.2" fill="#c6d6f0" opacity="0.8"/>
+
+              <!-- Ground glow -->
+              <ellipse cx="110" cy="200" rx="50" ry="6" fill="#7fa0d0" opacity="0.14" filter="url(#pa-blur)"/>
+
+              <!-- Card (outer bevel) -->
+              <g filter="url(#pa-card-shadow)">
+                <rect x="30" y="34" width="160" height="160" rx="38" fill="url(#pa-card-outer)"/>
+              </g>
+              <rect x="30.5" y="34.5" width="159" height="159" rx="37.5" stroke="#ffffff" stroke-opacity="0.95"/>
+
+              <!-- Card inner face -->
+              <rect x="37" y="41" width="146" height="146" rx="32" fill="url(#pa-card-inner)"/>
+              <rect x="37.5" y="41.5" width="145" height="145" rx="31.5" stroke="#dbe6f6" stroke-opacity="0.9"/>
+
+              <!-- Glass shine -->
+              <path d="M44 78 C 44 56, 56 44, 78 44 H116 C 90 54, 66 66, 44 98 Z" fill="url(#pa-shine)" opacity="0.8"/>
+
+              <!-- Header dot + text lines -->
+              <circle cx="64" cy="56" r="3.2" fill="#8fb0f6"/>
+              <g stroke="url(#pa-lines)" stroke-width="4" stroke-linecap="round">
+                <path d="M74 56 H116"/>
+                <path d="M58 69 H108"/>
+                <path d="M58 82 H90"/>
+              </g>
+
+              <!-- Chart grid -->
+              <g stroke="url(#pa-grid)" stroke-width="1" stroke-dasharray="3 4" stroke-linecap="round">
+                <path d="M56 104 H172"/>
+                <path d="M56 124 H172"/>
+                <path d="M56 144 H172"/>
+              </g>
+              <!-- Baseline -->
+              <path d="M56 160 H172" stroke="#d3e0f4" stroke-width="1.5" stroke-linecap="round"/>
+
+              <!-- Bars -->
+              <g filter="url(#pa-bar-shadow)">
+                <rect class="bmr-chart-bar bmr-chart-bar--one" x="62"  y="128" width="26" height="32" rx="6" fill="url(#pa-bar1)"/>
+                <rect class="bmr-chart-bar bmr-chart-bar--two" x="100" y="112" width="26" height="48" rx="6" fill="url(#pa-bar2)"/>
+                <rect class="bmr-chart-bar bmr-chart-bar--three" x="138" y="84"  width="26" height="76" rx="6" fill="url(#pa-bar3)"/>
+              </g>
+              <g clip-path="url(#pa-bars-clip)">
+                <rect x="62"  y="128" width="26" height="32" fill="url(#pa-gloss)"/>
+                <rect x="100" y="112" width="26" height="48" fill="url(#pa-gloss)"/>
+                <rect x="138" y="84"  width="26" height="76" fill="url(#pa-gloss)"/>
+                <!-- top edge highlights -->
+                <rect x="62"  y="128" width="26" height="2.5" fill="#ffffff" opacity="0.35"/>
+                <rect x="100" y="112" width="26" height="2.5" fill="#ffffff" opacity="0.35"/>
+                <rect x="138" y="84"  width="26" height="2.5" fill="#ffffff" opacity="0.35"/>
+              </g>
+
+              <!-- Trend line + arrow head -->
+              <g filter="url(#pa-line-shadow)" stroke="url(#pa-arrow)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M62 112 L92 92 L112 104 L166 62"/>
+                <path d="M151 62 L166 62 L162.4 76.5"/>
+              </g>
+
+              <!-- Data points -->
+              <g filter="url(#pa-dot-shadow)" fill="#ffffff" stroke="#5f8cf6" stroke-width="2.5">
+                <circle cx="62"  cy="112" r="3.6"/>
+                <circle cx="92"  cy="92"  r="3.6"/>
+                <circle cx="112" cy="104" r="3.6"/>
+              </g>
+            </svg>
           </div>
 
           <!-- Card 2: Shield (Top-Right) -->
           <div class="bmr-visual bmr-visual--shield" data-parallax="0.95">
-            <div class="bmr-visual__glass">
-              <svg viewBox="0 0 120 120" role="presentation">
-                <defs>
-                  <linearGradient id="shieldFill" x1="0.15" y1="0" x2="0.85" y2="1">
-                    <stop offset="0" stop-color="#16c7ed" />
-                    <stop offset="0.52" stop-color="#0876f2" />
-                    <stop offset="1" stop-color="#0751cd" />
-                  </linearGradient>
-                  <linearGradient id="shieldGloss" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0" stop-color="#fff" stop-opacity=".65" />
-                    <stop offset="1" stop-color="#fff" stop-opacity="0" />
-                  </linearGradient>
-                </defs>
-                <path d="M60 17 91 28v25c0 21-12.2 37.5-31 49C41.2 90.5 29 74 29 53V28l31-11Z" fill="url(#shieldFill)" />
-                <path d="M60 17 91 28v25c0 21-12.2 37.5-31 49-5-3-9.5-6.3-13.3-10.1 15.3-11.1 24.8-26 24.8-45.2V23.4L60 17Z" fill="url(#shieldGloss)" opacity=".34" />
-                <path d="m44 58 11 11 23-25" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M39 31c7-4 13-6 21-8" fill="none" stroke="#b9f5ff" stroke-width="3" stroke-linecap="round" opacity=".8" />
-              </svg>
-            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="168" height="159" viewBox="0 0 168 159" fill="none" class="bmr-svg-standalone">
+              <defs>
+                <!-- Tile top face -->
+                <linearGradient id="tileGrad" x1="0.1" y1="0" x2="0.9" y2="1">
+                  <stop offset="0" stop-color="#FFFFFF"/>
+                  <stop offset="1" stop-color="#EDF0F9"/>
+                </linearGradient>
+
+                <!-- Tile thickness / side -->
+                <linearGradient id="tileSideGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#E4E8F4"/>
+                  <stop offset="1" stop-color="#D5DBEC"/>
+                </linearGradient>
+
+                <!-- Shield main -->
+                <linearGradient id="shieldMainGrad" x1="0.1" y1="0" x2="0.9" y2="1">
+                  <stop offset="0" stop-color="#3FC3FF"/>
+                  <stop offset="0.5" stop-color="#1E8BFF"/>
+                  <stop offset="1" stop-color="#1655F2"/>
+                </linearGradient>
+
+                <!-- Shield right half (darker) -->
+                <linearGradient id="shieldRightGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#1B7BFF" stop-opacity="0"/>
+                  <stop offset="1" stop-color="#0E3FD8" stop-opacity="0.55"/>
+                </linearGradient>
+
+                <!-- Shadows -->
+                <filter id="tileDropShadow" x="-30%" y="-30%" width="160%" height="170%">
+                  <feGaussianBlur stdDeviation="7"/>
+                </filter>
+                <filter id="shieldDropShadow" x="-40%" y="-40%" width="180%" height="190%">
+                  <feGaussianBlur stdDeviation="4"/>
+                </filter>
+              </defs>
+
+              <!-- Tile group (slightly rotated 3D card) -->
+              <g transform="rotate(-7 84 82)">
+                <!-- soft drop shadow -->
+                <rect x="34" y="40" width="102" height="102" rx="28" fill="#9FB0D8" opacity="0.45" filter="url(#tileDropShadow)"/>
+
+                <!-- tile thickness -->
+                <rect x="32" y="31" width="104" height="104" rx="28" fill="url(#tileSideGrad)"/>
+
+                <!-- tile top face -->
+                <rect x="32" y="26" width="104" height="104" rx="28" fill="url(#tileGrad)"/>
+                <rect x="32.5" y="26.5" width="103" height="103" rx="27.5" stroke="#FFFFFF" stroke-opacity="0.9"/>
+              </g>
+
+              <!-- Shield -->
+              <g transform="rotate(-4 84 80)">
+                <!-- shield shadow -->
+                <path d="M84 53 C93 59 103 62 112 62 V86 C112 101 99 112 84 118 C69 112 56 101 56 86 V62 C65 62 75 59 84 53 Z"
+                      fill="#1650E0" opacity="0.45" filter="url(#shieldDropShadow)"/>
+
+                <!-- shield body -->
+                <path d="M84 47 C93 53 103 56 112 56 V80 C112 95 99 106 84 112 C69 106 56 95 56 80 V56 C65 56 75 53 84 47 Z"
+                      fill="url(#shieldMainGrad)"/>
+
+                <!-- right half shading -->
+                <path d="M84 47 C93 53 103 56 112 56 V80 C112 95 99 106 84 112 Z"
+                      fill="url(#shieldRightGrad)"/>
+
+                <!-- top highlight -->
+                <path d="M84 47 C75 53 65 56 56 56 V62 C66 61 76 58 84 53 Z"
+                      fill="#FFFFFF" opacity="0.25"/>
+
+                <!-- check mark -->
+                <path d="M72 79 L81 88 L97 70"
+                      stroke="#FFFFFF" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </g>
+            </svg>
           </div>
 
-          <!-- Card 3: Coins (Bottom-Left) -->
+          <!-- Card 3: Coins / Database Storage (Bottom-Left) -->
           <div class="bmr-visual bmr-visual--coins" data-parallax="0.85">
-            <div class="bmr-visual__glass">
-              <svg viewBox="0 0 120 120" role="presentation">
-                <defs>
-                  <linearGradient id="coinGold" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0" stop-color="#ffe47a" />
-                    <stop offset=".45" stop-color="#ffbd22" />
-                    <stop offset="1" stop-color="#ed8f00" />
-                  </linearGradient>
-                  <linearGradient id="coinBlue" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0" stop-color="#5fc3ff" />
-                    <stop offset="1" stop-color="#1265df" />
-                  </linearGradient>
-                </defs>
-                <ellipse cx="47" cy="82" rx="22" ry="9" fill="#0c61c9" opacity=".18" />
-                <path d="M24 63v19c0 7 10 12 23 12s23-5 23-12V63Z" fill="url(#coinBlue)" />
-                <ellipse cx="47" cy="63" rx="23" ry="10" fill="#73cbff" stroke="#2789ee" stroke-width="2" />
-                <path d="M24 72c0 6 10 10 23 10s23-4 23-10" fill="none" stroke="#a8e3ff" stroke-width="2" />
-                <path d="M24 80c0 6 10 10 23 10s23-4 23-10" fill="none" stroke="#0b55bf" stroke-width="2" opacity=".45" />
-                <path d="M44 43v26c0 7 11 12 25 12s25-5 25-12V43Z" fill="url(#coinGold)" />
-                <ellipse cx="69" cy="43" rx="25" ry="11" fill="#ffe27b" stroke="#f6a800" stroke-width="2" />
-                <path d="M44 52c0 7 11 12 25 12s25-5 25-12M44 61c0 7 11 12 25 12s25-5 25-12" fill="none" stroke="#f6a800" stroke-width="2" opacity=".75" />
-                <path d="M57 38c5-4 13-5 19-3" fill="none" stroke="#fff6c8" stroke-width="3" stroke-linecap="round" />
-              </svg>
-            </div>
+            <svg width="235" height="210" viewBox="0 0 235 210" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Database storage icon" class="bmr-svg-standalone">
+              <defs>
+                <!-- Background curve -->
+                <linearGradient id="pd-curve" x1="0" y1="0" x2="235" y2="0" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#cfdcf0" stop-opacity="0"/>
+                  <stop offset="0.25" stop-color="#cfdcf0" stop-opacity="0.9"/>
+                  <stop offset="0.8" stop-color="#cfdcf0" stop-opacity="0.9"/>
+                  <stop offset="1" stop-color="#cfdcf0" stop-opacity="0"/>
+                </linearGradient>
+
+                <!-- Card -->
+                <linearGradient id="pd-card-outer" x1="42" y1="24" x2="194" y2="172" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#ffffff"/>
+                  <stop offset="1" stop-color="#e3ecf8"/>
+                </linearGradient>
+                <linearGradient id="pd-card-inner" x1="118" y1="30" x2="118" y2="166" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#ffffff"/>
+                  <stop offset="1" stop-color="#f1f6fc"/>
+                </linearGradient>
+
+                <!-- Blue stack -->
+                <linearGradient id="pd-blue-body" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="#2f86ff"/>
+                  <stop offset="0.45" stop-color="#2a74f2"/>
+                  <stop offset="1" stop-color="#1b55d6"/>
+                </linearGradient>
+                <linearGradient id="pd-blue-top" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#7cc0ff"/>
+                  <stop offset="1" stop-color="#3f8cff"/>
+                </linearGradient>
+
+                <!-- Orange stack -->
+                <linearGradient id="pd-orange-body" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="#ffbb2e"/>
+                  <stop offset="0.45" stop-color="#ffa21a"/>
+                  <stop offset="1" stop-color="#f77f00"/>
+                </linearGradient>
+                <linearGradient id="pd-orange-top" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#ffe083"/>
+                  <stop offset="1" stop-color="#ffb23a"/>
+                </linearGradient>
+
+                <!-- Filters -->
+                <filter id="pd-card-shadow" x="-30%" y="-30%" width="160%" height="170%" color-interpolation-filters="sRGB">
+                  <feDropShadow dx="0" dy="14" stdDeviation="11" flood-color="#6b8fc4" flood-opacity="0.28"/>
+                </filter>
+                <filter id="pd-blue-shadow" x="-40%" y="-30%" width="190%" height="170%" color-interpolation-filters="sRGB">
+                  <feDropShadow dx="2" dy="5" stdDeviation="4" flood-color="#1b4fc9" flood-opacity="0.38"/>
+                </filter>
+                <filter id="pd-orange-shadow" x="-40%" y="-30%" width="190%" height="170%" color-interpolation-filters="sRGB">
+                  <feDropShadow dx="2" dy="5" stdDeviation="4" flood-color="#e57300" flood-opacity="0.35"/>
+                </filter>
+                <filter id="pd-blur" x="-50%" y="-300%" width="200%" height="700%">
+                  <feGaussianBlur stdDeviation="6"/>
+                </filter>
+              </defs>
+
+              <!-- Faint background curve -->
+              <path d="M0 126 C 28 150, 62 178, 118 180 C 168 182, 205 146, 235 108"
+                    stroke="url(#pd-curve)" stroke-width="1.2" stroke-linecap="round"/>
+
+              <!-- Ground glow -->
+              <ellipse cx="118" cy="176" rx="58" ry="7" fill="#7fa0d0" opacity="0.28" filter="url(#pd-blur)"/>
+
+              <!-- Card -->
+              <g filter="url(#pd-card-shadow)">
+                <rect x="42" y="24" width="152" height="148" rx="34" fill="url(#pd-card-outer)"/>
+              </g>
+              <rect x="42.5" y="24.5" width="151" height="147" rx="33.5" stroke="#ffffff" stroke-opacity="0.9"/>
+              <rect x="48" y="30" width="140" height="136" rx="29" fill="url(#pd-card-inner)"/>
+              <rect x="48.5" y="30.5" width="139" height="135" rx="28.5" stroke="#dfe8f5" stroke-opacity="0.8"/>
+
+              <!-- Orange stack (back, 4 layers) -->
+              <g filter="url(#pd-orange-shadow)">
+                <!-- layer 4 (bottom) -->
+                <path d="M114 123 V144 A22 8 0 0 0 158 144 V123 Z" fill="url(#pd-orange-body)"/>
+                <ellipse cx="136" cy="123" rx="22" ry="8" fill="url(#pd-orange-top)"/>
+                <!-- layer 3 -->
+                <path d="M114 102 V123 A22 8 0 0 0 158 123 V102 Z" fill="url(#pd-orange-body)"/>
+                <ellipse cx="136" cy="102" rx="22" ry="8" fill="url(#pd-orange-top)"/>
+                <!-- layer 2 -->
+                <path d="M114 81 V102 A22 8 0 0 0 158 102 V81 Z" fill="url(#pd-orange-body)"/>
+                <ellipse cx="136" cy="81" rx="22" ry="8" fill="url(#pd-orange-top)"/>
+                <!-- layer 1 (top) -->
+                <path d="M114 60 V81 A22 8 0 0 0 158 81 V60 Z" fill="url(#pd-orange-body)"/>
+                <ellipse cx="136" cy="60" rx="22" ry="8" fill="url(#pd-orange-top)"/>
+              </g>
+              <!-- Orange seam highlights -->
+              <g stroke="#ffffff" stroke-opacity="0.35" stroke-width="1" stroke-linecap="round">
+                <path d="M115 81 A21 7.5 0 0 0 157 81"/>
+                <path d="M115 102 A21 7.5 0 0 0 157 102"/>
+                <path d="M115 123 A21 7.5 0 0 0 157 123"/>
+              </g>
+              <ellipse cx="136" cy="60" rx="14" ry="4.5" fill="#ffffff" opacity="0.28"/>
+
+              <!-- Blue stack (front, 3 layers) -->
+              <g filter="url(#pd-blue-shadow)">
+                <!-- layer 3 (bottom) -->
+                <path d="M75 120 V144 A21 8 0 0 0 117 144 V120 Z" fill="url(#pd-blue-body)"/>
+                <ellipse cx="96" cy="120" rx="21" ry="8" fill="url(#pd-blue-top)"/>
+                <!-- layer 2 -->
+                <path d="M75 96 V120 A21 8 0 0 0 117 120 V96 Z" fill="url(#pd-blue-body)"/>
+                <ellipse cx="96" cy="96" rx="21" ry="8" fill="url(#pd-blue-top)"/>
+                <!-- layer 1 (top) -->
+                <path d="M75 72 V96 A21 8 0 0 0 117 96 V72 Z" fill="url(#pd-blue-body)"/>
+                <ellipse cx="96" cy="72" rx="21" ry="8" fill="url(#pd-blue-top)"/>
+              </g>
+              <!-- Blue seam highlights -->
+              <g stroke="#ffffff" stroke-opacity="0.35" stroke-width="1" stroke-linecap="round">
+                <path d="M76 96 A20 7.5 0 0 0 116 96"/>
+                <path d="M76 120 A20 7.5 0 0 0 116 120"/>
+              </g>
+              <ellipse cx="96" cy="72" rx="13" ry="4.5" fill="#ffffff" opacity="0.3"/>
+
+              <!-- Left edge shine on bodies -->
+              <g stroke="#ffffff" stroke-opacity="0.25" stroke-width="2" stroke-linecap="round">
+                <path d="M79 80 V140"/>
+                <path d="M118 68 V138"/>
+              </g>
+            </svg>
           </div>
 
           <!-- Card 4: Growth (Bottom-Right) -->
           <div class="bmr-visual bmr-visual--growth" data-parallax="1.05">
-            <div class="bmr-visual__glass">
-              <svg viewBox="0 0 120 120" role="presentation">
-                <defs>
-                  <linearGradient id="growthMint" x1="0" y1="0" x2="0.9" y2="1">
-                    <stop offset="0" stop-color="#6ce9c3" />
-                    <stop offset="1" stop-color="#00ae88" />
-                  </linearGradient>
-                </defs>
-                <path d="M23 87h76" stroke="#d1f2e9" stroke-width="3" stroke-linecap="round" />
-                <rect class="bmr-chart-bar bmr-chart-bar--one" x="25" y="67" width="17" height="20" rx="4" fill="url(#growthMint)" />
-                <rect class="bmr-chart-bar bmr-chart-bar--two" x="51" y="53" width="17" height="34" rx="4" fill="url(#growthMint)" />
-                <rect class="bmr-chart-bar bmr-chart-bar--three" x="77" y="38" width="17" height="49" rx="4" fill="url(#growthMint)" />
-                <path d="m24 55 23-12 15 4 29-27" fill="none" stroke="#16c9a2" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="m78 20 14 0-2 14" fill="none" stroke="#16c9a2" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-                <circle cx="47" cy="43" r="3.2" fill="#fff" />
-                <circle cx="62" cy="47" r="3.2" fill="#fff" />
-              </svg>
-            </div>
+            <svg width="235" height="210" viewBox="0 0 235 210" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Growth chart icon" class="bmr-svg-standalone">
+              <defs>
+                <!-- Background curve line -->
+                <linearGradient id="ps-curve" x1="0" y1="0" x2="235" y2="0" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#cfdcf0" stop-opacity="0"/>
+                  <stop offset="0.25" stop-color="#cfdcf0" stop-opacity="0.9"/>
+                  <stop offset="0.8" stop-color="#cfdcf0" stop-opacity="0.9"/>
+                  <stop offset="1" stop-color="#cfdcf0" stop-opacity="0"/>
+                </linearGradient>
+
+                <!-- Card outer edge -->
+                <linearGradient id="ps-card-outer" x1="42" y1="24" x2="194" y2="172" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#ffffff"/>
+                  <stop offset="1" stop-color="#e3ecf8"/>
+                </linearGradient>
+
+                <!-- Card inner face -->
+                <linearGradient id="ps-card-inner" x1="118" y1="30" x2="118" y2="166" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#ffffff"/>
+                  <stop offset="1" stop-color="#f1f6fc"/>
+                </linearGradient>
+
+                <!-- Bars -->
+                <linearGradient id="ps-bar1" x1="86" y1="108" x2="86" y2="140" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#34df9a"/>
+                  <stop offset="1" stop-color="#12b886"/>
+                </linearGradient>
+                <linearGradient id="ps-bar2" x1="118" y1="92" x2="118" y2="140" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#1fb9a0"/>
+                  <stop offset="1" stop-color="#0f8f9c"/>
+                </linearGradient>
+                <linearGradient id="ps-bar3" x1="150" y1="68" x2="150" y2="140" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#2fd9a0"/>
+                  <stop offset="1" stop-color="#0fa5a8"/>
+                </linearGradient>
+
+                <!-- Bar glossy highlight -->
+                <linearGradient id="ps-gloss" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="#ffffff" stop-opacity="0.35"/>
+                  <stop offset="0.6" stop-color="#ffffff" stop-opacity="0"/>
+                </linearGradient>
+
+                <!-- Arrow line -->
+                <linearGradient id="ps-arrow" x1="66" y1="92" x2="168" y2="39" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#1fcf8e"/>
+                  <stop offset="0.55" stop-color="#16bfa0"/>
+                  <stop offset="1" stop-color="#0fa9b5"/>
+                </linearGradient>
+
+                <!-- Shadows -->
+                <filter id="ps-card-shadow" x="-30%" y="-30%" width="160%" height="170%" color-interpolation-filters="sRGB">
+                  <feDropShadow dx="0" dy="14" stdDeviation="11" flood-color="#6b8fc4" flood-opacity="0.28"/>
+                </filter>
+                <filter id="ps-soft" x="-30%" y="-30%" width="160%" height="170%" color-interpolation-filters="sRGB">
+                  <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#0f9f8a" flood-opacity="0.30"/>
+                </filter>
+                <filter id="ps-blur" x="-50%" y="-200%" width="200%" height="500%">
+                  <feGaussianBlur stdDeviation="6"/>
+                </filter>
+
+                <clipPath id="ps-bars-clip">
+                  <rect x="74" y="108" width="24" height="32" rx="5"/>
+                  <rect x="106" y="92" width="24" height="48" rx="5"/>
+                  <rect x="138" y="68" width="24" height="72" rx="5"/>
+                </clipPath>
+              </defs>
+
+              <!-- Faint background curve -->
+              <path d="M0 128 C 28 150, 62 178, 118 180 C 168 182, 205 140, 235 100"
+                    stroke="url(#ps-curve)" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+
+              <!-- Ground glow under card -->
+              <ellipse cx="118" cy="176" rx="58" ry="7" fill="#7fa0d0" opacity="0.28" filter="url(#ps-blur)"/>
+
+              <!-- Card -->
+              <g filter="url(#ps-card-shadow)">
+                <rect x="42" y="24" width="152" height="148" rx="34" fill="url(#ps-card-outer)"/>
+              </g>
+              <rect x="42.5" y="24.5" width="151" height="147" rx="33.5" stroke="#ffffff" stroke-opacity="0.9"/>
+              <rect x="48" y="30" width="140" height="136" rx="29" fill="url(#ps-card-inner)"/>
+              <rect x="48.5" y="30.5" width="139" height="135" rx="28.5" stroke="#dfe8f5" stroke-opacity="0.8"/>
+
+              <!-- Bars -->
+              <g filter="url(#ps-soft)">
+                <rect class="bmr-chart-bar bmr-chart-bar--one" x="74"  y="108" width="24" height="32" rx="5" fill="url(#ps-bar1)"/>
+                <rect class="bmr-chart-bar bmr-chart-bar--two" x="106" y="92"  width="24" height="48" rx="5" fill="url(#ps-bar2)"/>
+                <rect class="bmr-chart-bar bmr-chart-bar--three" x="138" y="68"  width="24" height="72" rx="5" fill="url(#ps-bar3)"/>
+              </g>
+
+              <!-- Bar gloss -->
+              <g clip-path="url(#ps-bars-clip)">
+                <rect x="74"  y="108" width="24" height="32" fill="url(#ps-gloss)"/>
+                <rect x="106" y="92"  width="24" height="48" fill="url(#ps-gloss)"/>
+                <rect x="138" y="68"  width="24" height="72" fill="url(#ps-gloss)"/>
+              </g>
+
+              <!-- Arrow line + head -->
+              <g filter="url(#ps-soft)" stroke="url(#ps-arrow)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M66 92 L92 68 L110 82 L166 41"/>
+                <path d="M152 38 L168 39 L164 54.5"/>
+              </g>
+            </svg>
           </div>
         </div>
 

@@ -4917,22 +4917,24 @@ body.tt-magic-cursor #magic-cursor {
   }
 }
 
-/* Inner pages: style-4 header over breadcrumb (index keeps solid .header-wrap) */
+/* Inner pages: Keep style-4 header solid white matching home screen */
 body:has(.breadcrumb-section) .header-area.style-4 .header-wrap {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.18);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
+  background: var(--white-color);
+  border: 1px solid #eee;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 body:has(.breadcrumb-section)
   .header-area.style-4
   .header-logo
-  img:not(.bmr-header-logo),
+  img,
 body:has(.breadcrumb-section)
   .header-area.style-4
   .mobile-logo-wrap
-  img:not(.bmr-header-logo) {
-  filter: brightness(0) invert(1);
+  img {
+  filter: none;
+  opacity: 1;
 }
 body:has(.breadcrumb-section)
   .header-area.style-4
@@ -4941,7 +4943,7 @@ body:has(.breadcrumb-section)
   ul
   > li
   > a {
-  color: var(--white-color);
+  color: var(--title-color);
 }
 body:has(.breadcrumb-section)
   .header-area.style-4
@@ -4950,7 +4952,8 @@ body:has(.breadcrumb-section)
   ul
   > li:hover
   > a {
-  border-color: rgba(255, 255, 255, 0.45);
+  border-color: #eee;
+  color: var(--primary-color);
 }
 body:has(.breadcrumb-section)
   .header-area.style-4
@@ -4959,7 +4962,9 @@ body:has(.breadcrumb-section)
   ul
   > li.active
   > a {
-  border-color: rgba(255, 255, 255, 0.65);
+  border: 1px solid var(--title-color);
+  border-radius: 999px;
+  color: var(--title-color);
 }
 body:has(.breadcrumb-section)
   .header-area.style-4
@@ -4968,7 +4973,7 @@ body:has(.breadcrumb-section)
   ul
   > li
   i {
-  color: var(--white-color);
+  color: var(--title-color);
 }
 @media (max-width: 991px) {
   body:has(.breadcrumb-section)
@@ -4977,7 +4982,7 @@ body:has(.breadcrumb-section)
     .nav-right
     .mobile-menu-btn
     span {
-    background-color: var(--white-color);
+    background-color: var(--title-color);
   }
   body:has(.breadcrumb-section)
     .header-area.style-4
@@ -4991,7 +4996,7 @@ body:has(.breadcrumb-section)
     .nav-right
     .mobile-menu-btn
     span::after {
-    background-color: var(--white-color);
+    background-color: var(--title-color);
   }
 }
 

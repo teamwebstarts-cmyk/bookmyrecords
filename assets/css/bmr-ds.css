@@ -4603,9 +4603,9 @@ p,
   text-align: justify;
   text-justify: inter-word;
   text-align-last: left;
-  hyphens: auto;
-  -webkit-hyphens: auto;
-  -ms-hyphens: auto;
+  hyphens: manual;
+  -webkit-hyphens: manual;
+  -ms-hyphens: manual;
 }
 
 /* Specific high-priority institutional alignment for Step Cards (Image 1) */
@@ -4615,8 +4615,8 @@ p,
   text-align: justify !important;
   text-justify: inter-word !important;
   text-align-last: left !important;
-  hyphens: auto !important;
-  -webkit-hyphens: auto !important;
+  hyphens: manual !important;
+  -webkit-hyphens: manual !important;
   line-height: 1.65 !important;
 }
 
@@ -4628,8 +4628,8 @@ p,
   text-align: justify !important;
   text-justify: inter-word !important;
   text-align-last: left !important;
-  hyphens: auto !important;
-  -webkit-hyphens: auto !important;
+  hyphens: manual !important;
+  -webkit-hyphens: manual !important;
 }
 
 /* Specific alignment for All Service Cards & Catalogues */
@@ -4641,8 +4641,8 @@ p,
   text-align: justify !important;
   text-justify: inter-word !important;
   text-align-last: left !important;
-  hyphens: auto !important;
-  -webkit-hyphens: auto !important;
+  hyphens: manual !important;
+  -webkit-hyphens: manual !important;
 }
 
 /* Specific alignment for About Us, Pricing, and Inner Pages */
@@ -4655,8 +4655,8 @@ body.about-page .section-title-sub,
   text-align: justify !important;
   text-justify: inter-word !important;
   text-align-last: left !important;
-  hyphens: auto !important;
-  -webkit-hyphens: auto !important;
+  hyphens: manual !important;
+  -webkit-hyphens: manual !important;
 }
 
 /* Center-aligned section header subtitles when the entire header is designed centered */
@@ -5349,3 +5349,90 @@ body.page-contact .contect-section6,
   color: #10b981;
 }
 
+
+.bmr-pillar-item p,
+.bmr-pillar-body p {
+  text-align: left !important;
+  hyphens: none !important;
+  -webkit-hyphens: none !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+}
+
+
+/* ==========================================================
+   Universal Consistent Solid White Navigation Across All Pages
+   Matches Home Screen navigation: clean white bar, visible logo,
+   dark legible typography, identical styling on all pages.
+   ========================================================== */
+
+.header-area.style-4 .header-wrap,
+body .header-area.style-4 .header-wrap,
+body:has(.breadcrumb-section) .header-area.style-4 .header-wrap,
+body:has(.breadcrumb-section) .header-area.style-4.is-stuck .header-wrap {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1px solid #eef2f6 !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04) !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* Ensure logo natural appearance and high clarity */
+.header-area.style-4 .header-logo img,
+.header-area.style-4 .mobile-logo-wrap img,
+body .header-area.style-4 .header-logo img,
+body:has(.breadcrumb-section) .header-area.style-4 .header-logo img,
+body:has(.breadcrumb-section) .header-area.style-4 .mobile-logo-wrap img {
+  filter: none !important;
+  -webkit-filter: none !important;
+  opacity: 1 !important;
+}
+
+/* Menu items: Always dark title color for clear contrast */
+.header-area.style-4 .menu-wrap .main-menu ul > li > a,
+body .header-area.style-4 .menu-wrap .main-menu ul > li > a,
+body:has(.breadcrumb-section) .header-area.style-4 .menu-wrap .main-menu ul > li > a {
+  color: #071d4b !important;
+  font-weight: 500 !important;
+  transition: all 0.3s ease !important;
+}
+
+.header-area.style-4 .menu-wrap .main-menu ul > li:hover > a,
+body:has(.breadcrumb-section) .header-area.style-4 .menu-wrap .main-menu ul > li:hover > a {
+  color: #0864ed !important;
+  border-color: rgba(8, 100, 237, 0.3) !important;
+}
+
+.header-area.style-4 .menu-wrap .main-menu ul > li.active > a,
+body:has(.breadcrumb-section) .header-area.style-4 .menu-wrap .main-menu ul > li.active > a {
+  color: #071d4b !important;
+  border: 1px solid #071d4b !important;
+  border-radius: 999px !important;
+}
+
+/* Dropdown icons */
+.header-area.style-4 .menu-wrap .main-menu ul > li i,
+body:has(.breadcrumb-section) .header-area.style-4 .menu-wrap .main-menu ul > li i {
+  color: #071d4b !important;
+}
+
+/* Mobile hamburger button */
+.header-area.style-4 .menu-wrap .nav-right .mobile-menu-btn span,
+.header-area.style-4 .menu-wrap .nav-right .mobile-menu-btn span::before,
+.header-area.style-4 .menu-wrap .nav-right .mobile-menu-btn span::after,
+body:has(.breadcrumb-section) .header-area.style-4 .menu-wrap .nav-right .mobile-menu-btn span,
+body:has(.breadcrumb-section) .header-area.style-4 .menu-wrap .nav-right .mobile-menu-btn span::before,
+body:has(.breadcrumb-section) .header-area.style-4 .menu-wrap .nav-right .mobile-menu-btn span::after {
+  background-color: #071d4b !important;
+}
+
+/* Ensure breadcrumb has proper top clearance so white header sits neatly on it */
+.breadcrumb-section {
+  padding-top: 175px !important;
+}
+@media (max-width: 991px) {
+  .breadcrumb-section {
+    padding-top: 140px !important;
+  }
+}
