@@ -68,19 +68,22 @@ async function runAllTests() {
     assert.ok(indexContent.includes('Executive Diagnostic Report') || indexContent.includes('24-Point AI Diagnostic Report'), 'Must mention Diagnostic Report');
   });
 
-  runTest('Teaser contains updated zero-friction value proposition copy', () => {
-    assert.ok(
-      indexContent.includes('Upload your financial documents') &&
-      indexContent.includes('100% Free, No Login Required'),
-      'Must contain updated streamlined document intake teaser copy'
-    );
+  runTest('Teaser header has no section-title-sub blurb', () => {
+    const teaserStart = indexContent.indexOf('id="health-checkup-teaser"');
+    const teaserEnd = indexContent.indexOf('<!-- 6 Business Pillars -->', teaserStart);
+    const teaserBlock = indexContent.slice(teaserStart, teaserEnd);
+    assert.ok(!teaserBlock.includes('section-title-sub'), 'Teaser header must not include section-title-sub');
+    assert.ok(!teaserBlock.includes('Upload your financial documents'), 'Document upload blurb removed from teaser');
   });
 
-  runTest('Teaser contains all 4 trust badges (100% Free, No Login Required, Instant Analysis, Confidential & DPDP Compliant)', () => {
-    assert.ok(indexContent.includes('100% Free'), 'Must contain 100% Free badge');
-    assert.ok(indexContent.includes('No Login Required'), 'Must contain No Login Required badge');
-    assert.ok(indexContent.includes('Instant Health Analysis') || indexContent.includes('Instant AI Analysis') || indexContent.includes('3-Minute Assessment'), 'Must contain speed/analysis badge');
-    assert.ok(indexContent.includes('Confidential &amp; DPDP Compliant') || indexContent.includes('Confidential & DPDP Compliant'), 'Must contain Confidential & DPDP Compliant badge');
+  runTest('Teaser copy includes free-trial value in chip, headline, or CTA', () => {
+    const teaserStart = indexContent.indexOf('id="health-checkup-teaser"');
+    const teaserEnd = indexContent.indexOf('<!-- 6 Business Pillars -->', teaserStart);
+    const teaserBlock = indexContent.slice(teaserStart, teaserEnd);
+    assert.ok(teaserBlock.includes('Free Trial'), 'Must contain Free Trial chip in teaser');
+    assert.ok(teaserBlock.includes('Free Business Health Checkup'), 'Must contain free checkup headline');
+    assert.ok(teaserBlock.includes('Get Free Health Assessment'), 'Must contain free CTA label');
+    assert.ok(!teaserBlock.includes('bmr-teaser-trust'), 'Trust bullet list removed from teaser');
   });
 
   runTest('Teaser contains 6 pillar preview badges (Financial, Sales, Marketing, Operations, IT, Governance)', () => {

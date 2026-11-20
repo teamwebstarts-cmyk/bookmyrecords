@@ -196,13 +196,13 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease, color 0.3s ease !important;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s ease, color 0.3s ease !important;
 }
 
 .step-card1:hover span {
   transform: scale(1.1) !important;
   color: #0864ed !important;
-  box-shadow: 0 6px 16px rgba(8, 100, 237, 0.18) !important;
+  box-shadow: none !important;
   border-color: rgba(8, 100, 237, 0.4) !important;
 }
 
@@ -232,14 +232,14 @@
   }
 }
 
-.project-walkthrough-video__play,
+#project-walkthrough .project-walkthrough-video__overlay .explore-btn.white,
 .video-wrap .play-btn,
 .video-btn {
   animation: bmr-play-ripple 2.6s infinite;
   transition: transform 0.3s ease;
 }
 
-.project-walkthrough-video__play:hover,
+#project-walkthrough .project-walkthrough-video__overlay .explore-btn.white:hover,
 .video-wrap .play-btn:hover,
 .video-btn:hover {
   transform: scale(1.08);
@@ -248,8 +248,8 @@
 /* ── 8. Tactile Button Physics ── */
 .btn-primary,
 .btn-secondary,
-.bmr-button--primary,
-.bmr-button--secondary,
+.bmr-hero__actions .primary-btn1:not(.btn-hover),
+.bmr-hero__actions .explore-btn:not(.btn-hover),
 .header-btn,
 .eg-btn {
   transition: transform 0.24s cubic-bezier(0.2, 0.8, 0.2, 1),
@@ -259,8 +259,8 @@
 
 .btn-primary:hover,
 .btn-secondary:hover,
-.bmr-button--primary:hover,
-.bmr-button--secondary:hover,
+.bmr-hero__actions .primary-btn1:not(.btn-hover):hover,
+.bmr-hero__actions .explore-btn:not(.btn-hover):hover,
 .header-btn:hover,
 .eg-btn:hover {
   transform: translateY(-2px) !important;
@@ -269,8 +269,8 @@
 
 .btn-primary:active,
 .btn-secondary:active,
-.bmr-button--primary:active,
-.bmr-button--secondary:active,
+.bmr-hero__actions .primary-btn1:not(.btn-hover):active,
+.bmr-hero__actions .explore-btn:not(.btn-hover):active,
 .header-btn:active,
 .eg-btn:active {
   transform: translateY(0) scale(0.98) !important;
@@ -315,4 +315,39 @@
 .cover-left-vec {
   animation: bmr-ambient-float 9s ease-in-out infinite;
   pointer-events: none;
+}
+
+/* Hero + home contact display type — Marcellus (matches #health-checkup-teaser h2) */
+.bmr-hero {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+}
+
+.bmr-hero__content .bmr-hero__title,
+.bmr-hero__content .bmr-hero__title-line {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+  letter-spacing: normal;
+}
+
+.bmr-hero__content :is(
+  .bmr-hero__eyebrow,
+  .bmr-hero__description,
+  .bmr-proof-item__copy,
+  .bmr-proof-item__copy strong,
+  .bmr-proof-item__copy small
+) {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+}
+
+.bmr-hero__eyebrow,
+.bmr-hero__eyebrow span {
+  font-weight: 500;
+}
+
+.bmr-hero__proof .bmr-proof-item__copy strong {
+  font-weight: 500;
+}
+
+.bmr-hero__proof .bmr-proof-item__copy small {
+  font-weight: 400;
 }

@@ -1,6 +1,35 @@
 (function ($) {
   "use strict";
 
+  // Home 06 btn-hover ripple — register first so it runs even if later init throws (e.g. missing gsap).
+  function bindBtnHoverRipple() {
+    $(".btn-hover")
+      .off("mouseenter.btnHoverRipple mouseout.btnHoverRipple")
+      .on("mouseenter.btnHoverRipple", function (e) {
+        var $ripple = $(this).children("span").last();
+        if (!$ripple.length) {
+          return;
+        }
+        var parentOffset = $(this).offset(),
+          relX = e.pageX - parentOffset.left,
+          relY = e.pageY - parentOffset.top;
+        $ripple.css({ top: relY, left: relX });
+      })
+      .on("mouseout.btnHoverRipple", function (e) {
+        var $ripple = $(this).children("span").last();
+        if (!$ripple.length) {
+          return;
+        }
+        var parentOffset = $(this).offset(),
+          relX = e.pageX - parentOffset.left,
+          relY = e.pageY - parentOffset.top;
+        $ripple.css({ top: relY, left: relX });
+      });
+  }
+
+  bindBtnHoverRipple();
+  $(document).on("DOMContentLoaded", bindBtnHoverRipple);
+
   // =================
   // Country Card
   // =================
@@ -717,7 +746,10 @@
   // ====================
   // GSAP
   // ====================
-  if ($("body").not(".is-mobile").hasClass("tt-magic-cursor")) {
+  if (
+    typeof gsap !== "undefined" &&
+    $("body").not(".is-mobile").hasClass("tt-magic-cursor")
+  ) {
     if ($(window).width() > 1024) {
       gsap.config({
         nullTargetWarn: false,
@@ -774,10 +806,25 @@
       });
 
       function callParallax(e, parent) {
-        parallaxIt(e, parent, parent.querySelector(".magnetic-item"), 25); // magnetic area = higher number is more attractive
+        var target = parent.querySelector(".magnetic-item");
+        if (!target) {
+          return;
+        }
+        var movement = 25;
+        if (
+          parent.closest(
+            ".contact-section2, .pricing-cta-section, .faq-cta-section",
+          )
+        ) {
+          movement = 32;
+        }
+        parallaxIt(e, parent, target, movement);
       }
 
       function parallaxIt(e, parent, target, movement) {
+        if (!target) {
+          return;
+        }
         var boundingRect = parent.getBoundingClientRect();
         var relX = e.clientX - boundingRect.left;
         var relY = e.clientY - boundingRect.top;
@@ -787,7 +834,8 @@
           x: ((relX - boundingRect.width / 2) / boundingRect.width) * movement,
           y:
             ((relY - boundingRect.height / 2) / boundingRect.height) * movement,
-          ease: Power2.easeOut,
+          ease: "power2.out",
+          overwrite: "auto",
         });
       }
 
@@ -1199,29 +1247,14 @@
     }
   }
 
-  document
-    .querySelector(".sidebar-button")
-    .addEventListener("click", () =>
+  var sidebarButton = document.querySelector(".sidebar-button");
+  if (sidebarButton) {
+    sidebarButton.addEventListener("click", () =>
       document
         .querySelector(".main-menu, .header-area.style-3")
-        .classList.toggle("show-menu"),
+        ?.classList.toggle("show-menu"),
     );
-
-  $(".btn-hover")
-    .on("mouseenter", function (e) {
-      var parentOffset = $(this).offset(),
-        relX = e.pageX - parentOffset.left,
-        relY = e.pageY - parentOffset.top;
-      $(this).find("span").css({ top: 0, left: 0 });
-      $(this).find("span").css({ top: relY, left: relX });
-    })
-    .on("mouseout", function (e) {
-      var parentOffset = $(this).offset(),
-        relX = e.pageX - parentOffset.left,
-        relY = e.pageY - parentOffset.top;
-      $(this).find("span").css({ top: 0, left: 0 });
-      $(this).find("span").css({ top: relY, left: relX });
-    });
+  }
 
   // services Images (cover-section2 hover preview — skip rows without .services-img)
   const serviceImgItem = document.querySelectorAll(
