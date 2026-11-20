@@ -92,13 +92,12 @@
 }
 
 #our-process.working-process-section.two {
-  background-color: var(--bmr-process-wash);
-  background-image: var(--bmr-gold-band-gradient);
+  background-color: #efeae6;
+  background-image: none;
 }
 
 #our-process.working-process-section.two .step-card1 span {
-  border: 1px solid
-    color-mix(in srgb, var(--bmr-process-gold) 32%, var(--bmr-white));
+  border: 1px solid color-mix(in srgb, var(--title-color) 18%, #efeae6);
   background: var(--bmr-white);
   color: var(--primary-color);
 }
@@ -113,30 +112,6 @@
 /* Home + About: Why Choose Us stays on white (no band tint) */
 #why-choose-us.solution-section {
   background-color: var(--bmr-white);
-}
-
-/* Homepage only: bottom spacing as padding (mb-130 leaves white strip outside bg) */
-body:not(.about-page) #why-choose-us.solution-section,
-body:not(.about-page) #business-challenges.solution-section,
-body:not(.about-page) #our-people.home6-people-section {
-  margin-bottom: 0;
-  padding-bottom: 100px;
-}
-
-@media (min-width: 992px) and (max-width: 1199px) {
-  body:not(.about-page) #why-choose-us.solution-section,
-  body:not(.about-page) #business-challenges.solution-section,
-  body:not(.about-page) #our-people.home6-people-section {
-    padding-bottom: 80px;
-  }
-}
-
-@media (max-width: 991px) {
-  body:not(.about-page) #why-choose-us.solution-section,
-  body:not(.about-page) #business-challenges.solution-section,
-  body:not(.about-page) #our-people.home6-people-section {
-    padding-bottom: 70px;
-  }
 }
 
 /* Testimonials: band only on quote panel, not whole section */
@@ -197,6 +172,65 @@ body:not(.about-page) #our-people.home6-people-section {
   border: 1px solid var(--bmr-border);
 }
 
+#home-faqs .faq-wrap .accordion .accordion-item .accordion-header .accordion-button,
+#home-faqs .faq-wrap .accordion .accordion-item .accordion-header .accordion-button:not(.collapsed),
+#home-faqs .faq-wrap .accordion .accordion-item .accordion-header .accordion-button.collapsed {
+  font-family: var(--font-marcellus, serif) !important;
+  font-weight: 400 !important;
+  color: var(--title-color, #1f2a44) !important;
+}
+
+/* FAQ header — top-start of right column (aligned with accordion) */
+#home-faqs > .container-fluid > .row.align-items-start {
+  align-items: flex-start;
+}
+
+#home-faqs .home-faqs-heading-row {
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  width: 100%;
+}
+
+/* Overrides [class*="-faq-section"] centering on .service-details-faq-section */
+#home-faqs .home-faqs-heading-row > .section-title1.two {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  align-self: flex-start;
+  align-items: flex-start !important;
+  text-align: left !important;
+}
+
+#home-faqs .home-faqs-heading-row > .section-title1.two > h2,
+#home-faqs .home-faqs-heading-row > .section-title1.two > .section-title-sub {
+  text-align: left !important;
+  text-align-last: left !important;
+  margin-left: 0 !important;
+  margin-right: auto !important;
+  align-self: flex-start !important;
+}
+
+#home-faqs .home-faqs-heading-row .section-title-sub {
+  max-width: 740px;
+}
+
+/* Card blocks — no elevation shadow (pillars, challenges, about overview) */
+#health-checkup-teaser .bmr-pillar-item,
+#health-checkup-teaser .bmr-pillar-item:hover {
+  box-shadow: none !important;
+}
+
+#business-challenges .business-challenges-cards .eg-card-2.style-2,
+#business-challenges .business-challenges-cards .eg-card-2.style-2:hover {
+  box-shadow: none !important;
+}
+
+.about-overview-section .shadow-sm,
+.about-overview-section .shadow,
+.about-overview-section .shadow-lg {
+  box-shadow: none !important;
+}
+
 /* Golden CTA band — home (matches #our-process); About keeps yellow wash */
 #home-contact-cta.contact-section2 {
   background-color: var(--bmr-process-wash);
@@ -204,7 +238,126 @@ body:not(.about-page) #our-people.home6-people-section {
 }
 
 body.about-page .contact-section2 {
-  background: var(--bmr-band-yellow);
+  background-color: #efeae6;
+  background-image: none;
+}
+
+/* Warm-band CTA — magnetic star button (About, Pricing, FAQ) */
+:is(.contact-section2, .pricing-cta-section, .faq-cta-section) .banner-btn {
+  width: 210px;
+}
+
+:is(.contact-section2, .pricing-cta-section, .faq-cta-section) .banner-btn a {
+  position: relative;
+  line-height: 1;
+  transition: 0.5s;
+  height: 178px;
+  width: 178px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:is(.contact-section2, .pricing-cta-section, .faq-cta-section) .banner-btn a .bg,
+:is(.contact-section2, .pricing-cta-section, .faq-cta-section) .banner-btn a .bg svg,
+:is(.contact-section2, .pricing-cta-section, .faq-cta-section) .banner-btn a .bg svg path {
+  transition: 0.5s;
+}
+
+:is(.contact-section2, .pricing-cta-section, .faq-cta-section) .banner-btn a .btn-content {
+  transition: 0.5s;
+  color: var(--title-color);
+  text-align: center;
+  font-family: var(--font-montserrat);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 20px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+:is(.contact-section2, .pricing-cta-section, .faq-cta-section) .banner-btn a .btn-content svg {
+  fill: var(--title-color);
+  margin-bottom: 15px;
+  transition: 0.5s;
+}
+
+body.about-page .contact-section2 .banner-btn a,
+body.about-page .contact-section2 .banner-btn a .bg,
+body.about-page .contact-section2 .banner-btn a .bg svg,
+body.page-pricing .pricing-cta-section .banner-btn a,
+body.page-pricing .pricing-cta-section .banner-btn a .bg,
+body.page-pricing .pricing-cta-section .banner-btn a .bg svg,
+body.page-faq .faq-cta-section .banner-btn a,
+body.page-faq .faq-cta-section .banner-btn a .bg,
+body.page-faq .faq-cta-section .banner-btn a .bg svg {
+  box-shadow: none;
+  filter: none;
+}
+
+body.about-page .contact-section2 .banner-btn a .bg svg path,
+body.page-pricing .pricing-cta-section .banner-btn a .bg svg path,
+body.page-faq .faq-cta-section .banner-btn a .bg svg path {
+  fill: #efeae6;
+  stroke: var(--title-color);
+}
+
+body.about-page .contact-section2
+  :is(
+    .banner-btn:hover a,
+    .magnetic-wrap:hover .banner-btn a,
+    .banner-btn a:hover,
+    .banner-btn a:focus-visible
+  )
+  .bg
+  svg,
+body.about-page .contact-section2
+  :is(
+    .banner-btn:hover a,
+    .magnetic-wrap:hover .banner-btn a,
+    .banner-btn a:hover,
+    .banner-btn a:focus-visible
+  )
+  .bg
+  svg
+  path {
+  fill: var(--primary-color);
+  stroke: var(--primary-color);
+}
+
+body.about-page .contact-section2
+  :is(
+    .banner-btn:hover a,
+    .magnetic-wrap:hover .banner-btn a,
+    .banner-btn a:hover,
+    .banner-btn a:focus-visible
+  )
+  .btn-content {
+  color: var(--white-color);
+}
+
+body.about-page .contact-section2
+  :is(
+    .banner-btn:hover a,
+    .magnetic-wrap:hover .banner-btn a,
+    .banner-btn a:hover,
+    .banner-btn a:focus-visible
+  )
+  .btn-content
+  svg,
+body.about-page .contact-section2
+  :is(
+    .banner-btn:hover a,
+    .magnetic-wrap:hover .banner-btn a,
+    .banner-btn a:hover,
+    .banner-btn a:focus-visible
+  )
+  .btn-content
+  svg
+  path {
+  fill: var(--white-color);
 }
 
 body:not(.about-page) .contact-section2:not(#home-contact-cta) {
@@ -271,6 +424,18 @@ footer {
 
 footer .footer-widget .subscribed-area .form-inner {
   background-color: var(--bmr-text);
+}
+
+/* Newsletter field — no inset blue focus ring on the input */
+footer .footer-widget .subscribed-area .form-inner input:focus,
+footer .footer-widget .subscribed-area .form-inner input:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none;
+}
+
+footer .footer-widget .subscribed-area .form-inner:focus-within {
+  border-color: rgba(255, 255, 255, 0.28);
 }
 
 /*=====================================
@@ -456,6 +621,40 @@ select:focus-visible {
   }
 }
 
+/* Why Choose Us — highlight bullets: single line in left column on desktop */
+@media (min-width: 992px) {
+  #why-choose-us .why-choose-highlights li {
+    align-items: center;
+    line-height: 1.35;
+    font-size: 14px;
+  }
+
+  #why-choose-us .why-choose-highlights li svg {
+    margin-top: 0;
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1399px) {
+  #why-choose-us .why-choose-highlights li {
+    font-size: 13.5px;
+  }
+}
+
+/* Why Choose Us — card copy hugs text (no template min-height / flex stretch) */
+#why-choose-us .eg-card-3 .content {
+  padding: 35px 25px 0;
+  margin-bottom: 0;
+  min-height: unset;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+@media (max-width: 1399px) {
+  #why-choose-us .eg-card-3 .content {
+    padding: 25px 20px 0;
+  }
+}
+
 /* Why Choose Us — card icon row */
 #why-choose-us .eg-card-3 .sn-and-btn {
   border-top: none;
@@ -521,41 +720,58 @@ select:focus-visible {
   background-color: #f8fafc !important;
   border-top: 1px solid #e2e8f0;
   border-bottom: 1px solid #e2e8f0;
-  padding-top: 100px;
-  padding-bottom: 100px;
   position: relative;
   overflow: hidden;
 }
 
-/* Two-column header layout: title left, CTA right */
+/* Heading + CTA on one row so the button top-aligns with h2 */
+#health-checkup-teaser .section-title1.two {
+  width: 100%;
+  max-width: 100%;
+}
+
+#health-checkup-teaser .bmr-teaser-headline-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  column-gap: 2rem;
+  row-gap: 1rem;
+  width: 100%;
+}
+
+#health-checkup-teaser .bmr-teaser-headline-row > h2 {
+  flex: 1 1 0;
+  min-width: min(100%, 22rem);
+  max-width: 740px;
+  margin-bottom: 0;
+}
+
+#health-checkup-teaser .bmr-teaser-headline-row > h2 > span {
+  color: var(--title-color);
+}
+
+#health-checkup-teaser .section-title1.two .section-title-sub {
+  max-width: none;
+  line-height: 1.5;
+  margin-bottom: 0;
+  margin-top: 18px;
+}
+
 .bmr-teaser-cta-wrap {
   flex-shrink: 0;
   min-width: 220px;
   text-align: left;
 }
 
-/* Trust checklist under CTA button */
-.bmr-teaser-trust {
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+#health-checkup-teaser .bmr-teaser-cta-wrap {
+  /* Match .section-title1.two h2 padding-top so button lines up with heading */
+  padding-top: 10px;
+  margin-top: 0;
 }
 
-.bmr-teaser-trust li {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.84rem;
-  font-weight: 500;
-  color: var(--bmr-text, #1f2a44);
-  font-family: var(--font-montserrat, sans-serif);
-}
-
-.bmr-teaser-trust li svg {
-  flex-shrink: 0;
-  fill: var(--bmr-primary, #0b5ed7);
+#health-checkup-teaser .bmr-teaser-cta-wrap .primary-btn1 {
+  margin-top: 0;
 }
 
 #health-checkup-teaser .section-title1.two > span {
@@ -590,13 +806,14 @@ select:focus-visible {
   border-radius: 12px;
   padding: 24px 20px 22px;
   height: 100%;
-  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+  box-shadow: none;
+  transition: transform 0.22s ease, border-color 0.22s ease;
 }
 
 .bmr-pillar-item:hover {
   transform: translateY(-4px);
   border-color: var(--bmr-primary, #0b5ed7);
-  box-shadow: 0 8px 24px rgba(11, 94, 215, 0.09);
+  box-shadow: none;
 }
 
 .bmr-pillar-icon {
@@ -659,15 +876,14 @@ select:focus-visible {
 
 /* Responsive adjustments */
 @media (max-width: 991px) {
-  .bmr-checkup-teaser-section {
-    padding-top: 80px;
-    padding-bottom: 80px;
-  }
-
   .bmr-teaser-cta-wrap {
     min-width: unset;
     width: 100%;
     text-align: left;
+  }
+
+  #health-checkup-teaser .bmr-teaser-cta-wrap {
+    padding-top: 0;
   }
 }
 
@@ -678,10 +894,6 @@ select:focus-visible {
     align-items: flex-start;
   }
 
-  .bmr-checkup-teaser-section {
-    padding-top: 60px;
-    padding-bottom: 60px;
-  }
 }
 
 /* Keep old pillar classes in case verify scripts reference them */
@@ -3202,6 +3414,18 @@ select:focus-visible {
   max-width: 780px;
 }
 
+.breadcrumb-section .breadcrumb-nav {
+  width: fit-content;
+  max-width: 100%;
+}
+
+.breadcrumb-section .banner-content .breadcrumb-list {
+  width: fit-content !important;
+  max-width: 100%;
+  flex: 0 0 auto;
+  display: inline-flex !important;
+}
+
 .breadcrumb-section .breadcrumb-list {
   margin-top: 15px;
   gap: 8px;
@@ -3246,6 +3470,19 @@ select:focus-visible {
   padding-top: 90px !important;
   padding-bottom: 40px !important;
   background-color: #ffffff !important;
+}
+
+body.page-pricing .pricing-intro-section .pricing-intro-trust-card {
+  margin-top: 0;
+  vertical-align: top;
+}
+
+@media (min-width: 992px) {
+  body.page-pricing .pricing-intro-section .row.align-items-start > .col-lg-4 {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+  }
 }
 
 .pricing-packages-section {
@@ -4285,9 +4522,9 @@ footer.footer-section {
    EXECUTIVE ENHANCEMENTS: BUTTON HOVER, NAVBAR, FOOTER & CTA STYLING
    ========================================================================== */
 
-/* Fix Point 12 & 10: Smooth, Reliable Button Hover (Disable expanding circular span) */
-.primary-btn1 span,
-.btn-hover span {
+/* Fix Point 12 & 10: Smooth, Reliable Button Hover (flat style; ripple pages excluded) */
+body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact) .primary-btn1 span,
+body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact) .btn-hover span {
   display: none !important;
   width: 0 !important;
   height: 0 !important;
@@ -4296,8 +4533,8 @@ footer.footer-section {
   transform: none !important;
 }
 
-.primary-btn1,
-.btn-hover {
+body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact) .primary-btn1,
+body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact) .btn-hover {
   background-color: #0b5ed7 !important;
   color: #ffffff !important;
   border: 1px solid #0b5ed7 !important;
@@ -4308,14 +4545,14 @@ footer.footer-section {
   overflow: hidden !important;
 }
 
-.primary-btn1 svg,
-.btn-hover svg {
+body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact) .primary-btn1 svg,
+body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact) .btn-hover svg {
   fill: #ffffff !important;
   transition: transform 0.25s ease !important;
 }
 
-.primary-btn1:hover,
-.btn-hover:hover {
+body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact) .primary-btn1:hover,
+body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact) .btn-hover:hover {
   background-color: #084298 !important;
   color: #ffffff !important;
   border-color: #084298 !important;
@@ -4323,8 +4560,8 @@ footer.footer-section {
   box-shadow: 0 6px 18px rgba(11, 94, 215, 0.28) !important;
 }
 
-.primary-btn1:hover svg,
-.btn-hover:hover svg {
+body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact) .primary-btn1:hover svg,
+body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact) .btn-hover:hover svg {
   fill: #ffffff !important;
   transform: translateX(3px) !important;
 }
@@ -4342,7 +4579,7 @@ footer .footer-widget .contact-area .hotline-area .icon {
   height: 42px !important;
   min-width: 42px !important;
   background-color: #0b5ed7 !important;
-  border-radius: 8px !important;
+  border-radius: 0 !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -4507,7 +4744,7 @@ footer .footer-widget .contact-area .hotline-area .icon {
   height: 42px !important;
   min-width: 42px !important;
   background-color: #0b5ed7 !important;
-  border-radius: 8px !important;
+  border-radius: 0 !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -4677,7 +4914,7 @@ body.about-page .section-title-sub,
 .ipr-cards-section .section-title1.two,
 .financing-cards-section .section-title1.two,
 [class*="-cards-section"] .section-title1.two,
-[class*="-faq-section"] .section-title1.two,
+[class*="-faq-section"]:not(#home-faqs) .section-title1.two,
 .text-center .section-title1.two,
 .section-title1.two.text-center,
 .col-lg-8.mx-auto > .section-title1.two,
@@ -4692,7 +4929,7 @@ body.about-page .section-title-sub,
 .ipr-cards-section .section-title1.two > span,
 .financing-cards-section .section-title1.two > span,
 [class*="-cards-section"] .section-title1.two > span,
-[class*="-faq-section"] .section-title1.two > span,
+[class*="-faq-section"]:not(#home-faqs) .section-title1.two > span,
 .text-center .section-title1.two > span,
 .section-title1.two.text-center > span,
 .col-lg-8.mx-auto > .section-title1.two > span,
@@ -4710,7 +4947,7 @@ body.about-page .section-title-sub,
 .ipr-cards-section .section-title1.two > h2,
 .financing-cards-section .section-title1.two > h2,
 [class*="-cards-section"] .section-title1.two > h2,
-[class*="-faq-section"] .section-title1.two > h2,
+[class*="-faq-section"]:not(#home-faqs) .section-title1.two > h2,
 .text-center .section-title1.two > h2,
 .section-title1.two.text-center > h2,
 .col-lg-8.mx-auto > .section-title1.two > h2,
@@ -4726,7 +4963,7 @@ body.about-page .section-title-sub,
 .ipr-cards-section .section-title1.two > p,
 .financing-cards-section .section-title1.two > p,
 [class*="-cards-section"] .section-title1.two > p,
-[class*="-faq-section"] .section-title1.two > p,
+[class*="-faq-section"]:not(#home-faqs) .section-title1.two > p,
 .text-center .section-title1.two > p,
 .section-title1.two.text-center > p,
 .col-lg-8.mx-auto > .section-title1.two > p,
@@ -5119,6 +5356,10 @@ body.page-contact .contect-section6,
   padding-right: 28px;
 }
 
+#home-contact-cta > .container-fluid > .row {
+  align-items: flex-start;
+}
+
 @media (max-width: 991px) {
   .bmr-contact-info-col {
     padding-right: 0;
@@ -5126,24 +5367,28 @@ body.page-contact .contect-section6,
   }
 }
 
+/* Match .section-title1 > span (e.g. Client Testimonials chip) */
 .bmr-contact-pill-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  background-color: #e0edff;
-  border: 1px solid #bfdbfe;
-  color: #0b5ed7;
+  display: inline-block;
+  margin-bottom: 18px;
+  color: var(--bmr-primary, #0b5ed7);
+  text-align: center;
   font-family: var(--font-montserrat, sans-serif);
-  font-size: 13px;
-  font-weight: 600;
-  padding: 5px 14px;
-  border-radius: 50px;
-  margin-bottom: 14px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1;
+  border-radius: 16px;
+  border: 1px solid rgba(11, 94, 215, 0.35);
+  background-color: rgba(11, 94, 215, 0.06);
+  padding: 7px 20px;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
 }
 
 .bmr-contact-info-col h2 {
   font-family: var(--font-marcellus, serif) !important;
   font-size: clamp(28px, 3vw, 36px) !important;
+  font-weight: 400 !important;
   color: #1e293b !important;
   line-height: 1.25 !important;
   margin-bottom: 12px !important;
@@ -5161,26 +5406,40 @@ body.page-contact .contect-section6,
 .bmr-contact-channel-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 14px;
   margin-bottom: 22px;
 }
 
-.bmr-contact-channel-card {
+:is(#home-contact-cta, body.page-contact .bmr-contact-section)
+  .explore-btn.bmr-contact-channel-link {
   display: flex;
   align-items: center;
   gap: 14px;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  padding: 11px 16px;
-  transition: all 0.2s ease;
+  padding: 6px 0;
   text-decoration: none !important;
+  white-space: normal;
 }
 
-.bmr-contact-channel-card:hover {
-  border-color: #93c5fd;
-  transform: translateX(4px);
-  box-shadow: 0 4px 14px rgba(11, 94, 215, 0.06);
+:is(#home-contact-cta, body.page-contact .bmr-contact-section)
+  .explore-btn.bmr-contact-channel-link
+  .bmr-contact-channel-text {
+  flex: 1;
+}
+
+:is(#home-contact-cta, body.page-contact .bmr-contact-section) .bmr-contact-channel-note {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 6px 0;
+  margin: 0;
+}
+
+:is(#home-contact-cta, body.page-contact .bmr-contact-section)
+  .explore-btn.bmr-contact-channel-link
+  svg {
+  flex-shrink: 0;
+  margin-left: auto;
+  fill: var(--title-color);
 }
 
 .bmr-contact-channel-icon {
@@ -5213,6 +5472,10 @@ body.page-contact .contect-section6,
   font-size: 14px;
   font-weight: 600;
   color: #1e293b;
+}
+
+.why-choose-cta-group {
+  margin-top: 10px;
 }
 
 .bmr-contact-trust-pills {
@@ -5435,4 +5698,1087 @@ body:has(.breadcrumb-section) .header-area.style-4 .menu-wrap .nav-right .mobile
   .breadcrumb-section {
     padding-top: 140px !important;
   }
+}
+
+/* ==========================================================================
+   Marketing pages — unified section vertical rhythm (shared tokens)
+   Home, About, Pricing, FAQ, Contact (breadcrumb excluded)
+   ========================================================================== */
+body.page-home,
+body.about-page,
+body.page-pricing,
+body.page-faq,
+body.page-contact {
+  /* Compact rhythm was 50% of template; +25% from that baseline */
+  --bmr-section-py: 63px;
+}
+
+body.page-home {
+  --bmr-home-hero-py-start: clamp(45px, 5vh, 60px);
+  --bmr-home-hero-py-end: clamp(55px, 6.25vh, 75px);
+  --bmr-home-hero-py-block: clamp(43px, 5vh, 58px);
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  body.page-home,
+  body.about-page,
+  body.page-pricing,
+  body.page-faq,
+  body.page-contact {
+    --bmr-section-py: 50px;
+  }
+
+  body.page-home {
+    --bmr-home-hero-py-block: clamp(40px, 4.375vh, 55px);
+  }
+}
+
+@media (max-width: 991px) {
+  body.page-home,
+  body.about-page,
+  body.page-pricing,
+  body.page-faq,
+  body.page-contact {
+    --bmr-section-py: 44px;
+  }
+
+  body.page-home {
+    --bmr-home-hero-py-block: clamp(40px, 4.375vh, 55px);
+  }
+}
+
+@media (max-width: 767px) {
+  body.page-home,
+  body.about-page,
+  body.page-pricing,
+  body.page-faq,
+  body.page-contact {
+    --bmr-section-py: 38px;
+  }
+}
+
+body.page-home :is(
+  #health-checkup-teaser,
+  #project-walkthrough,
+  #our-services,
+  #why-choose-us,
+  #our-process,
+  #who-we-help,
+  #business-challenges,
+  #our-people,
+  #client-testimonials,
+  #home-faqs,
+  #home-contact-cta
+),
+body.about-page :is(
+  .logo-section,
+  .mission-section,
+  .about-overview-section,
+  #why-choose-us,
+  #our-people,
+  #client-testimonials,
+  .contact-section2
+),
+body.page-pricing :is(
+  .pricing-intro-section,
+  .pricing-packages-section,
+  .pricing-faq-section,
+  .pricing-cta-section
+),
+body.page-faq :is(
+  .faq-content-section,
+  .faq-cta-section
+),
+body.page-contact .bmr-contact-section {
+  padding-top: var(--bmr-section-py) !important;
+  padding-bottom: var(--bmr-section-py) !important;
+  margin-bottom: 0 !important;
+}
+
+/* Pricing — tighter handoff intro → package cards (avoid stacked full section-py) */
+body.page-pricing .pricing-intro-section {
+  padding-bottom: calc(var(--bmr-section-py) * 0.45) !important;
+}
+
+body.page-pricing .pricing-packages-section {
+  padding-top: calc(var(--bmr-section-py) * 0.38) !important;
+}
+
+/* ==========================================================================
+   Home & About — sharp corners on blocks (0 radius)
+   ========================================================================== */
+body.page-home,
+body.about-page,
+body.page-pricing,
+body.page-faq {
+  --bmr-home-block-radius: 0;
+  --bmr-radius-card: 0;
+}
+
+body.page-home .bmr-hero {
+  --bmr-radius-card: 0;
+}
+
+body.page-home :is(
+  .bmr-button,
+  .bmr-visual__glass,
+  .bmr-pillar-item,
+  .bmr-pillar-icon,
+  .primary-btn1,
+  .explore-btn.two,
+  .eg-card4,
+  .eg-card4 .card-img,
+  .eg-card4 .card-img img,
+  .eg-card-3,
+  .eg-card-2,
+  .eg-card-2.style-2,
+  #who-we-help .single-services,
+  #who-we-help .single-services .services-img,
+  .people-card1 .people-flip-box-layer.people-flip-box-front .people-img img,
+  .people-card1 .people-flip-box-layer.people-flip-box-back,
+  .testimonial-img-with-logo,
+  .testimonial-img-with-logo > img,
+  .testimonial-img-with-logo::after,
+  .testimonial-wrap,
+  .testimonial-wrap.two,
+  .testimonial-card,
+  #home-faqs .accordion-item,
+  #home-faqs .accordion-button,
+  #project-walkthrough .project-walkthrough-video,
+  #project-walkthrough .project-walkthrough-video__media,
+  #project-walkthrough .project-walkthrough-video video,
+  #project-walkthrough .logo-section .logo-wrapper,
+  #project-walkthrough .logo-section .logo-wrapper .logo-title,
+  #home-contact-cta .explore-btn.bmr-contact-channel-link,
+  body.page-contact .bmr-contact-section .explore-btn.bmr-contact-channel-link,
+  .bmr-contact-channel-note,
+  .bmr-contact-channel-icon,
+  .bmr-compact-form-card,
+  #home-contact-cta .form-inner input,
+  #home-contact-cta .form-inner textarea,
+  #home-contact-cta .form-inner select,
+  #home-contact-cta .primary-btn1,
+  footer .footer-widget .subscribed-area .form-inner
+) {
+  border-radius: var(--bmr-home-block-radius) !important;
+}
+
+body.about-page :is(
+  .primary-btn1,
+  .explore-btn.two,
+  .eg-card-3,
+  .eg-card-2,
+  .eg-card-2.style-2,
+  .about-overview-section .rounded-3,
+  .mission-section .mission-img,
+  .mission-section .mission-img img,
+  .logo-section .logo-wrapper,
+  .logo-section .logo-wrapper .logo-title,
+  .people-card1 .people-flip-box-layer.people-flip-box-front .people-img img,
+  .people-card1 .people-flip-box-layer.people-flip-box-front .content,
+  .people-card1 .people-flip-box-layer.people-flip-box-back,
+  #our-people .people-card1 .people-flip-box-back .phone-area .icon,
+  #our-people .people-card1 .people-flip-box-back .phone-area .content,
+  .testimonial-img-with-logo,
+  .testimonial-img-with-logo > img,
+  .testimonial-img-with-logo::after,
+  .testimonial-wrap,
+  .testimonial-wrap.two,
+  .testimonial-card,
+  footer .footer-widget .subscribed-area .form-inner,
+  footer .footer-widget .subscribed-area .form-inner input
+) {
+  border-radius: var(--bmr-home-block-radius) !important;
+}
+
+@media (max-width: 991px) {
+  body.about-page :is(
+    .testimonial-img-with-logo,
+    .testimonial-img-with-logo > img,
+    .testimonial-img-with-logo::after,
+    .testimonial-wrap.two
+  ) {
+    border-radius: 0 !important;
+  }
+}
+
+@media (max-width: 767px) {
+  body.about-page .mission-section .mission-img img {
+    border-radius: 0 !important;
+  }
+}
+
+body.page-pricing :is(
+  .primary-btn1,
+  .explore-btn.two,
+  .pricing-plan-card,
+  .pricing-intro-section .rounded-3,
+  .pricing-faq-section .accordion-item,
+  .pricing-faq-section .accordion-button,
+  footer .footer-widget .subscribed-area .form-inner,
+  footer .footer-widget .subscribed-area .form-inner input
+) {
+  border-radius: var(--bmr-home-block-radius) !important;
+}
+
+body.page-faq :is(
+  .primary-btn1,
+  .explore-btn.two,
+  .faq-content-section .accordion-item,
+  .faq-content-section .accordion-button,
+  footer .footer-widget .subscribed-area .form-inner,
+  footer .footer-widget .subscribed-area .form-inner input
+) {
+  border-radius: var(--bmr-home-block-radius) !important;
+}
+
+body.page-contact :is(
+  .primary-btn1,
+  .explore-btn.two,
+  .bmr-compact-form-card,
+  .bmr-contact-section .explore-btn.bmr-contact-channel-link,
+  .bmr-contact-section .bmr-contact-channel-note,
+  .bmr-contact-section .bmr-contact-channel-icon,
+  .bmr-contact-section .form-inner input,
+  .bmr-contact-section .form-inner textarea,
+  .bmr-contact-section .form-inner select,
+  .bmr-contact-section .bmr-compact-form-card .primary-btn1,
+  footer .footer-widget .subscribed-area .form-inner,
+  footer .footer-widget .subscribed-area .form-inner input
+) {
+  border-radius: var(--bmr-home-block-radius) !important;
+}
+
+body.page-contact .bmr-contact-section > .container-fluid > .row {
+  align-items: flex-start;
+}
+
+body.page-contact .bmr-contact-section > .container-fluid > .row :is(
+  .bmr-contact-pill-badge,
+  .lead-desc,
+  .bmr-contact-channel-label,
+  .bmr-contact-channel-val,
+  .bmr-contact-trust-pills,
+  .bmr-contact-trust-pills span,
+  .bmr-compact-form-card,
+  .bmr-compact-form-card .form-inner label,
+  .bmr-compact-form-card .form-inner input,
+  .bmr-compact-form-card .form-inner select,
+  .bmr-compact-form-card .form-inner textarea
+) {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+}
+
+body.page-contact .bmr-contact-section > .container-fluid > .row .bmr-contact-info-col > h2 {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+}
+
+/* Keep nav + section chips / labels rounded (pre–sharp-corner pass) */
+body.page-home .header-area.style-4 .menu-wrap .main-menu ul > li > a,
+body.about-page .header-area.style-4 .menu-wrap .main-menu ul > li > a,
+body.page-pricing .header-area.style-4 .menu-wrap .main-menu ul > li > a,
+body.page-faq .header-area.style-4 .menu-wrap .main-menu ul > li > a,
+body.page-contact .header-area.style-4 .menu-wrap .main-menu ul > li > a {
+  border-radius: 15px !important;
+}
+
+body.page-home .header-area.style-4 .menu-wrap .main-menu ul > li.active > a,
+body.about-page .header-area.style-4 .menu-wrap .main-menu ul > li.active > a,
+body.page-pricing .header-area.style-4 .menu-wrap .main-menu ul > li.active > a,
+body.page-faq .header-area.style-4 .menu-wrap .main-menu ul > li.active > a,
+body.page-contact .header-area.style-4 .menu-wrap .main-menu ul > li.active > a {
+  border-radius: 999px !important;
+}
+
+body.page-home :is(
+  .section-title1 > span,
+  .section-title1.one > span,
+  .section-title1.two > span,
+  #project-walkthrough .section-title1.two > span,
+  #health-checkup-teaser .section-title1.two > span
+),
+body.about-page :is(
+  .section-title1 > span,
+  .section-title1.one > span,
+  .section-title1.two > span
+),
+body.page-pricing :is(
+  .section-title1 > span:not(.badge),
+  .section-title1.one > span:not(.badge),
+  .section-title1.two > span:not(.badge)
+),
+body.page-faq :is(
+  .section-title1 > span,
+  .section-title1.one > span,
+  .section-title1.two > span
+) {
+  border-radius: 16px !important;
+}
+
+/* Bootstrap pill labels stay rounded */
+body.about-page .about-overview-section .badge.rounded-pill,
+body.page-pricing .badge.rounded-pill,
+body.page-faq .badge.rounded-pill {
+  border-radius: var(--bs-border-radius-pill, 50rem) !important;
+}
+
+body.page-home .bmr-hero__eyebrow {
+  border-radius: 999px !important;
+}
+
+body.page-home .step-card1 span {
+  border-radius: 14px !important;
+}
+
+body.page-home .eg-card4 .card-content > a {
+  border-radius: 15px !important;
+}
+
+/* Service card image overlay arrow — full circle (all slides + static cards) */
+body.page-home #our-services .eg-card4 .card-img .explore-btn a {
+  border-radius: 50% !important;
+}
+
+body.page-home .bmr-contact-pill-badge {
+  border-radius: 16px !important;
+}
+
+/* Button hover ripples stay circular */
+body.page-home :is(
+  .primary-btn1.btn-hover > span,
+  .explore-btn.two.btn-hover > span,
+  .bmr-button > span
+),
+body.about-page :is(
+  .primary-btn1.btn-hover > span,
+  .explore-btn.two.btn-hover > span
+),
+body.page-pricing :is(
+  .primary-btn1.btn-hover > span,
+  .explore-btn.two.btn-hover > span
+),
+body.page-faq :is(
+  .primary-btn1.btn-hover > span,
+  .explore-btn.two.btn-hover > span
+),
+body.page-contact :is(
+  .primary-btn1.btn-hover > span,
+  .explore-btn.two.btn-hover > span
+) {
+  border-radius: 50% !important;
+}
+
+/* Keep round affordances (nav dots, cursors, play/avatar chips) */
+body.page-home :is(
+  .slider-btn,
+  .circle-container,
+  .circle-progress path,
+  #magic-cursor #ball,
+  .testimonial-card .author-img img,
+  #project-walkthrough .project-walkthrough-video__overlay .explore-btn.white,
+  .bmr-proof-item__icon,
+  footer .footer-widget .subscribed-area .form-inner button,
+  .social-area li a
+),
+body.about-page :is(
+  .slider-btn,
+  .circle-container,
+  .circle-progress path,
+  #magic-cursor #ball,
+  .testimonial-card .author-img img,
+  footer .footer-widget .subscribed-area .form-inner button,
+  .social-area li a
+),
+body.page-pricing :is(
+  .slider-btn,
+  .circle-container,
+  .circle-progress path,
+  #magic-cursor #ball,
+  footer .footer-widget .subscribed-area .form-inner button,
+  .social-area li a
+),
+body.page-faq :is(
+  .slider-btn,
+  .circle-container,
+  .circle-progress path,
+  #magic-cursor #ball,
+  footer .footer-widget .subscribed-area .form-inner button,
+  .social-area li a
+),
+body.page-contact :is(
+  .slider-btn,
+  .circle-container,
+  .circle-progress path,
+  #magic-cursor #ball,
+  footer .footer-widget .subscribed-area .form-inner button,
+  .social-area li a
+) {
+  border-radius: 50% !important;
+}
+
+/* ==========================================================================
+   Homepage — Home 06 btn-hover fluid ripple (main.js positions span on hover)
+   Restores template behavior overridden by "Executive Enhancements" above.
+   ========================================================================== */
+body.page-home :is(a, button).primary-btn1.btn-hover,
+body.about-page :is(a, button).primary-btn1.btn-hover,
+body.page-pricing :is(a, button).primary-btn1.btn-hover,
+body.page-faq :is(a, button).primary-btn1.btn-hover,
+body.page-contact :is(a, button).primary-btn1.btn-hover {
+  background-color: var(--primary-color) !important;
+  color: var(--white-color) !important;
+  border: 1px solid var(--primary-color) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  transition: color 0.6s, border-color 0.6s, background-color 0.6s !important;
+  overflow: hidden !important;
+  position: relative !important;
+  z-index: 1;
+  isolation: isolate;
+  font-family: var(--font-montserrat);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1;
+  padding: 20px 37px;
+  gap: 8px;
+  display: inline-flex;
+  align-items: center;
+}
+
+body.page-pricing .header-area.style-4 :is(a, button).primary-btn1.btn-hover,
+body.page-faq .header-area.style-4 :is(a, button).primary-btn1.btn-hover,
+body.page-contact .header-area.style-4 :is(a, button).primary-btn1.btn-hover {
+  padding: 15px 28px;
+}
+
+@media (max-width: 1199px) {
+  body.page-pricing .header-area.style-4 :is(a, button).primary-btn1.btn-hover,
+  body.page-faq .header-area.style-4 :is(a, button).primary-btn1.btn-hover,
+  body.page-contact .header-area.style-4 :is(a, button).primary-btn1.btn-hover {
+    padding: 15px 18px;
+  }
+}
+
+body.page-home :is(a, button).primary-btn1.btn-hover > span,
+body.about-page :is(a, button).primary-btn1.btn-hover > span,
+body.page-pricing :is(a, button).primary-btn1.btn-hover > span,
+body.page-faq :is(a, button).primary-btn1.btn-hover > span,
+body.page-contact :is(a, button).primary-btn1.btn-hover > span {
+  display: block !important;
+  position: absolute !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  border-radius: 50% !important;
+  background-color: var(--white-color) !important;
+  transition: width 0.6s, height 0.6s !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: -1 !important;
+  pointer-events: none;
+}
+
+body.page-home :is(a, button).primary-btn1.btn-hover svg,
+body.about-page :is(a, button).primary-btn1.btn-hover svg,
+body.page-pricing :is(a, button).primary-btn1.btn-hover svg,
+body.page-faq :is(a, button).primary-btn1.btn-hover svg,
+body.page-contact :is(a, button).primary-btn1.btn-hover svg {
+  fill: var(--white-color) !important;
+  transition: fill 0.6s !important;
+  transform: none !important;
+}
+
+body.page-home :is(a, button).primary-btn1.btn-hover:hover,
+body.about-page :is(a, button).primary-btn1.btn-hover:hover,
+body.page-pricing :is(a, button).primary-btn1.btn-hover:hover,
+body.page-faq :is(a, button).primary-btn1.btn-hover:hover,
+body.page-contact :is(a, button).primary-btn1.btn-hover:hover {
+  background-color: var(--primary-color) !important;
+  color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+body.page-home :is(a, button).primary-btn1.btn-hover:hover > span,
+body.about-page :is(a, button).primary-btn1.btn-hover:hover > span,
+body.page-pricing :is(a, button).primary-btn1.btn-hover:hover > span,
+body.page-faq :is(a, button).primary-btn1.btn-hover:hover > span,
+body.page-contact :is(a, button).primary-btn1.btn-hover:hover > span {
+  width: 225% !important;
+  height: 1000.5px !important;
+}
+
+body.page-home :is(a, button).primary-btn1.btn-hover:hover svg,
+body.about-page :is(a, button).primary-btn1.btn-hover:hover svg,
+body.page-pricing :is(a, button).primary-btn1.btn-hover:hover svg,
+body.page-faq :is(a, button).primary-btn1.btn-hover:hover svg,
+body.page-contact :is(a, button).primary-btn1.btn-hover:hover svg {
+  fill: var(--primary-color) !important;
+  transform: none !important;
+}
+
+body.page-home a.explore-btn.two.btn-hover {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+  box-shadow: none !important;
+  transform: none !important;
+  transition: color 0.6s !important;
+}
+
+body.page-home a.explore-btn.two.btn-hover > span {
+  display: block !important;
+  position: absolute !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  border-radius: 50% !important;
+  background-color: var(--primary-color) !important;
+  transition: width 0.6s, height 0.6s !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: -1 !important;
+  pointer-events: none;
+}
+
+body.page-home a.explore-btn.two.btn-hover:hover {
+  color: var(--white-color) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+body.page-home a.explore-btn.two.btn-hover:hover > span {
+  width: 225% !important;
+  height: 1000.5px !important;
+}
+
+body.page-home a.explore-btn.two.btn-hover:hover svg {
+  fill: var(--white-color) !important;
+}
+
+body.page-home #home-contact-cta .bmr-compact-form-card button.primary-btn1.btn-hover[type="submit"],
+body.page-contact .bmr-compact-form-card button.primary-btn1.btn-hover[type="submit"] {
+  border: 1px solid var(--primary-color) !important;
+  box-shadow: none !important;
+  transform: none !important;
+  padding: 20px 37px !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  line-height: 1 !important;
+  gap: 8px !important;
+  border-radius: 0 !important;
+}
+
+body.page-home #home-contact-cta .bmr-compact-form-card button.primary-btn1.btn-hover[type="submit"]:hover,
+body.page-contact .bmr-compact-form-card button.primary-btn1.btn-hover[type="submit"]:hover {
+  background-color: var(--primary-color) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+body.page-home .bmr-hero__actions .explore-btn:not(.two):hover,
+body.page-home .bmr-contact-channel-list .explore-btn:hover,
+body.page-contact .bmr-contact-channel-list .explore-btn:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+body.page-contact .bmr-contact-channel-list .explore-btn.bmr-contact-channel-link:hover svg {
+  transform: rotate(45deg);
+  fill: var(--primary-color);
+}
+
+/* Pricing & FAQ — force sharp blocks over Bootstrap .rounded-* and card presets */
+body.page-pricing .pricing-plan-card,
+body.page-pricing .pricing-intro-section .rounded-3,
+body.page-pricing .pricing-faq-section .accordion-item,
+body.page-faq .faq-content-section .accordion-item {
+  border-radius: 0 !important;
+}
+
+body.page-pricing .pricing-plan-card .position-absolute.bg-primary {
+  border-radius: 0 !important;
+}
+
+/* Pricing FAQ band — site blue-tint (not Bootstrap .bg-light) */
+body.page-pricing .pricing-faq-section {
+  background-color: var(--bmr-band, #dce8f6) !important;
+}
+
+/* Pricing packages — no card lift/shadow (default, hover, Bootstrap .shadow*) */
+body.page-pricing .pricing-plan-card,
+body.page-pricing .pricing-plan-card:hover,
+body.page-pricing .pricing-plan-card.shadow-sm,
+body.page-pricing .pricing-plan-card.shadow,
+body.page-pricing .pricing-plan-card.shadow-sm:hover,
+body.page-pricing .pricing-plan-card.shadow:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Pricing package CTAs — full-width card footers (template ripple unchanged) */
+body.page-pricing .pricing-plan-card :is(a, button).primary-btn1.btn-hover {
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+body.page-pricing .pricing-cta-section :is(a, button).primary-btn1.btn-hover,
+body.page-faq .faq-cta-section :is(a, button).primary-btn1.btn-hover {
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+body.page-pricing .pricing-cta-section .explore-btn.white,
+body.page-faq .faq-cta-section .explore-btn.white {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+body.page-pricing .pricing-cta-section .explore-btn.white:hover,
+body.page-faq .faq-cta-section .explore-btn.white:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Pricing page — warm band CTA (replaces dark executive banner) */
+body.page-pricing .pricing-cta-section {
+  background-color: #efeae6 !important;
+  background-image: none !important;
+  color: var(--title-color, #1f2a44) !important;
+  border-top: 1px solid rgba(13, 23, 32, 0.08) !important;
+  border-bottom: 1px solid rgba(13, 23, 32, 0.08) !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+body.page-pricing .pricing-cta-section h2 {
+  color: var(--title-color, #1f2a44) !important;
+  text-shadow: none !important;
+}
+
+body.page-pricing .pricing-cta-section p {
+  color: var(--paragraph-color, #4a5568) !important;
+}
+
+/* FAQ page — warm band CTA (matches pricing) */
+body.page-faq .faq-cta-section {
+  background-color: #efeae6 !important;
+  background-image: none !important;
+  color: var(--title-color, #1f2a44) !important;
+  border-top: 1px solid rgba(13, 23, 32, 0.08) !important;
+  border-bottom: 1px solid rgba(13, 23, 32, 0.08) !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+body.page-faq .faq-cta-section h2 {
+  color: var(--title-color, #1f2a44) !important;
+  text-shadow: none !important;
+}
+
+body.page-faq .faq-cta-section p {
+  color: var(--paragraph-color, #4a5568) !important;
+}
+
+/* ==========================================================================
+   Hero + home contact — display type matches #health-checkup-teaser h2 (Marcellus)
+   ========================================================================== */
+#home-contact-cta > .container-fluid > .row .bmr-contact-info-col > h2 {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+}
+
+#home-contact-cta > .container-fluid > .row :is(
+  .bmr-contact-pill-badge,
+  .lead-desc,
+  .bmr-contact-channel-label,
+  .bmr-contact-channel-val,
+  .bmr-contact-trust-pills,
+  .bmr-contact-trust-pills span,
+  .bmr-compact-form-card,
+  .bmr-compact-form-card .form-inner label,
+  .bmr-compact-form-card .form-inner input,
+  .bmr-compact-form-card .form-inner select,
+  .bmr-compact-form-card .form-inner textarea,
+  .bmr-compact-form-card .form-check-label
+) {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+}
+
+/* ==========================================================================
+   About overview — Marcellus display / Montserrat body (matches home sections)
+   ========================================================================== */
+body.about-page .about-overview-section {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+}
+
+body.about-page .about-overview-section .section-title1.two > .badge,
+body.about-page .about-overview-section .badge.rounded-pill {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif) !important;
+  font-weight: 500 !important;
+}
+
+body.about-page .about-overview-section .section-title1.two > h2 {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+  line-height: 1.28;
+}
+
+body.about-page .about-overview-section :is(
+  .section-title1.two > p,
+  p.text-muted,
+  p.small,
+  .small,
+  .text-muted
+) {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+  font-weight: 400 !important;
+}
+
+body.about-page .about-overview-section h5 {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+}
+
+body.about-page .about-overview-section .display-6 {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif) !important;
+  font-weight: 500 !important;
+}
+
+body.about-page .about-overview-section .text-uppercase.fw-semibold {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+  font-weight: 400 !important;
+}
+
+body.about-page .about-overview-section .fw-bold {
+  font-weight: 500 !important;
+}
+
+body.about-page .about-overview-section :is(h2, h5) {
+  font-weight: 400 !important;
+}
+
+body.about-page .about-overview-section .display-6.fw-bold {
+  font-weight: 500 !important;
+}
+
+/* ==========================================================================
+   Pricing page — breadcrumb chip, intro heading, FAQ accordion
+   ========================================================================== */
+body.page-pricing .pricing-intro-section .section-title1.two > h2 {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+  line-height: 1.28;
+}
+
+body.page-pricing .pricing-faq-section .accordion-button,
+body.page-pricing .pricing-faq-section .accordion-button:not(.collapsed),
+body.page-pricing .pricing-faq-section .accordion-button.collapsed,
+body.page-faq .faq-content-section #generalFaqAccordion .accordion-button,
+body.page-faq .faq-content-section #generalFaqAccordion .accordion-button:not(.collapsed),
+body.page-faq .faq-content-section #generalFaqAccordion .accordion-button.collapsed {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+  color: var(--title-color, #1f2a44) !important;
+}
+
+body.page-pricing .pricing-faq-section .accordion-button:hover,
+body.page-pricing .pricing-faq-section .accordion-button:focus-visible,
+body.page-faq .faq-content-section #generalFaqAccordion .accordion-button:hover,
+body.page-faq .faq-content-section #generalFaqAccordion .accordion-button:focus-visible {
+  color: #000000 !important;
+}
+
+body.page-pricing .pricing-faq-section .accordion-button:not(.collapsed):hover,
+body.page-pricing .pricing-faq-section .accordion-button:not(.collapsed):focus-visible,
+body.page-faq .faq-content-section #generalFaqAccordion .accordion-button:not(.collapsed):hover,
+body.page-faq .faq-content-section #generalFaqAccordion .accordion-button:not(.collapsed):focus-visible {
+  color: #000000 !important;
+}
+
+/* Pricing package cards — Marcellus titles / Montserrat body (lighter weights) */
+body.page-pricing .pricing-packages-section .pricing-plan-card {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+}
+
+body.page-pricing .pricing-plan-card :is(.badge, .position-absolute.bg-primary) {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif) !important;
+  font-weight: 500 !important;
+}
+
+body.page-pricing .pricing-plan-card h3 {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+  line-height: 1.28;
+}
+
+body.page-pricing .pricing-plan-card :is(
+  p,
+  .small,
+  .text-muted,
+  .plan-features,
+  .plan-features li
+) {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+  font-weight: 400 !important;
+}
+
+body.page-pricing .pricing-plan-card .price-callout .fs-4 {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+}
+
+body.page-pricing .pricing-plan-card .fw-bold:not(h3):not(.fs-4) {
+  font-weight: 500 !important;
+}
+
+body.page-pricing .pricing-plan-card :is(h3, .price-callout .fs-4) {
+  font-weight: 400 !important;
+}
+
+/* Pricing / FAQ warm-band — contact-section2 star CTA (theme parity + link reset) */
+body.page-pricing .pricing-cta-section .banner-btn,
+body.page-faq .faq-cta-section .banner-btn {
+  width: 210px;
+  flex-shrink: 0;
+}
+
+body.page-pricing .pricing-cta-section .banner-btn a,
+body.page-faq .faq-cta-section .banner-btn a {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 178px !important;
+  height: 178px !important;
+  line-height: 1;
+  text-decoration: none !important;
+  color: var(--title-color) !important;
+  transition: 0.5s;
+}
+
+body.page-pricing .pricing-cta-section .banner-btn a .bg,
+body.page-faq .faq-cta-section .banner-btn a .bg {
+  line-height: 1;
+  transition: 0.5s;
+}
+
+body.page-pricing .pricing-cta-section .banner-btn a .bg svg,
+body.page-faq .faq-cta-section .banner-btn a .bg svg {
+  display: block;
+  width: 178px;
+  height: 178px;
+  fill: #efeae6;
+  stroke: var(--title-color);
+  transition: fill 0.5s, stroke 0.5s;
+}
+
+body.page-pricing .pricing-cta-section .banner-btn a .bg svg path,
+body.page-faq .faq-cta-section .banner-btn a .bg svg path {
+  fill: #efeae6 !important;
+  stroke: var(--title-color) !important;
+  stroke-width: 1px;
+  transition: fill 0.5s, stroke 0.5s;
+}
+
+body.page-pricing .pricing-cta-section .banner-btn a .btn-content,
+body.page-faq .faq-cta-section .banner-btn a .btn-content {
+  position: absolute !important;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--title-color) !important;
+  text-align: center;
+  font-family: var(--font-montserrat);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 20px;
+  pointer-events: none;
+  transition: 0.5s;
+}
+
+body.page-pricing .pricing-cta-section .banner-btn a .btn-content svg,
+body.page-faq .faq-cta-section .banner-btn a .btn-content svg {
+  fill: var(--title-color);
+  margin-bottom: 15px;
+  transition: fill 0.5s, color 0.5s;
+}
+
+body.page-pricing .pricing-cta-section .banner-btn a .btn-content svg path,
+body.page-faq .faq-cta-section .banner-btn a .btn-content svg path {
+  fill: var(--title-color);
+  transition: fill 0.5s;
+}
+
+body.page-pricing .pricing-cta-section .banner-btn a,
+body.page-faq .faq-cta-section .banner-btn a {
+  cursor: pointer;
+}
+
+/* Star CTA hover — match About contact-section2 + magnetic-wrap target */
+body.page-pricing .pricing-cta-section
+  :is(
+    .banner-btn:hover a,
+    .magnetic-wrap:hover .banner-btn a,
+    .banner-btn a:hover,
+    .banner-btn a:focus-visible
+  ),
+body.page-faq .faq-cta-section
+  :is(
+    .banner-btn:hover a,
+    .magnetic-wrap:hover .banner-btn a,
+    .banner-btn a:hover,
+    .banner-btn a:focus-visible
+  ) {
+  color: var(--title-color) !important;
+  text-decoration: none !important;
+}
+
+body.page-pricing .pricing-cta-section
+  :is(
+    .banner-btn:hover a,
+    .magnetic-wrap:hover .banner-btn a,
+    .banner-btn a:hover,
+    .banner-btn a:focus-visible
+  )
+  .bg
+  svg,
+body.page-faq .faq-cta-section
+  :is(
+    .banner-btn:hover a,
+    .magnetic-wrap:hover .banner-btn a,
+    .banner-btn a:hover,
+    .banner-btn a:focus-visible
+  )
+  .bg
+  svg {
+  fill: var(--primary-color);
+  stroke: var(--primary-color);
+}
+
+body.page-pricing .pricing-cta-section
+  :is(
+    .banner-btn:hover a,
+    .magnetic-wrap:hover .banner-btn a,
+    .banner-btn a:hover,
+    .banner-btn a:focus-visible
+  )
+  .bg
+  svg
+  path,
+body.page-faq .faq-cta-section
+  :is(
+    .banner-btn:hover a,
+    .magnetic-wrap:hover .banner-btn a,
+    .banner-btn a:hover,
+    .banner-btn a:focus-visible
+  )
+  .bg
+  svg
+  path {
+  fill: var(--primary-color) !important;
+  stroke: var(--primary-color) !important;
+}
+
+body.page-pricing .pricing-cta-section
+  :is(
+    .banner-btn:hover a,
+    .magnetic-wrap:hover .banner-btn a,
+    .banner-btn a:hover,
+    .banner-btn a:focus-visible
+  )
+  .btn-content,
+body.page-faq .faq-cta-section
+  :is(
+    .banner-btn:hover a,
+    .magnetic-wrap:hover .banner-btn a,
+    .banner-btn a:hover,
+    .banner-btn a:focus-visible
+  )
+  .btn-content {
+  color: var(--white-color) !important;
+}
+
+body.page-pricing .pricing-cta-section
+  :is(
+    .banner-btn:hover a,
+    .magnetic-wrap:hover .banner-btn a,
+    .banner-btn a:hover,
+    .banner-btn a:focus-visible
+  )
+  .btn-content
+  svg,
+body.page-pricing .pricing-cta-section
+  :is(
+    .banner-btn:hover a,
+    .magnetic-wrap:hover .banner-btn a,
+    .banner-btn a:hover,
+    .banner-btn a:focus-visible
+  )
+  .btn-content
+  svg
+  path,
+body.page-faq .faq-cta-section
+  :is(
+    .banner-btn:hover a,
+    .magnetic-wrap:hover .banner-btn a,
+    .banner-btn a:hover,
+    .banner-btn a:focus-visible
+  )
+  .btn-content
+  svg,
+body.page-faq .faq-cta-section
+  :is(
+    .banner-btn:hover a,
+    .magnetic-wrap:hover .banner-btn a,
+    .banner-btn a:hover,
+    .banner-btn a:focus-visible
+  )
+  .btn-content
+  svg
+  path {
+  fill: var(--white-color) !important;
+}
+
+body.about-page .contact-section2 .magnetic-wrap,
+body.page-pricing .pricing-cta-section .magnetic-wrap,
+body.page-faq .faq-cta-section .magnetic-wrap {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
+  padding: 24px;
+  margin: -24px;
+  min-width: 226px;
+  min-height: 226px;
+  box-sizing: content-box;
+}
+
+body.about-page .contact-section2 .banner-btn.magnetic-item,
+body.page-pricing .pricing-cta-section .banner-btn.magnetic-item,
+body.page-faq .faq-cta-section .banner-btn.magnetic-item {
+  will-change: transform;
+}
+
+body.page-pricing .pricing-cta-section :is(.row, .container-fluid),
+body.page-faq .faq-cta-section :is(.row, .container-fluid) {
+  overflow: visible;
+}
+
+body.page-pricing .pricing-cta-section .col-lg-5,
+body.page-faq .faq-cta-section .col-lg-5 {
+  overflow: visible;
 }
