@@ -13648,7 +13648,8 @@ footer .footer-btm .social-area li a:hover i {
   align-items: stretch !important;
 }
 #business-challenges > .container-fluid.one.pl--95.pr--95,
-#client-testimonials > .container-fluid.one.pl--95.pr--95 {
+#client-testimonials > .container-fluid.one.pl--95.pr--95,
+#home-faqs > .container-fluid.one.pl--95.pr--95 {
   overflow-x: clip;
 }
 /* Homepage — Who We Help (match our-process / business-challenges header) */
@@ -13836,6 +13837,7 @@ footer .footer-btm .social-area li a:hover i {
 }
 /* Match #our-process / #client-testimonials section title row (section-title1 one) */
 #who-we-help .col-lg-12 > .who-we-help-header,
+#home-faqs .col-lg-12 > .home-faqs-header,
 #business-challenges .col-lg-12 > .business-challenges-header,
 #client-testimonials .col-lg-12 > .client-testimonials-header {
   flex: 1 1 100%;
@@ -13843,6 +13845,7 @@ footer .footer-btm .social-area li a:hover i {
   max-width: 1066px;
 }
 #who-we-help .who-we-help-title-col > h2,
+#home-faqs .home-faqs-title-col > h2,
 #business-challenges .section-title1.one > h2,
 #client-testimonials .section-title1.one > h2,
 #home-faqs .section-title1.one > h2 {
@@ -13850,6 +13853,7 @@ footer .footer-btm .social-area li a:hover i {
   min-width: 0;
 }
 #who-we-help .who-we-help-title-col > h2,
+#home-faqs .home-faqs-title-col > h2,
 #business-challenges .section-title1.one > h2,
 #client-testimonials .section-title1.one > h2,
 #home-faqs .section-title1.one > h2 {
@@ -19843,7 +19847,7 @@ button.explore-btn.two.btn-hover {
 ========================================*/
 #our-people .section-title1.two > span,
 #client-testimonials .section-title1.one > span,
-#home-faqs .sub-title > span {
+#home-faqs .home-faqs-title-col > span {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -19880,7 +19884,7 @@ button.explore-btn.two.btn-hover {
 #who-we-help .who-we-help-title-col > span,
 #our-people .section-title1.two > span,
 #client-testimonials .section-title1.one > span,
-#home-faqs .sub-title > span {
+#home-faqs .home-faqs-title-col > span {
   border: 1px solid var(--bmr-border, #d9e2ec);
   background-color: var(--bmr-white, #ffffff);
   color: var(--primary-color);
@@ -19892,6 +19896,7 @@ button.explore-btn.two.btn-hover {
 #project-walkthrough .section-title1.two > span,
 #why-choose-us .section-title1.two > span,
 #who-we-help .who-we-help-title-col > span,
+#home-faqs .home-faqs-title-col > span,
 #our-process .section-title1.two > span {
   display: inline-flex;
   align-items: center;
@@ -20002,6 +20007,107 @@ button.explore-btn.two.btn-hover {
     min-height: calc(26px * 1.5);
   }
 }
+/*=====================================
+ 69b. BMR Home FAQs — match Who We Help width / align
+========================================*/
+#home-faqs .home-faqs-header {
+  width: 100%;
+  max-width: none;
+}
+#home-faqs .home-faqs-title-row.section-title1,
+#home-faqs .home-faqs-sub-row {
+  justify-content: flex-start;
+  gap: 0;
+}
+#home-faqs .home-faqs-title-row.section-title1 {
+  width: 100%;
+  max-width: none;
+}
+#home-faqs .home-faqs-title-row {
+  display: flex;
+  align-items: flex-start;
+}
+#home-faqs .home-faqs-title-col {
+  flex: 0 1 740px;
+  max-width: 740px;
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+}
+#home-faqs .home-faqs-title-col > span {
+  margin-bottom: 8px;
+}
+#home-faqs .home-faqs-title-col > h2 {
+  margin-top: 0;
+  padding-top: 0;
+}
+#home-faqs .home-faqs-content-lead {
+  display: none;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  min-height: 0;
+  overflow: hidden;
+}
+#home-faqs .home-faqs-accordion-align {
+  width: 100%;
+  max-width: none;
+}
+@media (min-width: 992px) {
+  #home-faqs {
+    --home-faqs-content-shift: 100px;
+    --home-faqs-cards-lead-nudge: 88px;
+  }
+  #home-faqs .home-faqs-title-col,
+  #home-faqs .home-faqs-sub-row > .home-faqs-heading-col {
+    margin-right: var(--home-faqs-content-shift);
+  }
+  #home-faqs .home-faqs-content-lead {
+    display: block;
+    flex: 0 0
+      max(
+        0px,
+        min(100%, 1066px) - 740px - var(--home-faqs-content-shift) -
+          var(--home-faqs-cards-lead-nudge)
+      );
+    width: max(
+      0px,
+      min(100%, 1066px) - 740px - var(--home-faqs-content-shift) -
+        var(--home-faqs-cards-lead-nudge)
+    );
+    max-width: calc(
+      326px - var(--home-faqs-content-shift) - var(--home-faqs-cards-lead-nudge)
+    );
+  }
+  #home-faqs .home-faqs-accordion-align {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+  }
+  #home-faqs .home-faqs-accordion-inner {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: 100%;
+  }
+}
+@media (max-width: 991px) {
+  #home-faqs .home-faqs-content-lead {
+    display: none;
+  }
+  #home-faqs .home-faqs-sub-row > .home-faqs-heading-col {
+    flex: 1 1 100%;
+    max-width: none;
+  }
+  #home-faqs .home-faqs-title-col > h2 {
+    margin-bottom: 0;
+  }
+}
+
 /*=====================================
  70. BMR Business Challenges — card title one line
 ========================================*/

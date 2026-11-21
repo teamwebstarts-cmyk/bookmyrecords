@@ -154,6 +154,15 @@
   }
 }
 
+@media (max-width: 767px) {
+  #who-we-help .who-we-help-cards .single-services .icon {
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-left: 0;
+    margin-bottom: 12px;
+  }
+}
+
 #business-challenges .business-challenges-cards {
   justify-content: flex-start;
 }
@@ -178,40 +187,6 @@
   font-family: var(--font-marcellus, serif) !important;
   font-weight: 400 !important;
   color: var(--title-color, #1f2a44) !important;
-}
-
-/* FAQ header — top-start of right column (aligned with accordion) */
-#home-faqs > .container-fluid > .row.align-items-start {
-  align-items: flex-start;
-}
-
-#home-faqs .home-faqs-heading-row {
-  align-items: flex-start !important;
-  justify-content: flex-start !important;
-  width: 100%;
-}
-
-/* Overrides [class*="-faq-section"] centering on .service-details-faq-section */
-#home-faqs .home-faqs-heading-row > .section-title1.two {
-  flex: 1 1 auto;
-  min-width: 0;
-  max-width: 100%;
-  align-self: flex-start;
-  align-items: flex-start !important;
-  text-align: left !important;
-}
-
-#home-faqs .home-faqs-heading-row > .section-title1.two > h2,
-#home-faqs .home-faqs-heading-row > .section-title1.two > .section-title-sub {
-  text-align: left !important;
-  text-align-last: left !important;
-  margin-left: 0 !important;
-  margin-right: auto !important;
-  align-self: flex-start !important;
-}
-
-#home-faqs .home-faqs-heading-row .section-title-sub {
-  max-width: 740px;
 }
 
 /* Card blocks — no elevation shadow (pillars, challenges, about overview) */
@@ -4216,18 +4191,21 @@ footer.footer-section {
   font-variant-numeric: tabular-nums;
 }
 
-.bmr-report .bmr-report-page__foot {
+.bmr-report .bmr-report-page__foot,
+.bmr-report footer.bmr-report-page__foot {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   gap: 16px;
   margin-top: auto;
-  padding-top: 18px;
+  padding: 18px 0 0 !important;
   font-size: 11px;
   line-height: 1.45;
-  color: #8794a5;
+  color: #8794a5 !important;
+  background-color: #ffffff !important;
   border-top: 1px solid #eef1f5;
   font-variant-numeric: tabular-nums;
+  position: static !important;
 }
 
 /* First section on page 1 sits under the masthead: no double rule */
@@ -4279,46 +4257,55 @@ footer.footer-section {
 
 /* --- Page 2: the locked stage ------------------------------------------- */
 .bmr-report .bmr-report-page--locked {
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
+}
+
+/* Anything left outside the stage must never show readable trial content */
+.bmr-report .bmr-report-page--locked > .bmr-sheet__flow {
+  display: none !important;
 }
 
 .bmr-report .bmr-report-lockstage {
   position: relative;
   flex: 1 1 auto;
-  min-height: 420px;
+  min-height: 560px;
+  overflow: hidden;
+  isolation: isolate;
 }
 
 /* The real continuation, blurred and non-interactive. */
 .bmr-report .bmr-report-lockstage__body {
-  filter: blur(5px) saturate(0.85);
-  opacity: 0.5;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  filter: blur(10px) saturate(0.65);
+  opacity: 0.55;
   pointer-events: none;
   user-select: none;
-  transform: scale(0.995);
+  transform: none;
   transform-origin: top center;
 }
 
-/* Soft fade toward the bottom so the cut reads as a cut. */
+/* Full-sheet haze so the gate does not track content height. */
 .bmr-report .bmr-report-lockstage::after {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: linear-gradient(180deg,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.55) 42%,
-      rgba(255, 255, 255, 0.92) 68%,
-      #ffffff 100%);
+  background: rgba(255, 255, 255, 0.82);
   pointer-events: none;
 }
 
 .bmr-report .bmr-report-lockcard {
   position: absolute;
-  z-index: 2;
+  z-index: 3;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: min(420px, 100%);
+  width: min(420px, calc(100% - 40px));
   padding: 30px 30px 26px;
   text-align: center;
   background: #ffffff;
@@ -4444,22 +4431,14 @@ footer.footer-section {
     min-height: 0;
   }
   .bmr-report .bmr-report-lockcard {
-    position: relative;
-    left: auto;
-    top: auto;
-    transform: none;
-    width: 100%;
-    margin: -60px auto 0;
+    width: calc(100% - 24px);
     padding: 24px 20px 22px;
   }
-  .bmr-report .bmr-report-lockstage {
-    min-height: 0;
+  .bmr-report .bmr-report-page--locked .bmr-report-lockstage {
+    min-height: min(520px, 65vh);
   }
   .bmr-report .bmr-report-lockstage::after {
-    background: linear-gradient(180deg,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0.9) 60%,
-        #ffffff 100%);
+    background: rgba(255, 255, 255, 0.82);
   }
   .bmr-report .bmr-report-page__head,
   .bmr-report .bmr-report-page__foot {
@@ -4523,8 +4502,8 @@ footer.footer-section {
    ========================================================================== */
 
 /* Fix Point 12 & 10: Smooth, Reliable Button Hover (flat style; ripple pages excluded) */
-body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact) .primary-btn1 span,
-body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact) .btn-hover span {
+body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact):not(.page-business-registration):not(.page-accounting-outsourcing):not(.page-ipr-registration):not(.page-loan-financing):not(.page-taxation):not(.page-checkup) .primary-btn1 span,
+body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact):not(.page-business-registration):not(.page-accounting-outsourcing):not(.page-ipr-registration):not(.page-loan-financing):not(.page-taxation):not(.page-checkup) .btn-hover span {
   display: none !important;
   width: 0 !important;
   height: 0 !important;
@@ -4533,8 +4512,8 @@ body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.pag
   transform: none !important;
 }
 
-body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact) .primary-btn1,
-body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact) .btn-hover {
+body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact):not(.page-business-registration):not(.page-accounting-outsourcing):not(.page-ipr-registration):not(.page-loan-financing):not(.page-taxation):not(.page-checkup) .primary-btn1,
+body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact):not(.page-business-registration):not(.page-accounting-outsourcing):not(.page-ipr-registration):not(.page-loan-financing):not(.page-taxation):not(.page-checkup) .btn-hover {
   background-color: #0b5ed7 !important;
   color: #ffffff !important;
   border: 1px solid #0b5ed7 !important;
@@ -4545,14 +4524,14 @@ body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.pag
   overflow: hidden !important;
 }
 
-body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact) .primary-btn1 svg,
-body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact) .btn-hover svg {
+body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact):not(.page-business-registration):not(.page-accounting-outsourcing):not(.page-ipr-registration):not(.page-loan-financing):not(.page-taxation):not(.page-checkup) .primary-btn1 svg,
+body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact):not(.page-business-registration):not(.page-accounting-outsourcing):not(.page-ipr-registration):not(.page-loan-financing):not(.page-taxation):not(.page-checkup) .btn-hover svg {
   fill: #ffffff !important;
   transition: transform 0.25s ease !important;
 }
 
-body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact) .primary-btn1:hover,
-body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact) .btn-hover:hover {
+body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact):not(.page-business-registration):not(.page-accounting-outsourcing):not(.page-ipr-registration):not(.page-loan-financing):not(.page-taxation):not(.page-checkup) .primary-btn1:hover,
+body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact):not(.page-business-registration):not(.page-accounting-outsourcing):not(.page-ipr-registration):not(.page-loan-financing):not(.page-taxation):not(.page-checkup) .btn-hover:hover {
   background-color: #084298 !important;
   color: #ffffff !important;
   border-color: #084298 !important;
@@ -4560,8 +4539,8 @@ body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.pag
   box-shadow: 0 6px 18px rgba(11, 94, 215, 0.28) !important;
 }
 
-body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact) .primary-btn1:hover svg,
-body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact) .btn-hover:hover svg {
+body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact):not(.page-business-registration):not(.page-accounting-outsourcing):not(.page-ipr-registration):not(.page-loan-financing):not(.page-taxation):not(.page-checkup) .primary-btn1:hover svg,
+body:not(.page-home):not(.about-page):not(.page-pricing):not(.page-faq):not(.page-contact):not(.page-business-registration):not(.page-accounting-outsourcing):not(.page-ipr-registration):not(.page-loan-financing):not(.page-taxation):not(.page-checkup) .btn-hover:hover svg {
   fill: #ffffff !important;
   transform: translateX(3px) !important;
 }
@@ -4717,9 +4696,8 @@ footer .footer-widget .contact-area .hotline-area .content h6 a:hover {
 }
 
 .bmr-report .bmr-report-page--locked .bmr-report-lockstage {
-  overflow: hidden;
-  min-height: 560px;
-  max-height: 900px;
+  min-height: min(640px, 72vh);
+  max-height: none;
 }
 
 /* Footer Hotline & Contact Area Alignment */
@@ -5702,13 +5680,19 @@ body:has(.breadcrumb-section) .header-area.style-4 .menu-wrap .nav-right .mobile
 
 /* ==========================================================================
    Marketing pages — unified section vertical rhythm (shared tokens)
-   Home, About, Pricing, FAQ, Contact (breadcrumb excluded)
+   Home, About, Pricing, FAQ, Contact, service landings (breadcrumb excluded)
    ========================================================================== */
 body.page-home,
 body.about-page,
 body.page-pricing,
 body.page-faq,
-body.page-contact {
+body.page-contact,
+body.page-business-registration,
+body.page-accounting-outsourcing,
+body.page-ipr-registration,
+body.page-loan-financing,
+body.page-taxation,
+body.page-checkup {
   /* Compact rhythm was 50% of template; +25% from that baseline */
   --bmr-section-py: 63px;
 }
@@ -5724,7 +5708,13 @@ body.page-home {
   body.about-page,
   body.page-pricing,
   body.page-faq,
-  body.page-contact {
+  body.page-contact,
+  body.page-business-registration,
+  body.page-accounting-outsourcing,
+  body.page-ipr-registration,
+  body.page-loan-financing,
+  body.page-taxation,
+  body.page-checkup {
     --bmr-section-py: 50px;
   }
 
@@ -5738,7 +5728,13 @@ body.page-home {
   body.about-page,
   body.page-pricing,
   body.page-faq,
-  body.page-contact {
+  body.page-contact,
+  body.page-business-registration,
+  body.page-accounting-outsourcing,
+  body.page-ipr-registration,
+  body.page-loan-financing,
+  body.page-taxation,
+  body.page-checkup {
     --bmr-section-py: 44px;
   }
 
@@ -5752,7 +5748,13 @@ body.page-home {
   body.about-page,
   body.page-pricing,
   body.page-faq,
-  body.page-contact {
+  body.page-contact,
+  body.page-business-registration,
+  body.page-accounting-outsourcing,
+  body.page-ipr-registration,
+  body.page-loan-financing,
+  body.page-taxation,
+  body.page-checkup {
     --bmr-section-py: 38px;
   }
 }
@@ -5789,7 +5791,36 @@ body.page-faq :is(
   .faq-content-section,
   .faq-cta-section
 ),
-body.page-contact .bmr-contact-section {
+body.page-contact .bmr-contact-section,
+body.page-business-registration :is(
+  .solution-section,
+  .entity-cards-section,
+  .incorporation-process-section,
+  .reg-faq-section
+),
+body.page-accounting-outsourcing :is(
+  .solution-section,
+  .service-cards-section,
+  .why-outsource-section,
+  .accounting-faq-section
+),
+body.page-ipr-registration :is(
+  .solution-section,
+  .ipr-cards-section,
+  .ipr-roadmap-section,
+  .ipr-faq-section
+),
+body.page-loan-financing :is(
+  .solution-section,
+  .loan-cards-section,
+  .loan-faq-section
+),
+body.page-taxation :is(
+  .solution-section,
+  .tax-cards-section,
+  .tax-faq-section
+),
+body.page-checkup .checkup-page-section {
   padding-top: var(--bmr-section-py) !important;
   padding-bottom: var(--bmr-section-py) !important;
   margin-bottom: 0 !important;
@@ -5810,7 +5841,13 @@ body.page-pricing .pricing-packages-section {
 body.page-home,
 body.about-page,
 body.page-pricing,
-body.page-faq {
+body.page-faq,
+body.page-business-registration,
+body.page-accounting-outsourcing,
+body.page-ipr-registration,
+body.page-loan-financing,
+body.page-taxation,
+body.page-checkup {
   --bmr-home-block-radius: 0;
   --bmr-radius-card: 0;
 }
@@ -5932,6 +5969,84 @@ body.page-faq :is(
   border-radius: var(--bmr-home-block-radius) !important;
 }
 
+body.page-business-registration :is(
+  .primary-btn1,
+  .explore-btn.two,
+  .bmr-card,
+  .service-triad-card,
+  .solution-section .bmr-card,
+  .entity-cards-section .bmr-card,
+  .incorporation-process-section .step-card,
+  .reg-faq-section .accordion-item,
+  .reg-faq-section .accordion-button,
+  footer .footer-widget .subscribed-area .form-inner,
+  footer .footer-widget .subscribed-area .form-inner input
+) {
+  border-radius: var(--bmr-home-block-radius) !important;
+}
+
+body.page-accounting-outsourcing :is(
+  .primary-btn1,
+  .explore-btn.two,
+  .bmr-card,
+  .service-triad-card,
+  .solution-section .bmr-card,
+  .service-cards-section .bmr-card,
+  .why-outsource-section .rounded-3,
+  .accounting-faq-section .accordion-item,
+  .accounting-faq-section .accordion-button,
+  footer .footer-widget .subscribed-area .form-inner,
+  footer .footer-widget .subscribed-area .form-inner input
+) {
+  border-radius: var(--bmr-home-block-radius) !important;
+}
+
+body.page-ipr-registration :is(
+  .primary-btn1,
+  .explore-btn.two,
+  .bmr-card,
+  .service-triad-card,
+  .solution-section .bmr-card,
+  .ipr-cards-section .bmr-card,
+  .ipr-roadmap-section .rounded-3,
+  .ipr-faq-section .accordion-item,
+  .ipr-faq-section .accordion-button,
+  footer .footer-widget .subscribed-area .form-inner,
+  footer .footer-widget .subscribed-area .form-inner input
+) {
+  border-radius: var(--bmr-home-block-radius) !important;
+}
+
+body.page-loan-financing :is(
+  .primary-btn1,
+  .explore-btn.two,
+  .bmr-card,
+  .service-triad-card,
+  .solution-section .bmr-card,
+  .loan-cards-section .bmr-card,
+  .loan-faq-section .accordion-item,
+  .loan-faq-section .accordion-button,
+  footer .footer-widget .subscribed-area .form-inner,
+  footer .footer-widget .subscribed-area .form-inner input
+) {
+  border-radius: var(--bmr-home-block-radius) !important;
+}
+
+body.page-taxation :is(
+  .primary-btn1,
+  .explore-btn.two,
+  .bmr-card,
+  .service-triad-card,
+  .solution-section .bmr-card,
+  .tax-cards-section .bmr-card,
+  .tax-faq-section .accordion-item,
+  .tax-faq-section .accordion-button,
+  footer .footer-widget .subscribed-area .form-inner,
+  footer .footer-widget .subscribed-area .form-inner input
+) {
+  border-radius: var(--bmr-home-block-radius) !important;
+}
+
 body.page-contact :is(
   .primary-btn1,
   .explore-btn.two,
@@ -5979,7 +6094,9 @@ body.page-home .header-area.style-4 .menu-wrap .main-menu ul > li > a,
 body.about-page .header-area.style-4 .menu-wrap .main-menu ul > li > a,
 body.page-pricing .header-area.style-4 .menu-wrap .main-menu ul > li > a,
 body.page-faq .header-area.style-4 .menu-wrap .main-menu ul > li > a,
-body.page-contact .header-area.style-4 .menu-wrap .main-menu ul > li > a {
+body.page-contact .header-area.style-4 .menu-wrap .main-menu ul > li > a,
+body.page-business-registration .header-area.style-4 .menu-wrap .main-menu ul > li > a,
+body.page-accounting-outsourcing .header-area.style-4 .menu-wrap .main-menu ul > li > a {
   border-radius: 15px !important;
 }
 
@@ -5987,7 +6104,9 @@ body.page-home .header-area.style-4 .menu-wrap .main-menu ul > li.active > a,
 body.about-page .header-area.style-4 .menu-wrap .main-menu ul > li.active > a,
 body.page-pricing .header-area.style-4 .menu-wrap .main-menu ul > li.active > a,
 body.page-faq .header-area.style-4 .menu-wrap .main-menu ul > li.active > a,
-body.page-contact .header-area.style-4 .menu-wrap .main-menu ul > li.active > a {
+body.page-contact .header-area.style-4 .menu-wrap .main-menu ul > li.active > a,
+body.page-business-registration .header-area.style-4 .menu-wrap .main-menu ul > li.active > a,
+body.page-accounting-outsourcing .header-area.style-4 .menu-wrap .main-menu ul > li.active > a {
   border-radius: 999px !important;
 }
 
@@ -6012,6 +6131,16 @@ body.page-faq :is(
   .section-title1 > span,
   .section-title1.one > span,
   .section-title1.two > span
+),
+body.page-business-registration :is(
+  .section-title1 > span,
+  .section-title1.one > span,
+  .section-title1.two > span
+),
+body.page-accounting-outsourcing :is(
+  .section-title1 > span,
+  .section-title1.one > span,
+  .section-title1.two > span
 ) {
   border-radius: 16px !important;
 }
@@ -6019,7 +6148,9 @@ body.page-faq :is(
 /* Bootstrap pill labels stay rounded */
 body.about-page .about-overview-section .badge.rounded-pill,
 body.page-pricing .badge.rounded-pill,
-body.page-faq .badge.rounded-pill {
+body.page-faq .badge.rounded-pill,
+body.page-business-registration .badge.rounded-pill,
+body.page-accounting-outsourcing .badge.rounded-pill {
   border-radius: var(--bs-border-radius-pill, 50rem) !important;
 }
 
@@ -6063,6 +6194,14 @@ body.page-faq :is(
   .explore-btn.two.btn-hover > span
 ),
 body.page-contact :is(
+  .primary-btn1.btn-hover > span,
+  .explore-btn.two.btn-hover > span
+),
+body.page-business-registration :is(
+  .primary-btn1.btn-hover > span,
+  .explore-btn.two.btn-hover > span
+),
+body.page-accounting-outsourcing :is(
   .primary-btn1.btn-hover > span,
   .explore-btn.two.btn-hover > span
 ) {
@@ -6113,6 +6252,22 @@ body.page-contact :is(
   #magic-cursor #ball,
   footer .footer-widget .subscribed-area .form-inner button,
   .social-area li a
+),
+body.page-business-registration :is(
+  .slider-btn,
+  .circle-container,
+  .circle-progress path,
+  #magic-cursor #ball,
+  footer .footer-widget .subscribed-area .form-inner button,
+  .social-area li a
+),
+body.page-accounting-outsourcing :is(
+  .slider-btn,
+  .circle-container,
+  .circle-progress path,
+  #magic-cursor #ball,
+  footer .footer-widget .subscribed-area .form-inner button,
+  .social-area li a
 ) {
   border-radius: 50% !important;
 }
@@ -6125,7 +6280,9 @@ body.page-home :is(a, button).primary-btn1.btn-hover,
 body.about-page :is(a, button).primary-btn1.btn-hover,
 body.page-pricing :is(a, button).primary-btn1.btn-hover,
 body.page-faq :is(a, button).primary-btn1.btn-hover,
-body.page-contact :is(a, button).primary-btn1.btn-hover {
+body.page-contact :is(a, button).primary-btn1.btn-hover,
+body.page-business-registration :is(a, button).primary-btn1.btn-hover,
+body.page-accounting-outsourcing :is(a, button).primary-btn1.btn-hover {
   background-color: var(--primary-color) !important;
   color: var(--white-color) !important;
   border: 1px solid var(--primary-color) !important;
@@ -6149,14 +6306,18 @@ body.page-contact :is(a, button).primary-btn1.btn-hover {
 
 body.page-pricing .header-area.style-4 :is(a, button).primary-btn1.btn-hover,
 body.page-faq .header-area.style-4 :is(a, button).primary-btn1.btn-hover,
-body.page-contact .header-area.style-4 :is(a, button).primary-btn1.btn-hover {
+body.page-contact .header-area.style-4 :is(a, button).primary-btn1.btn-hover,
+body.page-business-registration .header-area.style-4 :is(a, button).primary-btn1.btn-hover,
+body.page-accounting-outsourcing .header-area.style-4 :is(a, button).primary-btn1.btn-hover {
   padding: 15px 28px;
 }
 
 @media (max-width: 1199px) {
   body.page-pricing .header-area.style-4 :is(a, button).primary-btn1.btn-hover,
   body.page-faq .header-area.style-4 :is(a, button).primary-btn1.btn-hover,
-  body.page-contact .header-area.style-4 :is(a, button).primary-btn1.btn-hover {
+  body.page-contact .header-area.style-4 :is(a, button).primary-btn1.btn-hover,
+  body.page-business-registration .header-area.style-4 :is(a, button).primary-btn1.btn-hover,
+  body.page-accounting-outsourcing .header-area.style-4 :is(a, button).primary-btn1.btn-hover {
     padding: 15px 18px;
   }
 }
@@ -6165,7 +6326,9 @@ body.page-home :is(a, button).primary-btn1.btn-hover > span,
 body.about-page :is(a, button).primary-btn1.btn-hover > span,
 body.page-pricing :is(a, button).primary-btn1.btn-hover > span,
 body.page-faq :is(a, button).primary-btn1.btn-hover > span,
-body.page-contact :is(a, button).primary-btn1.btn-hover > span {
+body.page-contact :is(a, button).primary-btn1.btn-hover > span,
+body.page-business-registration :is(a, button).primary-btn1.btn-hover > span,
+body.page-accounting-outsourcing :is(a, button).primary-btn1.btn-hover > span {
   display: block !important;
   position: absolute !important;
   width: 0 !important;
@@ -6184,7 +6347,9 @@ body.page-home :is(a, button).primary-btn1.btn-hover svg,
 body.about-page :is(a, button).primary-btn1.btn-hover svg,
 body.page-pricing :is(a, button).primary-btn1.btn-hover svg,
 body.page-faq :is(a, button).primary-btn1.btn-hover svg,
-body.page-contact :is(a, button).primary-btn1.btn-hover svg {
+body.page-contact :is(a, button).primary-btn1.btn-hover svg,
+body.page-business-registration :is(a, button).primary-btn1.btn-hover svg,
+body.page-accounting-outsourcing :is(a, button).primary-btn1.btn-hover svg {
   fill: var(--white-color) !important;
   transition: fill 0.6s !important;
   transform: none !important;
@@ -6194,7 +6359,9 @@ body.page-home :is(a, button).primary-btn1.btn-hover:hover,
 body.about-page :is(a, button).primary-btn1.btn-hover:hover,
 body.page-pricing :is(a, button).primary-btn1.btn-hover:hover,
 body.page-faq :is(a, button).primary-btn1.btn-hover:hover,
-body.page-contact :is(a, button).primary-btn1.btn-hover:hover {
+body.page-contact :is(a, button).primary-btn1.btn-hover:hover,
+body.page-business-registration :is(a, button).primary-btn1.btn-hover:hover,
+body.page-accounting-outsourcing :is(a, button).primary-btn1.btn-hover:hover {
   background-color: var(--primary-color) !important;
   color: var(--primary-color) !important;
   border-color: var(--primary-color) !important;
@@ -6206,7 +6373,9 @@ body.page-home :is(a, button).primary-btn1.btn-hover:hover > span,
 body.about-page :is(a, button).primary-btn1.btn-hover:hover > span,
 body.page-pricing :is(a, button).primary-btn1.btn-hover:hover > span,
 body.page-faq :is(a, button).primary-btn1.btn-hover:hover > span,
-body.page-contact :is(a, button).primary-btn1.btn-hover:hover > span {
+body.page-contact :is(a, button).primary-btn1.btn-hover:hover > span,
+body.page-business-registration :is(a, button).primary-btn1.btn-hover:hover > span,
+body.page-accounting-outsourcing :is(a, button).primary-btn1.btn-hover:hover > span {
   width: 225% !important;
   height: 1000.5px !important;
 }
@@ -6215,7 +6384,9 @@ body.page-home :is(a, button).primary-btn1.btn-hover:hover svg,
 body.about-page :is(a, button).primary-btn1.btn-hover:hover svg,
 body.page-pricing :is(a, button).primary-btn1.btn-hover:hover svg,
 body.page-faq :is(a, button).primary-btn1.btn-hover:hover svg,
-body.page-contact :is(a, button).primary-btn1.btn-hover:hover svg {
+body.page-contact :is(a, button).primary-btn1.btn-hover:hover svg,
+body.page-business-registration :is(a, button).primary-btn1.btn-hover:hover svg,
+body.page-accounting-outsourcing :is(a, button).primary-btn1.btn-hover:hover svg {
   fill: var(--primary-color) !important;
   transform: none !important;
 }
@@ -6303,6 +6474,44 @@ body.page-faq .faq-content-section .accordion-item {
   border-radius: 0 !important;
 }
 
+/* Business registration — sharp blocks; chips/labels stay rounded via rules above */
+body.page-business-registration .bmr-card,
+body.page-business-registration .bmr-card.rounded-3,
+body.page-business-registration .service-triad-card.rounded-3,
+body.page-business-registration .step-card.rounded-3,
+body.page-business-registration .reg-faq-section .accordion-item.rounded,
+body.page-business-registration .reg-faq-section .accordion-item {
+  border-radius: 0 !important;
+}
+
+body.page-business-registration .service-triad-card,
+body.page-business-registration .service-triad-card:hover {
+  transform: none !important;
+}
+
+/* Accounting outsourcing — sharp blocks; chips/labels stay rounded */
+body.page-accounting-outsourcing .bmr-card,
+body.page-accounting-outsourcing .bmr-card.rounded-3,
+body.page-accounting-outsourcing .service-triad-card.rounded-3,
+body.page-accounting-outsourcing .why-outsource-section .rounded-3,
+body.page-accounting-outsourcing .accounting-faq-section .accordion-item.rounded,
+body.page-accounting-outsourcing .accounting-faq-section .accordion-item {
+  border-radius: 0 !important;
+}
+
+body.page-accounting-outsourcing .service-triad-card,
+body.page-accounting-outsourcing .service-triad-card:hover {
+  transform: none !important;
+}
+
+body.page-accounting-outsourcing .why-outsource-section :is(a, button).primary-btn1.btn-hover {
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
 body.page-pricing .pricing-plan-card .position-absolute.bg-primary {
   border-radius: 0 !important;
 }
@@ -6325,6 +6534,26 @@ body.page-pricing .pricing-plan-card.shadow:hover {
 
 /* Pricing package CTAs — full-width card footers (template ripple unchanged) */
 body.page-pricing .pricing-plan-card :is(a, button).primary-btn1.btn-hover {
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+body.page-business-registration .service-triad-card :is(a, button).primary-btn1.btn-hover,
+body.page-accounting-outsourcing .service-triad-card :is(a, button).primary-btn1.btn-hover,
+body.page-ipr-registration .service-triad-card :is(a, button).primary-btn1.btn-hover,
+body.page-loan-financing .service-triad-card :is(a, button).primary-btn1.btn-hover,
+body.page-taxation .service-triad-card :is(a, button).primary-btn1.btn-hover {
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+body.page-accounting-outsourcing .why-outsource-section :is(a, button).primary-btn1.btn-hover {
   width: 100%;
   justify-content: center;
   text-align: center;
@@ -6489,7 +6718,22 @@ body.page-pricing .pricing-faq-section .accordion-button:not(.collapsed),
 body.page-pricing .pricing-faq-section .accordion-button.collapsed,
 body.page-faq .faq-content-section #generalFaqAccordion .accordion-button,
 body.page-faq .faq-content-section #generalFaqAccordion .accordion-button:not(.collapsed),
-body.page-faq .faq-content-section #generalFaqAccordion .accordion-button.collapsed {
+body.page-faq .faq-content-section #generalFaqAccordion .accordion-button.collapsed,
+body.page-business-registration .reg-faq-section #regFaqAccordion .accordion-button,
+body.page-business-registration .reg-faq-section #regFaqAccordion .accordion-button:not(.collapsed),
+body.page-business-registration .reg-faq-section #regFaqAccordion .accordion-button.collapsed,
+body.page-accounting-outsourcing .accounting-faq-section #accountingFaqAccordion .accordion-button,
+body.page-accounting-outsourcing .accounting-faq-section #accountingFaqAccordion .accordion-button:not(.collapsed),
+body.page-accounting-outsourcing .accounting-faq-section #accountingFaqAccordion .accordion-button.collapsed,
+body.page-ipr-registration .ipr-faq-section #iprFaqAccordion .accordion-button,
+body.page-ipr-registration .ipr-faq-section #iprFaqAccordion .accordion-button:not(.collapsed),
+body.page-ipr-registration .ipr-faq-section #iprFaqAccordion .accordion-button.collapsed,
+body.page-loan-financing .loan-faq-section #loanFaqAccordion .accordion-button,
+body.page-loan-financing .loan-faq-section #loanFaqAccordion .accordion-button:not(.collapsed),
+body.page-loan-financing .loan-faq-section #loanFaqAccordion .accordion-button.collapsed,
+body.page-taxation .tax-faq-section #taxFaqAccordion .accordion-button,
+body.page-taxation .tax-faq-section #taxFaqAccordion .accordion-button:not(.collapsed),
+body.page-taxation .tax-faq-section #taxFaqAccordion .accordion-button.collapsed {
   font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
   font-weight: 400 !important;
   color: var(--title-color, #1f2a44) !important;
@@ -6498,14 +6742,34 @@ body.page-faq .faq-content-section #generalFaqAccordion .accordion-button.collap
 body.page-pricing .pricing-faq-section .accordion-button:hover,
 body.page-pricing .pricing-faq-section .accordion-button:focus-visible,
 body.page-faq .faq-content-section #generalFaqAccordion .accordion-button:hover,
-body.page-faq .faq-content-section #generalFaqAccordion .accordion-button:focus-visible {
+body.page-faq .faq-content-section #generalFaqAccordion .accordion-button:focus-visible,
+body.page-business-registration .reg-faq-section #regFaqAccordion .accordion-button:hover,
+body.page-business-registration .reg-faq-section #regFaqAccordion .accordion-button:focus-visible,
+body.page-accounting-outsourcing .accounting-faq-section #accountingFaqAccordion .accordion-button:hover,
+body.page-accounting-outsourcing .accounting-faq-section #accountingFaqAccordion .accordion-button:focus-visible,
+body.page-ipr-registration .ipr-faq-section #iprFaqAccordion .accordion-button:hover,
+body.page-ipr-registration .ipr-faq-section #iprFaqAccordion .accordion-button:focus-visible,
+body.page-loan-financing .loan-faq-section #loanFaqAccordion .accordion-button:hover,
+body.page-loan-financing .loan-faq-section #loanFaqAccordion .accordion-button:focus-visible,
+body.page-taxation .tax-faq-section #taxFaqAccordion .accordion-button:hover,
+body.page-taxation .tax-faq-section #taxFaqAccordion .accordion-button:focus-visible {
   color: #000000 !important;
 }
 
 body.page-pricing .pricing-faq-section .accordion-button:not(.collapsed):hover,
 body.page-pricing .pricing-faq-section .accordion-button:not(.collapsed):focus-visible,
 body.page-faq .faq-content-section #generalFaqAccordion .accordion-button:not(.collapsed):hover,
-body.page-faq .faq-content-section #generalFaqAccordion .accordion-button:not(.collapsed):focus-visible {
+body.page-faq .faq-content-section #generalFaqAccordion .accordion-button:not(.collapsed):focus-visible,
+body.page-business-registration .reg-faq-section #regFaqAccordion .accordion-button:not(.collapsed):hover,
+body.page-business-registration .reg-faq-section #regFaqAccordion .accordion-button:not(.collapsed):focus-visible,
+body.page-accounting-outsourcing .accounting-faq-section #accountingFaqAccordion .accordion-button:not(.collapsed):hover,
+body.page-accounting-outsourcing .accounting-faq-section #accountingFaqAccordion .accordion-button:not(.collapsed):focus-visible,
+body.page-ipr-registration .ipr-faq-section #iprFaqAccordion .accordion-button:not(.collapsed):hover,
+body.page-ipr-registration .ipr-faq-section #iprFaqAccordion .accordion-button:not(.collapsed):focus-visible,
+body.page-loan-financing .loan-faq-section #loanFaqAccordion .accordion-button:not(.collapsed):hover,
+body.page-loan-financing .loan-faq-section #loanFaqAccordion .accordion-button:not(.collapsed):focus-visible,
+body.page-taxation .tax-faq-section #taxFaqAccordion .accordion-button:not(.collapsed):hover,
+body.page-taxation .tax-faq-section #taxFaqAccordion .accordion-button:not(.collapsed):focus-visible {
   color: #000000 !important;
 }
 
@@ -6781,4 +7045,1182 @@ body.page-faq .faq-cta-section :is(.row, .container-fluid) {
 body.page-pricing .pricing-cta-section .col-lg-5,
 body.page-faq .faq-cta-section .col-lg-5 {
   overflow: visible;
+}
+
+/* Header Services dropdown — keep each label on one line */
+@media (min-width: 992px) {
+  .header-area.style-4 .menu-wrap .main-menu ul > li ul.sub-menu {
+    left: 0;
+    right: auto;
+    width: max-content;
+    min-width: 360px;
+    max-width: min(440px, 94vw);
+  }
+
+  .header-area.style-4 .menu-wrap .main-menu ul > li ul.sub-menu > li > a {
+    white-space: nowrap;
+  }
+}
+
+.header-area.style-4 .menu-wrap .main-menu > ul li ul.sub-menu > li > a,
+.header-area.style-4 .menu-wrap .main-menu ul > li ul.sub-menu > li > a {
+  white-space: nowrap;
+}
+
+/* Submenu items — flat corners (override top-nav pill radius on nested ul > li > a) */
+.header-area.style-4 .menu-wrap .main-menu ul > li ul.sub-menu,
+.header-area.style-4 .menu-wrap .main-menu > ul li ul.sub-menu {
+  border-radius: 0 !important;
+}
+
+.header-area.style-4 .menu-wrap .main-menu ul > li ul.sub-menu > li,
+.header-area.style-4 .menu-wrap .main-menu ul > li ul.sub-menu > li > a,
+body.page-home .header-area.style-4 .menu-wrap .main-menu ul > li ul.sub-menu > li > a,
+body.about-page .header-area.style-4 .menu-wrap .main-menu ul > li ul.sub-menu > li > a,
+body.page-pricing .header-area.style-4 .menu-wrap .main-menu ul > li ul.sub-menu > li > a,
+body.page-faq .header-area.style-4 .menu-wrap .main-menu ul > li ul.sub-menu > li > a,
+body.page-contact .header-area.style-4 .menu-wrap .main-menu ul > li ul.sub-menu > li > a {
+  border-radius: 0 !important;
+}
+
+.header-area.style-4 .menu-wrap .main-menu ul > li ul.sub-menu > li > a,
+body.page-home .header-area.style-4 .menu-wrap .main-menu ul > li ul.sub-menu > li > a,
+body.about-page .header-area.style-4 .menu-wrap .main-menu ul > li ul.sub-menu > li > a,
+body.page-pricing .header-area.style-4 .menu-wrap .main-menu ul > li ul.sub-menu > li > a,
+body.page-faq .header-area.style-4 .menu-wrap .main-menu ul > li ul.sub-menu > li > a,
+body.page-contact .header-area.style-4 .menu-wrap .main-menu ul > li ul.sub-menu > li > a {
+  border: none !important;
+  border-bottom: 1px solid rgba(13, 23, 32, 0.0784313725) !important;
+}
+
+.header-area.style-4 .menu-wrap .main-menu ul > li ul.sub-menu > li:last-child > a {
+  border-bottom: none !important;
+}
+
+/* ==========================================================================
+   Business registration — Marcellus display / Montserrat body
+   ========================================================================== */
+body.page-business-registration :is(
+  .solution-section,
+  .entity-cards-section,
+  .incorporation-process-section,
+  .reg-faq-section
+) {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+}
+
+body.page-business-registration :is(
+  .solution-section,
+  .entity-cards-section,
+  .incorporation-process-section,
+  .reg-faq-section
+) .section-title1.two > h2 {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+  line-height: 1.28;
+}
+
+body.page-business-registration :is(
+  .solution-section,
+  .entity-cards-section,
+  .incorporation-process-section,
+  .reg-faq-section
+) .section-title1.two > span {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+  font-weight: 500 !important;
+}
+
+body.page-business-registration :is(
+  .solution-section .section-title1.two > p,
+  .section-title-sub,
+  .entity-cards-section .section-title1.two > p
+) {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+  font-weight: 400 !important;
+}
+
+body.page-business-registration .solution-section .bmr-card h4 {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+}
+
+body.page-business-registration .solution-section .bmr-card :is(li, div) {
+  font-weight: 400 !important;
+}
+
+body.page-business-registration .solution-section .bmr-card strong {
+  font-weight: 500 !important;
+}
+
+body.page-business-registration .entity-cards-section .service-triad-card {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+}
+
+body.page-business-registration .service-triad-card .badge {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif) !important;
+  font-weight: 500 !important;
+}
+
+body.page-business-registration .service-triad-card h3 {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+  line-height: 1.28;
+}
+
+body.page-business-registration .service-triad-card :is(
+  p,
+  .small,
+  .text-muted,
+  ul,
+  ul li
+) {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+  font-weight: 400 !important;
+}
+
+body.page-business-registration .incorporation-process-section .step-card h5 {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+}
+
+body.page-business-registration .incorporation-process-section .step-card :is(p, .text-muted, .small) {
+  font-weight: 400 !important;
+}
+
+body.page-business-registration .incorporation-process-section .step-num {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+  font-weight: 500 !important;
+}
+
+body.page-business-registration .reg-faq-section .accordion-body {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+  font-weight: 400 !important;
+}
+
+body.page-business-registration :is(
+  .solution-section,
+  .entity-cards-section,
+  .incorporation-process-section
+) :is(h2, h3, h4, h5) {
+  font-weight: 400 !important;
+}
+
+/* ==========================================================================
+   Accounting outsourcing — Marcellus display / Montserrat body
+   ========================================================================== */
+body.page-accounting-outsourcing :is(
+  .solution-section,
+  .service-cards-section,
+  .why-outsource-section,
+  .accounting-faq-section
+) {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+}
+
+body.page-accounting-outsourcing :is(
+  .solution-section,
+  .service-cards-section,
+  .why-outsource-section,
+  .accounting-faq-section
+) .section-title1.two > h2 {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+  line-height: 1.28;
+}
+
+body.page-accounting-outsourcing :is(
+  .solution-section,
+  .service-cards-section,
+  .why-outsource-section,
+  .accounting-faq-section
+) .section-title1.two > span {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+  font-weight: 500 !important;
+}
+
+body.page-accounting-outsourcing :is(
+  .solution-section .section-title1.two > p,
+  .section-title-sub,
+  .service-cards-section .section-title1.two > p,
+  .accounting-faq-section .section-title1.two > p
+) {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+  font-weight: 400 !important;
+}
+
+body.page-accounting-outsourcing .solution-section .bmr-card h4 {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+}
+
+body.page-accounting-outsourcing .solution-section .bmr-card :is(li, div) {
+  font-weight: 400 !important;
+}
+
+body.page-accounting-outsourcing .solution-section .bmr-card strong {
+  font-weight: 500 !important;
+}
+
+body.page-accounting-outsourcing .service-cards-section .service-triad-card {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+}
+
+body.page-accounting-outsourcing .service-triad-card .badge {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif) !important;
+  font-weight: 500 !important;
+}
+
+body.page-accounting-outsourcing .service-triad-card h3 {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+  line-height: 1.28;
+}
+
+body.page-accounting-outsourcing .service-triad-card :is(
+  p,
+  .small,
+  .text-muted,
+  ul,
+  ul li
+) {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+  font-weight: 400 !important;
+}
+
+body.page-accounting-outsourcing .why-outsource-section .section-title1.two h5 {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+}
+
+body.page-accounting-outsourcing .why-outsource-section .section-title1.two p {
+  font-weight: 400 !important;
+}
+
+body.page-accounting-outsourcing .why-outsource-section .bg-light h4 {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+}
+
+body.page-accounting-outsourcing .why-outsource-section .bg-light :is(ol, li, p) {
+  font-weight: 400 !important;
+}
+
+body.page-accounting-outsourcing .why-outsource-section .bg-light strong {
+  font-weight: 500 !important;
+}
+
+body.page-accounting-outsourcing .accounting-faq-section .accordion-body {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+  font-weight: 400 !important;
+}
+
+body.page-accounting-outsourcing :is(
+  .solution-section,
+  .service-cards-section,
+  .why-outsource-section
+) :is(h2, h3, h4, h5) {
+  font-weight: 400 !important;
+}
+
+/* ==========================================================================
+   IPR registration & Loan financing — sharp corners + marketing chrome
+   (matches accounting-outsourcing / business-registration; chips stay rounded)
+   ========================================================================== */
+body.page-ipr-registration :is(
+  .primary-btn1,
+  .explore-btn.two,
+  .bmr-card,
+  .service-triad-card,
+  .solution-section .bmr-card,
+  .ipr-cards-section .bmr-card,
+  .ipr-roadmap-section .step-card,
+  .ipr-faq-section .accordion-item,
+  .ipr-faq-section .accordion-button,
+  footer .footer-widget .subscribed-area .form-inner,
+  footer .footer-widget .subscribed-area .form-inner input
+),
+body.page-loan-financing :is(
+  .primary-btn1,
+  .explore-btn.two,
+  .bmr-card,
+  .service-triad-card,
+  .solution-section .bmr-card,
+  .loan-cards-section .bmr-card,
+  .loan-faq-section .accordion-item,
+  .loan-faq-section .accordion-button,
+  footer .footer-widget .subscribed-area .form-inner,
+  footer .footer-widget .subscribed-area .form-inner input
+) {
+  border-radius: var(--bmr-home-block-radius) !important;
+}
+
+body.page-ipr-registration :is(
+  .section-title1 > span,
+  .section-title1.one > span,
+  .section-title1.two > span
+),
+body.page-loan-financing :is(
+  .section-title1 > span,
+  .section-title1.one > span,
+  .section-title1.two > span
+) {
+  border-radius: 16px !important;
+}
+
+body.page-ipr-registration .badge.rounded-pill,
+body.page-loan-financing .badge.rounded-pill {
+  border-radius: var(--bs-border-radius-pill, 50rem) !important;
+}
+
+body.page-ipr-registration .header-area.style-4 .menu-wrap .main-menu ul > li > a,
+body.page-loan-financing .header-area.style-4 .menu-wrap .main-menu ul > li > a {
+  border-radius: 15px !important;
+}
+
+body.page-ipr-registration .header-area.style-4 .menu-wrap .main-menu ul > li.active > a,
+body.page-loan-financing .header-area.style-4 .menu-wrap .main-menu ul > li.active > a {
+  border-radius: 999px !important;
+}
+
+body.page-ipr-registration :is(
+  .primary-btn1.btn-hover > span,
+  .explore-btn.two.btn-hover > span
+),
+body.page-loan-financing :is(
+  .primary-btn1.btn-hover > span,
+  .explore-btn.two.btn-hover > span
+) {
+  border-radius: 50% !important;
+}
+
+body.page-ipr-registration :is(
+  .slider-btn,
+  .circle-container,
+  .circle-progress path,
+  #magic-cursor #ball,
+  footer .footer-widget .subscribed-area .form-inner button,
+  .social-area li a
+),
+body.page-loan-financing :is(
+  .slider-btn,
+  .circle-container,
+  .circle-progress path,
+  #magic-cursor #ball,
+  footer .footer-widget .subscribed-area .form-inner button,
+  .social-area li a
+) {
+  border-radius: 50% !important;
+}
+
+body.page-ipr-registration :is(a, button).primary-btn1.btn-hover,
+body.page-loan-financing :is(a, button).primary-btn1.btn-hover {
+  background-color: var(--primary-color) !important;
+  color: var(--white-color) !important;
+  border: 1px solid var(--primary-color) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  transition: color 0.6s, border-color 0.6s, background-color 0.6s !important;
+  overflow: hidden !important;
+  position: relative !important;
+  z-index: 1;
+  isolation: isolate;
+  font-family: var(--font-montserrat);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1;
+  padding: 20px 37px;
+  gap: 8px;
+  display: inline-flex;
+  align-items: center;
+}
+
+body.page-ipr-registration .header-area.style-4 :is(a, button).primary-btn1.btn-hover,
+body.page-loan-financing .header-area.style-4 :is(a, button).primary-btn1.btn-hover {
+  padding: 15px 28px;
+}
+
+@media (max-width: 1199px) {
+  body.page-ipr-registration .header-area.style-4 :is(a, button).primary-btn1.btn-hover,
+  body.page-loan-financing .header-area.style-4 :is(a, button).primary-btn1.btn-hover {
+    padding: 15px 18px;
+  }
+}
+
+body.page-ipr-registration :is(a, button).primary-btn1.btn-hover > span,
+body.page-loan-financing :is(a, button).primary-btn1.btn-hover > span {
+  display: block !important;
+  position: absolute !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  border-radius: 50% !important;
+  background-color: var(--white-color) !important;
+  transition: width 0.6s, height 0.6s !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: -1 !important;
+  pointer-events: none;
+}
+
+body.page-ipr-registration :is(a, button).primary-btn1.btn-hover svg,
+body.page-loan-financing :is(a, button).primary-btn1.btn-hover svg {
+  fill: var(--white-color) !important;
+  transition: fill 0.6s !important;
+  transform: none !important;
+}
+
+body.page-ipr-registration :is(a, button).primary-btn1.btn-hover:hover,
+body.page-loan-financing :is(a, button).primary-btn1.btn-hover:hover {
+  background-color: var(--primary-color) !important;
+  color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+body.page-ipr-registration :is(a, button).primary-btn1.btn-hover:hover > span,
+body.page-loan-financing :is(a, button).primary-btn1.btn-hover:hover > span {
+  width: 225% !important;
+  height: 1000.5px !important;
+}
+
+body.page-ipr-registration :is(a, button).primary-btn1.btn-hover:hover svg,
+body.page-loan-financing :is(a, button).primary-btn1.btn-hover:hover svg {
+  fill: var(--primary-color) !important;
+  transform: none !important;
+}
+
+body.page-ipr-registration .bmr-card,
+body.page-ipr-registration .bmr-card.rounded-3,
+body.page-ipr-registration .service-triad-card.rounded-3,
+body.page-ipr-registration .ipr-roadmap-section .step-card.rounded-3,
+body.page-ipr-registration .ipr-faq-section .accordion-item.rounded,
+body.page-ipr-registration .ipr-faq-section .accordion-item,
+body.page-loan-financing .bmr-card,
+body.page-loan-financing .bmr-card.rounded-3,
+body.page-loan-financing .service-triad-card.rounded-3,
+body.page-loan-financing .loan-faq-section .accordion-item.rounded,
+body.page-loan-financing .loan-faq-section .accordion-item {
+  border-radius: 0 !important;
+}
+
+body.page-ipr-registration .service-triad-card,
+body.page-ipr-registration .service-triad-card:hover,
+body.page-loan-financing .service-triad-card,
+body.page-loan-financing .service-triad-card:hover {
+  transform: none !important;
+}
+
+body.page-ipr-registration .ipr-faq-section #iprFaqAccordion .accordion-button,
+body.page-ipr-registration .ipr-faq-section #iprFaqAccordion .accordion-button:not(.collapsed),
+body.page-ipr-registration .ipr-faq-section #iprFaqAccordion .accordion-button.collapsed,
+body.page-loan-financing .loan-faq-section #loanFaqAccordion .accordion-button,
+body.page-loan-financing .loan-faq-section #loanFaqAccordion .accordion-button:not(.collapsed),
+body.page-loan-financing .loan-faq-section #loanFaqAccordion .accordion-button.collapsed {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+  color: var(--title-color, #1f2a44) !important;
+}
+
+body.page-ipr-registration .ipr-faq-section #iprFaqAccordion .accordion-button:hover,
+body.page-ipr-registration .ipr-faq-section #iprFaqAccordion .accordion-button:focus-visible,
+body.page-loan-financing .loan-faq-section #loanFaqAccordion .accordion-button:hover,
+body.page-loan-financing .loan-faq-section #loanFaqAccordion .accordion-button:focus-visible {
+  color: #000000 !important;
+}
+
+body.page-ipr-registration .ipr-faq-section #iprFaqAccordion .accordion-button:not(.collapsed):hover,
+body.page-ipr-registration .ipr-faq-section #iprFaqAccordion .accordion-button:not(.collapsed):focus-visible,
+body.page-loan-financing .loan-faq-section #loanFaqAccordion .accordion-button:not(.collapsed):hover,
+body.page-loan-financing .loan-faq-section #loanFaqAccordion .accordion-button:not(.collapsed):focus-visible {
+  color: #000000 !important;
+}
+
+/* ==========================================================================
+   IPR registration — Marcellus display / Montserrat body
+   ========================================================================== */
+body.page-ipr-registration :is(
+  .solution-section,
+  .ipr-cards-section,
+  .ipr-roadmap-section,
+  .ipr-faq-section
+) {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+}
+
+body.page-ipr-registration :is(
+  .solution-section,
+  .ipr-cards-section,
+  .ipr-roadmap-section,
+  .ipr-faq-section
+) .section-title1.two > h2 {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+  line-height: 1.28;
+}
+
+body.page-ipr-registration :is(
+  .solution-section,
+  .ipr-cards-section,
+  .ipr-roadmap-section,
+  .ipr-faq-section
+) .section-title1.two > span {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+  font-weight: 500 !important;
+}
+
+body.page-ipr-registration :is(
+  .solution-section .section-title1.two > p,
+  .section-title-sub,
+  .ipr-cards-section .section-title1.two > p,
+  .ipr-faq-section .section-title1.two > p
+) {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+  font-weight: 400 !important;
+}
+
+body.page-ipr-registration .solution-section .bmr-card h4 {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+}
+
+body.page-ipr-registration .solution-section .bmr-card :is(li, div) {
+  font-weight: 400 !important;
+}
+
+body.page-ipr-registration .solution-section .bmr-card strong {
+  font-weight: 500 !important;
+}
+
+body.page-ipr-registration .ipr-cards-section .service-triad-card {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+}
+
+body.page-ipr-registration .service-triad-card .badge {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif) !important;
+  font-weight: 500 !important;
+}
+
+body.page-ipr-registration .service-triad-card h3 {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+  line-height: 1.28;
+}
+
+body.page-ipr-registration .service-triad-card :is(
+  p,
+  .small,
+  .text-muted,
+  ul,
+  ul li
+) {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+  font-weight: 400 !important;
+}
+
+body.page-ipr-registration .ipr-roadmap-section .step-card h5 {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+}
+
+body.page-ipr-registration .ipr-roadmap-section .step-card :is(p, .text-muted, .small) {
+  font-weight: 400 !important;
+}
+
+body.page-ipr-registration .ipr-roadmap-section .step-num {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+  font-weight: 500 !important;
+}
+
+body.page-ipr-registration .ipr-faq-section .accordion-body {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+  font-weight: 400 !important;
+}
+
+body.page-ipr-registration :is(
+  .solution-section,
+  .ipr-cards-section,
+  .ipr-roadmap-section
+) :is(h2, h3, h4, h5) {
+  font-weight: 400 !important;
+}
+
+/* ==========================================================================
+   Loan & financing — Marcellus display / Montserrat body
+   ========================================================================== */
+body.page-loan-financing :is(
+  .solution-section,
+  .loan-cards-section,
+  .loan-faq-section
+) {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+}
+
+body.page-loan-financing .alert strong {
+  font-weight: 500 !important;
+}
+
+body.page-loan-financing :is(
+  .solution-section,
+  .loan-cards-section,
+  .loan-faq-section
+) .section-title1.two > h2 {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+  line-height: 1.28;
+}
+
+body.page-loan-financing :is(
+  .solution-section,
+  .loan-cards-section,
+  .loan-faq-section
+) .section-title1.two > span {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+  font-weight: 500 !important;
+}
+
+body.page-loan-financing :is(
+  .solution-section .section-title1.two > p,
+  .section-title-sub,
+  .loan-cards-section .section-title1.two > p,
+  .loan-faq-section .section-title1.two > p
+) {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+  font-weight: 400 !important;
+}
+
+body.page-loan-financing .solution-section .bmr-card h4 {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+}
+
+body.page-loan-financing .solution-section .bmr-card :is(li, div) {
+  font-weight: 400 !important;
+}
+
+body.page-loan-financing .solution-section .bmr-card strong {
+  font-weight: 500 !important;
+}
+
+body.page-loan-financing .loan-cards-section .service-triad-card {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+}
+
+body.page-loan-financing .service-triad-card .badge {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif) !important;
+  font-weight: 500 !important;
+}
+
+body.page-loan-financing .service-triad-card h3 {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+  line-height: 1.28;
+}
+
+body.page-loan-financing .service-triad-card :is(
+  p,
+  .small,
+  .text-muted,
+  ul,
+  ul li
+) {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+  font-weight: 400 !important;
+}
+
+body.page-loan-financing .loan-faq-section .accordion-body {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+  font-weight: 400 !important;
+}
+
+body.page-loan-financing :is(
+  .solution-section,
+  .loan-cards-section
+) :is(h2, h3, h4, h5) {
+  font-weight: 400 !important;
+}
+
+/* ==========================================================================
+   Taxation — sharp corners + marketing chrome (chips/labels stay rounded)
+   ========================================================================== */
+body.page-taxation :is(
+  .primary-btn1,
+  .explore-btn.two,
+  .bmr-card,
+  .service-triad-card,
+  .solution-section .bmr-card,
+  .tax-cards-section .bmr-card,
+  .tax-faq-section .accordion-item,
+  .tax-faq-section .accordion-button,
+  footer .footer-widget .subscribed-area .form-inner,
+  footer .footer-widget .subscribed-area .form-inner input
+) {
+  border-radius: var(--bmr-home-block-radius) !important;
+}
+
+body.page-taxation :is(
+  .section-title1 > span,
+  .section-title1.one > span,
+  .section-title1.two > span
+) {
+  border-radius: 16px !important;
+}
+
+body.page-taxation .badge.rounded-pill {
+  border-radius: var(--bs-border-radius-pill, 50rem) !important;
+}
+
+body.page-taxation .header-area.style-4 .menu-wrap .main-menu ul > li > a {
+  border-radius: 15px !important;
+}
+
+body.page-taxation .header-area.style-4 .menu-wrap .main-menu ul > li.active > a {
+  border-radius: 999px !important;
+}
+
+body.page-taxation :is(
+  .primary-btn1.btn-hover > span,
+  .explore-btn.two.btn-hover > span
+) {
+  border-radius: 50% !important;
+}
+
+body.page-taxation :is(
+  .slider-btn,
+  .circle-container,
+  .circle-progress path,
+  #magic-cursor #ball,
+  footer .footer-widget .subscribed-area .form-inner button,
+  .social-area li a
+) {
+  border-radius: 50% !important;
+}
+
+body.page-taxation :is(a, button).primary-btn1.btn-hover {
+  background-color: var(--primary-color) !important;
+  color: var(--white-color) !important;
+  border: 1px solid var(--primary-color) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  transition: color 0.6s, border-color 0.6s, background-color 0.6s !important;
+  overflow: hidden !important;
+  position: relative !important;
+  z-index: 1;
+  isolation: isolate;
+  font-family: var(--font-montserrat);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1;
+  padding: 20px 37px;
+  gap: 8px;
+  display: inline-flex;
+  align-items: center;
+}
+
+body.page-taxation .header-area.style-4 :is(a, button).primary-btn1.btn-hover {
+  padding: 15px 28px;
+}
+
+@media (max-width: 1199px) {
+  body.page-taxation .header-area.style-4 :is(a, button).primary-btn1.btn-hover {
+    padding: 15px 18px;
+  }
+}
+
+body.page-taxation :is(a, button).primary-btn1.btn-hover > span {
+  display: block !important;
+  position: absolute !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  border-radius: 50% !important;
+  background-color: var(--white-color) !important;
+  transition: width 0.6s, height 0.6s !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: -1 !important;
+  pointer-events: none;
+}
+
+body.page-taxation :is(a, button).primary-btn1.btn-hover svg {
+  fill: var(--white-color) !important;
+  transition: fill 0.6s !important;
+  transform: none !important;
+}
+
+body.page-taxation :is(a, button).primary-btn1.btn-hover:hover {
+  background-color: var(--primary-color) !important;
+  color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+body.page-taxation :is(a, button).primary-btn1.btn-hover:hover > span {
+  width: 225% !important;
+  height: 1000.5px !important;
+}
+
+body.page-taxation :is(a, button).primary-btn1.btn-hover:hover svg {
+  fill: var(--primary-color) !important;
+  transform: none !important;
+}
+
+body.page-taxation .bmr-card,
+body.page-taxation .bmr-card.rounded-3,
+body.page-taxation .service-triad-card.rounded-3,
+body.page-taxation .tax-faq-section .accordion-item.rounded,
+body.page-taxation .tax-faq-section .accordion-item {
+  border-radius: 0 !important;
+}
+
+body.page-taxation .service-triad-card,
+body.page-taxation .service-triad-card:hover {
+  transform: none !important;
+}
+
+body.page-taxation .tax-faq-section #taxFaqAccordion .accordion-button,
+body.page-taxation .tax-faq-section #taxFaqAccordion .accordion-button:not(.collapsed),
+body.page-taxation .tax-faq-section #taxFaqAccordion .accordion-button.collapsed {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+  color: var(--title-color, #1f2a44) !important;
+}
+
+body.page-taxation .tax-faq-section #taxFaqAccordion .accordion-button:hover,
+body.page-taxation .tax-faq-section #taxFaqAccordion .accordion-button:focus-visible {
+  color: #000000 !important;
+}
+
+body.page-taxation .tax-faq-section #taxFaqAccordion .accordion-button:not(.collapsed):hover,
+body.page-taxation .tax-faq-section #taxFaqAccordion .accordion-button:not(.collapsed):focus-visible {
+  color: #000000 !important;
+}
+
+body.page-taxation :is(
+  .solution-section,
+  .tax-cards-section,
+  .tax-faq-section
+) {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+}
+
+body.page-taxation :is(
+  .solution-section,
+  .tax-cards-section,
+  .tax-faq-section
+) .section-title1.two > h2 {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+  line-height: 1.28;
+}
+
+body.page-taxation :is(
+  .solution-section,
+  .tax-cards-section,
+  .tax-faq-section
+) .section-title1.two > span {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+  font-weight: 500 !important;
+}
+
+body.page-taxation .solution-section .bmr-card h4 {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+}
+
+body.page-taxation .tax-cards-section .service-triad-card h3 {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+  line-height: 1.28;
+}
+
+body.page-taxation .tax-faq-section .accordion-body {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+  font-weight: 400 !important;
+}
+
+body.page-taxation :is(
+  .solution-section .section-title1.two > p,
+  .section-title-sub,
+  .tax-cards-section .section-title1.two > p,
+  .tax-faq-section .section-title1.two > p
+) {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+  font-weight: 400 !important;
+}
+
+body.page-taxation .solution-section .bmr-card :is(li, div) {
+  font-weight: 400 !important;
+}
+
+body.page-taxation .solution-section .bmr-card strong {
+  font-weight: 500 !important;
+}
+
+body.page-taxation .tax-cards-section .service-triad-card {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+}
+
+body.page-taxation .service-triad-card .badge {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif) !important;
+  font-weight: 500 !important;
+}
+
+body.page-taxation .service-triad-card :is(
+  p,
+  .small,
+  .text-muted,
+  ul,
+  ul li
+) {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+  font-weight: 400 !important;
+}
+
+body.page-taxation :is(
+  .solution-section,
+  .tax-cards-section
+) :is(h2, h3, h4, h5) {
+  font-weight: 400 !important;
+}
+
+/* ==========================================================================
+   Business Health Checkup (checkup.html) — sharp corners, ripple, typography
+   ========================================================================== */
+body.page-checkup .checkup-page-section :is(
+  .bmr-wizard-container,
+  .question-block,
+  .option-radio-card,
+  .upload-dropzone,
+  .bmr-upload-shell .file-info-badge,
+  .dpdp-consent-row,
+  .wizard-ai-note,
+  .wizard-step-pane .form-control,
+  .wizard-step-pane .form-select,
+  .wizard-step-pane .input-group-text,
+  .bmr-report .bmr-report-doc,
+  .primary-btn1,
+  .explore-btn.two,
+  footer .footer-widget .subscribed-area .form-inner,
+  footer .footer-widget .subscribed-area .form-inner input
+) {
+  border-radius: var(--bmr-home-block-radius) !important;
+}
+
+body.page-checkup .header-area.style-4 .menu-wrap .main-menu ul > li > a {
+  border-radius: 15px !important;
+}
+
+body.page-checkup .header-area.style-4 .menu-wrap .main-menu ul > li.active > a {
+  border-radius: 999px !important;
+}
+
+body.page-checkup :is(
+  .wizard-step-bullet,
+  .upload-icon-circle,
+  .primary-btn1.btn-hover > span,
+  .slider-btn,
+  .circle-container,
+  .circle-progress path,
+  #magic-cursor #ball,
+  footer .footer-widget .subscribed-area .form-inner button,
+  .social-area li a
+) {
+  border-radius: 50% !important;
+}
+
+body.page-checkup :is(a, button).primary-btn1.btn-hover {
+  background-color: var(--primary-color) !important;
+  color: var(--white-color) !important;
+  border: 1px solid var(--primary-color) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  transition: color 0.6s, border-color 0.6s, background-color 0.6s !important;
+  overflow: hidden !important;
+  position: relative !important;
+  z-index: 1;
+  isolation: isolate;
+  font-family: var(--font-montserrat);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1;
+  gap: 8px;
+  display: inline-flex;
+  align-items: center;
+}
+
+body.page-checkup .header-area.style-4 :is(a, button).primary-btn1.btn-hover {
+  padding: 15px 28px;
+}
+
+@media (max-width: 1199px) {
+  body.page-checkup .header-area.style-4 :is(a, button).primary-btn1.btn-hover {
+    padding: 15px 18px;
+  }
+}
+
+body.page-checkup :is(a, button).primary-btn1.btn-hover > span {
+  display: block !important;
+  position: absolute !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  border-radius: 50% !important;
+  background-color: var(--white-color) !important;
+  transition: width 0.6s, height 0.6s !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: -1 !important;
+  pointer-events: none;
+}
+
+body.page-checkup :is(a, button).primary-btn1.btn-hover svg {
+  fill: var(--white-color) !important;
+  transition: fill 0.6s !important;
+  transform: none !important;
+}
+
+body.page-checkup :is(a, button).primary-btn1.btn-hover:hover {
+  background-color: var(--primary-color) !important;
+  color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+body.page-checkup :is(a, button).primary-btn1.btn-hover:hover > span {
+  width: 225% !important;
+  height: 1000.5px !important;
+}
+
+body.page-checkup :is(a, button).primary-btn1.btn-hover:hover svg {
+  fill: var(--primary-color) !important;
+  transform: none !important;
+}
+
+body.page-checkup .breadcrumb-section .banner-content h1 {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+  line-height: 1.28;
+}
+
+body.page-checkup .checkup-page-section {
+  font-family: var(--font-montserrat, "Montserrat", sans-serif);
+}
+
+body.page-checkup .wizard-pane-title {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+  line-height: 1.28;
+}
+
+body.page-checkup :is(.wizard-pane-sub, .wizard-ai-note p, .option-desc-text) {
+  font-weight: 400 !important;
+}
+
+body.page-checkup .wizard-ai-note strong {
+  font-weight: 500 !important;
+}
+
+body.page-checkup :is(.wizard-step-title, .wizard-step-bullet) {
+  font-weight: 500 !important;
+}
+
+body.page-checkup :is(.wizard-action-hint, .wizard-text-btn, .bmr-label) {
+  font-weight: 500 !important;
+}
+
+body.page-checkup .req-mark {
+  font-weight: 500 !important;
+}
+
+body.page-checkup .question-prompt {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+}
+
+body.page-checkup :is(.question-number-badge, .option-rating-label) {
+  font-weight: 500 !important;
+}
+
+body.page-checkup :is(.wizard-ai-strip, .wizard-ai-strip__badge) {
+  font-weight: 500 !important;
+}
+
+body.page-checkup .pillar-tab-btn {
+  font-weight: 500 !important;
+}
+
+body.page-checkup .bmr-upload-shell .upload-title {
+  font-family: var(--font-marcellus, "Marcellus", Georgia, serif) !important;
+  font-weight: 400 !important;
+}
+
+body.page-checkup .fw-bold {
+  font-weight: 500 !important;
+}
+
+body.page-checkup .bmr-report .bmr-report-metagrid__k {
+  font-weight: 500 !important;
+}
+
+body.page-checkup .bmr-report :is(h2, h3, .bmr-report-title) {
+  font-weight: 400 !important;
+}
+
+body.page-checkup #btn-wizard-next,
+body.page-checkup #btn-analyze-submit {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  font-weight: 500;
+}
+
+body.page-checkup #btn-wizard-next > span,
+body.page-checkup #btn-analyze-submit > span {
+  display: block !important;
+}
+
+body.page-checkup #btn-wizard-next::after,
+body.page-checkup #btn-analyze-submit::after {
+  display: none !important;
+  content: none !important;
+}
+
+body.page-checkup #btn-wizard-next:hover,
+body.page-checkup #btn-analyze-submit:hover:not([disabled]) {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+body.page-checkup #btn-analyze-submit[disabled],
+body.page-checkup #btn-analyze-submit[aria-disabled="true"] {
+  color: var(--primary-color) !important;
+  background-color: var(--white-color) !important;
+  border-color: var(--bmr-border, #d9e2ec) !important;
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* --- R19. Trial report: pages 1–2 open, 3+ lock stage over blurred body ---- */
+.bmr-report .bmr-report-page--trial-prelim {
+  min-height: 0;
+}
+
+
+.bmr-report .bmr-report-lockstage > .bmr-report-lockcard {
+  display: block;
+}
+
+.bmr-report .bmr-report-lockcard--clone .bmr-report-lockcard__button {
+  width: 100%;
+}
+
+.bmr-report .bmr-report-lockcard--clone .bmr-report-lockcard__body {
+  font-size: 12.5px;
 }
