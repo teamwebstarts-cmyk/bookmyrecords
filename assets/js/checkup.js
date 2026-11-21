@@ -14,6 +14,8 @@
   const NOTES_MAX = 400;
   const validExtensions = ['.pdf', '.xlsx', '.xls', '.csv'];
   const MAX_SIZE_BYTES = 4 * 1024 * 1024; // 4 MB ceiling (4,194,304 bytes)
+  /** Trial: first N sheets are readable; page N+1 onward use the lock stage. */
+  const TRIAL_UNLOCKED_PAGES = 2;
 
   // --- Global Assessment State ---
   const state = {
@@ -689,9 +691,16 @@
     if (elements.analysisReport) elements.analysisReport.hidden = !revealing;
     if (elements.bookingBlock) elements.bookingBlock.hidden = which !== 'booking';
 
-    // Re-measure once the sheets are in the document and fonts have settled.
-    if (revealing && wasHidden && state.reportData) {
+    const pagesWrap = elements.reportPages;
+    if (pagesWrap) {
+      pagesWrap.classList.toggle('bmr-report-pages--booking', which === 'booking');
+    }
+    if (revealing && which === 'report' && state.reportData) {
       paginateWhenVisible();
+      requestAnimationFrame(() => {
+        const wrap = elements.reportPages || document.getElementById('report-pages');
+        if (wrap) applyTrialReportLayout(wrap);
+      });
     }
 
     if (elements.wizardScroll) elements.wizardScroll.scrollTop = 0;
@@ -703,6 +712,8 @@
       initCalBooking(state.reportData);
       pollPdfAfterBooking(state.reportData.meta && state.reportData.meta.report_id);
     }
+    const nextSteps = document.getElementById('report-page-nextsteps');
+    if (nextSteps) nextSteps.hidden = false;
     showAnalysisView('booking');
     focusBookingHeading();
   }
@@ -906,7 +917,8 @@
     }
 
     const nothingLocked = total === 0;
-    if (nothingLocked) {
+    const trialGate = document.getElementById('report-pages')?.classList.contains('bmr-report-pages--trial');
+    if (nothingLocked && !trialGate) {
       // Nothing to gate: reveal the continuation inline and drop the lock card.
       if (elements.reportLocked) elements.reportLocked.hidden = true;
       if (elements.reportLockedBody) {
@@ -929,7 +941,7 @@
    * heading row, or one child of a section. A section that straddles a page
    * break is reopened on the next sheet as a continuation (no repeated rule).
    */
-  const A4_LIMIT_PX = 1000; // A4 @96dpi minus sheet padding and running head/foot
+  const A4_LIMIT_PX = 720; // Trial: more sheets so page 3+ can use the lock stage
 
   function collectSheetUnits(source) {
     const units = [];
@@ -978,13 +990,24 @@
   function paginateReport() {
     const source = document.getElementById('report-sheet-source');
     const pagesWrap = document.getElementById('report-pages');
-    if (!source || !pagesWrap) return;
+    if (!pagesWrap) return;
+
+    // After the first pass the template is gone; re-run trial labelling when the
+    // report becomes visible so page 3+ pick up lock stages and numbering.
+    if (!source) {
+      applyTrialReportLayout(pagesWrap);
+      return;
+    }
 
     // Idempotent: drop sheets from a previous render before measuring again.
     pagesWrap.querySelectorAll('.bmr-report-page[data-generated="1"]').forEach(n => n.remove());
 
     const units = collectSheetUnits(source);
-    if (units.length === 0) return;
+    if (units.length === 0) {
+      source.remove();
+      applyTrialReportLayout(pagesWrap);
+      return;
+    }
 
     // Build into a detached measuring host so layout is real, not guessed.
     const sheetData = [];           // [{ flow, currentSection, nodes: [] }]
@@ -1102,28 +1125,300 @@
       }
     });
 
-    // Patch the counters by walking the sheets in DOM order. Deriving the
-    // numbers from counts is fragile (generated sheets + locked page + authored
-    // pages all coexist); DOM order is the only thing that is always right.
-    const allSheets = Array.from(pagesWrap.querySelectorAll(':scope > .bmr-report-page'));
-    const total = allSheets.length;
+    // Drop the template sheet before numbering — while it is still in the DOM it
+    // reads as an extra visible page and shifts trial labels to "2 of 2" / "3 of 2".
+    source.remove();
 
-    allSheets.forEach((sheet, idx) => {
+    applyTrialReportLayout(pagesWrap);
+  }
+
+  function cloneLockCard() {
+    const tpl = document.getElementById('report-lockcard-template');
+    if (tpl && tpl.content && tpl.content.firstElementChild) {
+      const card = tpl.content.firstElementChild.cloneNode(true);
+      card.classList.add('bmr-report-lockcard--clone');
+      card.hidden = false;
+      return card;
+    }
+    const fallback = document.querySelector(
+      '.bmr-report-lockcard:not(.bmr-report-lockcard--clone)'
+    ) || document.getElementById('report-locked');
+    if (!fallback) return null;
+    const card = fallback.cloneNode(true);
+    card.removeAttribute('id');
+    card.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+    card.classList.add('bmr-report-lockcard--clone');
+    card.hidden = false;
+    return card;
+  }
+
+  function ensureLockCardOnStage(stage) {
+    if (!stage) return null;
+    let card = stage.querySelector(':scope > .bmr-report-lockcard');
+    if (!card) {
+      card = cloneLockCard();
+      if (card) stage.appendChild(card);
+    }
+    if (card) card.hidden = false;
+    return card;
+  }
+
+  function applyLockCardCopy(card, opts) {
+    if (!card || !opts) return;
+    const { primary, pageNo, total } = opts;
+    const eyebrow = card.querySelector('.bmr-report-lockcard__eyebrow');
+    const unlockFrom = TRIAL_UNLOCKED_PAGES + 1;
+
+    if (primary) {
+      card.classList.remove('bmr-report-lockcard--clone');
+      if (eyebrow) {
+        eyebrow.innerHTML =
+          '<i class="bi bi-lock-fill me-1" aria-hidden="true"></i> Full report locked &mdash; page ' +
+          unlockFrom + ' and beyond';
+      }
+      return;
+    }
+
+    card.classList.add('bmr-report-lockcard--clone');
+    if (eyebrow) {
+      eyebrow.innerHTML =
+        '<i class="bi bi-lock-fill me-1" aria-hidden="true"></i> Page ' + pageNo + ' of ' + total + ' &mdash; locked';
+    }
+  }
+
+  function demoteLockCardOnSheet(sheet) {
+    if (!sheet) return;
+    const card = sheet.querySelector('.bmr-report-lockcard');
+    if (card) {
+      card.removeAttribute('id');
+      card.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+    }
+    const body = sheet.querySelector('.bmr-report-lockstage__body');
+    if (body) body.removeAttribute('id');
+  }
+
+  function assignPrimaryLockCard(sheet) {
+    if (!sheet) return;
+    demoteLockCardOnSheet(sheet);
+    let card = sheet.querySelector('.bmr-report-lockcard');
+    if (!card) {
+      card = cloneLockCard();
+      if (!card) return;
+      sheet.querySelector('.bmr-report-lockstage')?.appendChild(card);
+    }
+    card.id = 'report-locked';
+    card.classList.remove('bmr-report-lockcard--clone');
+    card.setAttribute('role', 'region');
+    const title = card.querySelector('.bmr-report-lockcard__title');
+    if (title) title.id = 'report-locked-title';
+    const count = card.querySelector('.bmr-report-lockcard__count');
+    if (count) count.id = 'report-locked-count';
+    const btn = card.querySelector('.bmr-report-lockcard__button');
+    if (btn) btn.id = 'btn-unlock-report';
+    const body = sheet.querySelector('.bmr-report-lockstage__body');
+    if (body && !body.id) body.id = 'report-locked-body';
+  }
+
+  function appendTrialLockStage(sheet, contentNodes) {
+    const foot = sheet.querySelector('.bmr-report-page__foot');
+    const stage = document.createElement('div');
+    stage.className = 'bmr-report-lockstage';
+
+    const body = document.createElement('div');
+    body.className = 'bmr-report-lockstage__body';
+    body.setAttribute('inert', '');
+    body.setAttribute('aria-hidden', 'true');
+    contentNodes.forEach(node => body.appendChild(node));
+
+    stage.appendChild(body);
+    ensureLockCardOnStage(stage);
+
+    if (foot) sheet.insertBefore(stage, foot);
+    else sheet.appendChild(stage);
+  }
+
+  /** Paginated overflow sheet: blur the flow, add a lock card. */
+  function ensureGeneratedSheetLocked(sheet) {
+    if (sheet.querySelector('.bmr-report-lockstage')) {
+      consolidateLockedSheetContent(sheet);
+      return;
+    }
+    const flow = sheet.querySelector('.bmr-sheet__flow');
+    if (!flow) return;
+    const nodes = [];
+    while (flow.firstChild) nodes.push(flow.firstChild);
+    flow.remove();
+    appendTrialLockStage(sheet, nodes);
+  }
+
+  /**
+   * Locked sheets sometimes keep a bare .bmr-sheet__flow above an empty lock stage
+   * (fallback ran after a partial wrap). Pull every stray node into the blur body.
+   */
+  function consolidateLockedSheetContent(sheet) {
+    const foot = sheet.querySelector('.bmr-report-page__foot');
+    const head = sheet.querySelector('.bmr-report-page__head');
+    let stage = sheet.querySelector('.bmr-report-lockstage');
+    if (!stage) return;
+
+    let body = stage.querySelector('.bmr-report-lockstage__body');
+    if (!body) {
+      body = document.createElement('div');
+      body.className = 'bmr-report-lockstage__body';
+      body.setAttribute('inert', '');
+      body.setAttribute('aria-hidden', 'true');
+      stage.insertBefore(body, stage.querySelector('.bmr-report-lockcard'));
+    }
+
+    const flow = sheet.querySelector(':scope > .bmr-sheet__flow');
+    if (flow) {
+      while (flow.firstChild) body.appendChild(flow.firstChild);
+      flow.remove();
+    }
+
+    let node = head ? head.nextElementSibling : sheet.firstElementChild;
+    while (node && node !== foot) {
+      const next = node.nextElementSibling;
+      if (node !== stage && node.id !== 'booking-block') {
+        if (!stage.contains(node)) body.appendChild(node);
+      }
+      node = next;
+    }
+
+    ensureLockCardOnStage(stage);
+  }
+
+  /** Next-steps (and similar) sheets: blur everything between head and foot. */
+  function ensureTrialSheetLocked(sheet) {
+    if (sheet.querySelector('.bmr-report-lockstage')) {
+      consolidateLockedSheetContent(sheet);
+      return;
+    }
+    const head = sheet.querySelector('.bmr-report-page__head');
+    const foot = sheet.querySelector('.bmr-report-page__foot');
+    if (!foot) return;
+
+    const nodes = [];
+    let node = head ? head.nextElementSibling : sheet.firstElementChild;
+    while (node && node !== foot) {
+      const next = node.nextElementSibling;
+      if (node.id === 'booking-block') {
+        node = next;
+        continue;
+      }
+      nodes.push(node);
+      node = next;
+    }
+    appendTrialLockStage(sheet, nodes);
+  }
+
+  function refreshTrialLockElementRefs() {
+    elements.reportLocked = document.getElementById('report-locked');
+    elements.reportLockedCount = document.getElementById('report-locked-count');
+    elements.reportLockedBody = document.getElementById('report-locked-body');
+    elements.btnUnlockReport = document.getElementById('btn-unlock-report');
+  }
+
+  /**
+   * Trial UX: pages 1–2 are readable preliminary sheets; every sheet from page 3
+   * onward is shown with the blurred body + lock card (including overflow pages
+   * and next steps).
+   */
+  function applyTrialReportLayout(pagesWrap) {
+    if (!pagesWrap) return;
+
+    pagesWrap.classList.add('bmr-report-pages--trial');
+
+    const nextSteps = document.getElementById('report-page-nextsteps');
+    if (nextSteps) {
+      nextSteps.removeAttribute('data-trial-suppressed');
+      nextSteps.hidden = false;
+      const booking = nextSteps.querySelector('#booking-block');
+      if (booking) booking.hidden = true;
+    }
+
+    const trialSheets = Array.from(
+      pagesWrap.querySelectorAll(
+        ':scope > .bmr-report-page:not(#report-sheet-source)'
+      )
+    );
+
+    trialSheets.forEach((sheet, idx) => {
+      const pageNo = idx + 1;
+      const locked = pageNo > TRIAL_UNLOCKED_PAGES;
+
+      sheet.classList.toggle('bmr-report-page--trial-prelim', !locked);
+      sheet.classList.toggle('bmr-report-page--locked', locked);
+
+      if (!locked) return;
+
+      try {
+        if (!sheet.querySelector('.bmr-report-lockstage')) {
+          if (sheet.querySelector('.bmr-sheet__flow')) ensureGeneratedSheetLocked(sheet);
+          else ensureTrialSheetLocked(sheet);
+        }
+        if (!sheet.querySelector('.bmr-report-lockstage')) {
+          appendTrialLockStage(sheet, []);
+        }
+        consolidateLockedSheetContent(sheet);
+        demoteLockCardOnSheet(sheet);
+      } catch (err) {
+        console.warn('Trial lock wrap failed for page ' + pageNo, err);
+        consolidateLockedSheetContent(sheet);
+      }
+    });
+
+    const total = trialSheets.length;
+    trialSheets.forEach((sheet, idx) => {
       const pageNo = idx + 1;
       const headSpan = sheet.querySelector('.bmr-report-page__head span:last-child');
       const footSpan = sheet.querySelector('.bmr-report-page__foot span:first-child');
-      const isLocked = sheet.classList.contains('bmr-report-page--locked');
+      const isLocked = pageNo > TRIAL_UNLOCKED_PAGES;
       const suffix = isLocked ? ' \u00b7 Locked' : ' \u00b7 Preliminary';
 
       if (headSpan) headSpan.textContent = 'Page ' + pageNo + ' of ' + total + suffix;
-      if (footSpan) footSpan.textContent = isLocked
-        ? 'Page ' + pageNo + ' of ' + total + ' \u00b7 Locked preview'
-        : 'Page ' + pageNo + ' of ' + total;
+      if (footSpan) {
+        footSpan.textContent = isLocked
+          ? 'Page ' + pageNo + ' of ' + total + ' \u00b7 Locked preview'
+          : 'Page ' + pageNo + ' of ' + total;
+      }
+      sheet.setAttribute('data-page', String(pageNo));
     });
 
-    // The authored source article was only a template; the generated sheets own
-    // the content now.
-    source.remove();
+    const primarySheet = trialSheets[TRIAL_UNLOCKED_PAGES];
+    if (primarySheet) {
+      try {
+        assignPrimaryLockCard(primarySheet);
+      } catch (err) {
+        console.warn('Primary lock card assign failed', err);
+      }
+    }
+
+    trialSheets.forEach((sheet, idx) => {
+      const pageNo = idx + 1;
+      if (pageNo <= TRIAL_UNLOCKED_PAGES) return;
+      const stage = sheet.querySelector('.bmr-report-lockstage');
+      const card = ensureLockCardOnStage(stage);
+      if (!card) return;
+      applyLockCardCopy(card, {
+        primary: pageNo === TRIAL_UNLOCKED_PAGES + 1,
+        pageNo,
+        total: trialSheets.length
+      });
+    });
+
+    refreshTrialLockElementRefs();
+    if (state.reportData) updateLockedState(state.reportData);
+
+    // Final pass: no readable content may sit outside the lock stage on page 3+.
+    trialSheets.forEach((sheet, idx) => {
+      if (idx + 1 <= TRIAL_UNLOCKED_PAGES) return;
+      sheet.classList.add('bmr-report-page--locked');
+      if (!sheet.querySelector('.bmr-report-lockstage')) {
+        appendTrialLockStage(sheet, []);
+      }
+      consolidateLockedSheetContent(sheet);
+    });
   }
 
   // --- Render Dynamic Business Health Report ---
@@ -1628,10 +1923,21 @@
       });
     }
 
-    // The gate on page 2 goes to the same booking block as the page-3 CTA.
-    if (elements.btnUnlockReport) {
-      elements.btnUnlockReport.addEventListener('click', (e) => {
+    // Any lock card (primary or clone on pages 3+) opens booking.
+    if (elements.reportPages) {
+      elements.reportPages.addEventListener('click', (e) => {
+        const btn = e.target.closest('.bmr-report-lockcard__button');
+        if (!btn) return;
         e.preventDefault();
+        const card = btn.closest('.bmr-report-lockcard');
+        if (card && card.classList.contains('bmr-report-lockcard--clone')) {
+          const gate = document.getElementById('report-locked');
+          if (gate) {
+            gate.scrollIntoView({ block: 'center', behavior: 'smooth' });
+            gate.focus({ preventScroll: true });
+          }
+          return;
+        }
         openBooking();
       });
     }

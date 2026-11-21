@@ -29,7 +29,7 @@
 <link rel="stylesheet" href="assets/css/bmr-animations.css">
 </head>
 
-<body id="body" class="tt-smooth-scroll tt-magic-cursor">
+<body id="body" class="page-checkup tt-smooth-scroll tt-magic-cursor">
     <div id="magic-cursor">
         <div id="ball"></div>
     </div>
@@ -57,9 +57,11 @@
                         <li class=""><a href="index.html">Home</a></li>
                         <li class=""><a href="about.html">About</a></li>
                         <li class="menu-item-has-children ">
-                            <a href="#" class="drop-down">Services</a><i class="bi bi-plus dropdown-icon"></i>
+                            <a href="index.html#our-services" class="drop-down">Services</a><i class="bi bi-plus dropdown-icon"></i>
                             <ul class="sub-menu">
-                                <li><a href="cfo-services.html">CFO Services</a></li>
+                                <li><a href="business-health-checkup.html">Business Health Checkup</a></li>
+                                <li><a href="business-health-diagnostic.html">Business Health Diagnostic</a></li>
+                                <li><a href="hands-on-consulting-growth-support.html">Hands-on Consulting &amp; Growth Support</a></li>
                                 <li><a href="business-registration.html">Business Registration &amp; Licensing</a></li>
                                 <li><a href="accounting-outsourcing.html">Accounting Outsourcing</a></li>
                                 <li><a href="taxation.html">Taxation &amp; Compliance</a></li>
@@ -142,7 +144,7 @@
     <!-- End Breadcrumb Section -->
 
     <!-- Start Interactive Checkup Section -->
-    <section class="checkup-page-section pt-80 pb-100 bg-light">
+    <section class="checkup-page-section bg-light">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-xl-11 col-lg-12">
@@ -390,6 +392,24 @@
 
                                     <div class="bmr-report-pages" id="report-pages">
 
+                                    <template id="report-lockcard-template">
+                                      <div class="bmr-report-lockcard" role="region">
+                                        <span class="bmr-report-lockcard__seal" aria-hidden="true">
+                                          <i class="bi bi-lock-fill"></i>
+                                        </span>
+                                        <p class="bmr-report-lockcard__eyebrow"><i class="bi bi-lock-fill me-1" aria-hidden="true"></i> Full report locked &mdash; page 3 and beyond</p>
+                                        <h3 class="bmr-report-lockcard__title">Unlock your complete AI-generated diagnostic</h3>
+                                        <p class="bmr-report-lockcard__body">What sits on these pages is written specifically for your business: the observations behind the score, a likelihood-weighted risk register, the 30/60/90 day action plan, and the agenda for the review call.</p>
+                                        <p class="bmr-report-lockcard__count">Further items are unlocked with a consultant.</p>
+                                        <button type="button" class="bmr-report-lockcard__button" aria-controls="booking-block">
+                                          <i class="bi bi-calendar-check me-2" aria-hidden="true"></i>
+                                          Start Free Trial &amp; Unlock Full Report
+                                        </button>
+                                        <p class="bmr-report-lockcard__fine">30 minutes &middot; free of charge &middot; your name, email and report ID are pre-filled</p>
+                                        <p class="bmr-report-lockcard__fine bmr-report-lockcard__fine--quiet">Prefer to read first? The same pages are sent by email after the call.</p>
+                                      </div>
+                                    </template>
+
                                     <!-- ============================ PAGE 1 ============================ -->
                                     <!-- Auto-paginated: paginateReport() splits these blocks across
                                          A4 sheets once the AI content is rendered. Without JS this
@@ -429,7 +449,7 @@
                                       </dl>
 
                                       <p class="bmr-report-kicker">
-                                        Preliminary &mdash; subject to consultant review &middot; Pages 1 and 3 of this document &middot; Page 2 unlocked on consultation &middot; Confidential
+                                        Preliminary &mdash; subject to consultant review &middot; Pages 1&ndash;2 preview &middot; Page 3 onward locked until consultation &middot; Confidential
                                       </p>
                                     </header>
 
@@ -582,12 +602,12 @@
 
                                       <p class="bmr-report-teaser" id="report-findings-teaser">
                                         <i class="bi bi-lock-fill" aria-hidden="true"></i>
-                                        More observations, the risk register and the action plan continue on page 2.
+                                        More observations, the risk register and the action plan continue from page 3.
                                       </p>
                                     </section>
 
                                     <footer class="bmr-report-page__foot">
-                                      <span>Page 1 of 5</span>
+                                      <span>Page 1 of 2</span>
                                       <span id="report-foot-id-p1">BMR-2026-DIAG</span>
                                     </footer>
 
@@ -602,7 +622,7 @@
 
                                       <div class="bmr-report-page__head">
                                         <span>Book My Records &middot; Business Advisory</span>
-                                        <span>Page 2 of 5 &middot; Locked</span>
+                                        <span>Page 2 of 2 &middot; Locked</span>
                                       </div>
 
                                       <div class="bmr-report-lockstage">
@@ -681,7 +701,7 @@
                                             <i class="bi bi-lock-fill"></i>
                                           </span>
 
-                                          <p class="bmr-report-lockcard__eyebrow"><i class="bi bi-lock-fill me-1" aria-hidden="true"></i> Full report locked &mdash; pages 2 and beyond</p>
+                                          <p class="bmr-report-lockcard__eyebrow"><i class="bi bi-lock-fill me-1" aria-hidden="true"></i> Full report locked &mdash; page 3 and beyond</p>
 
                                           <h3 class="bmr-report-lockcard__title" id="report-locked-title">
                                             Unlock your complete AI-generated diagnostic
@@ -714,7 +734,7 @@
                                       </div>
 
                                       <footer class="bmr-report-page__foot">
-                                        <span>Page 2 of 5 &middot; Locked preview</span>
+                                        <span>Page 2 of 2 &middot; Locked preview</span>
                                         <span id="report-foot-id">BMR-2026-DIAG</span>
                                       </footer>
 
@@ -722,7 +742,7 @@
                                     <!-- /PAGE 2 -->
 
                                     <!-- ============================ PAGE 3 ============================ -->
-                                    <article class="bmr-report-page" data-page="3" aria-labelledby="report-h8">
+                                    <article class="bmr-report-page" data-page="3" id="report-page-nextsteps" aria-labelledby="report-h8">
 
                                       <div class="bmr-report-page__head">
                                         <span>Book My Records &middot; Business Advisory</span>
@@ -837,11 +857,17 @@
                             <div class="wizard-actions-right">
                                 <span class="wizard-action-hint" id="wizard-action-hint">Step 1 of 3</span>
                                 <button type="button" id="btn-wizard-next" class="primary-btn1 btn-hover px-4 py-3">
-                                    Continue &rarr;
+                                    Continue
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M10.1865 1.06237L0 11.2484L0.751627 12L10.9376 1.81347V8.85645H12V0H3.14355V1.06237H10.1865Z"></path>
+                                    </svg>
                                     <span></span>
                                 </button>
                                 <button type="button" id="btn-analyze-submit" class="primary-btn1 btn-hover px-4 py-3" disabled aria-disabled="true">
-                                    Analyze health &rarr;
+                                    Analyze health
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M10.1865 1.06237L0 11.2484L0.751627 12L10.9376 1.81347V8.85645H12V0H3.14355V1.06237H10.1865Z"></path>
+                                    </svg>
                                     <span></span>
                                 </button>
                             </div>
@@ -896,7 +922,9 @@
                                     </div>
                                     <div class="menu-container">
                                         <ul>
-                                            <li><a href="cfo-services.html">CFO Services</a></li>
+                                            <li><a href="business-health-checkup.html">Business Health Checkup</a></li>
+                                            <li><a href="business-health-diagnostic.html">Business Health Diagnostic</a></li>
+                                            <li><a href="hands-on-consulting-growth-support.html">Hands-on Consulting &amp; Growth Support</a></li>
                                             <li><a href="business-registration.html">Business Registration &amp; Licensing</a></li>
                                             <li><a href="accounting-outsourcing.html">Accounting Outsourcing</a></li>
                                             <li><a href="taxation.html">Taxation &amp; Compliance</a></li>
@@ -941,6 +969,7 @@
     <script src="assets/js/bootstrap.min.js"></script>
     <script src="assets/js/waypoints.min.js"></script>
     <script src="assets/js/jquery.counterup.min.js"></script>
+    <script src="assets/js/gsap.min.js"></script>
     <script src="assets/js/main.js"></script>
     <script src="assets/js/checkup.js"></script>
 <script src="assets/js/bmr-animations.js" defer></script>
