@@ -64,3 +64,6 @@ Include the same assets before `</body>` on any additional public page that need
 ### Session and transcript policy
 
 Public website sessions use process-local, short-lived conversation context (30 minutes) only. Chat transcripts are not persisted to MongoDB or Supabase in this release. The session identifier is an anonymous browser continuity token, not authentication. Render restarts or multiple instances may reset/fragment this memory. Persistent memory must be introduced only with an explicit privacy notice/consent, retention/deletion controls, authenticated user identity and tenant isolation.
+
+## Conversation memory consent
+The widget includes an unchecked opt-in checkbox for short-lived conversation context. When checked, only redacted user messages and assistant text are retained in the current server process for up to 30 minutes (maximum 10 turns). When unchecked, requests are answered without prior-turn context. The session key is a hash of the browser token, not an authenticated identity. This memory is volatile and is not durable across Render restarts or multiple instances. Do not use this public session memory for personal financial records, reports, filings or dashboard data.
