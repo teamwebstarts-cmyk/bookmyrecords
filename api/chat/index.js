@@ -1,7 +1,7 @@
 'use strict';
 
 const { retrieveKnowledge } = require('./rag');
-const { getSessionHistory, appendTurn } = require('./memory');
+const { getSessionHistory, appendTurn, clearSession } = require('./memory');
 const crypto = require('crypto');
 
 const MAX_MESSAGE = 2000;
@@ -132,12 +132,15 @@ async function handleChat(req, res) {
 
     const sessionKey = getSessionKey(req, body.sessionId);
     const pageContext = cleanText(body.pageContext, MAX_PAGE_CONTEXT);
-    const history = getSessionHistory(sessionKey);
+    const memoryConsent = body.memoryConsent === true;
+    const history = memoryConsent ? getSessionHistory(sessionKey) : [];
     const context = retrieveKnowledge(message, 5);
     const reply = await callModel({ message, history, context, pageContext });
-    if (body.memoryConsent === true) {
+    if (memoryConsent) {
       appendTurn(sessionKey, 'user', redactSensitive(message));
       appendTurn(sessionKey, 'assistant', reply);
+    } else {
+      clearSession(sessionKey);
     }
     return sendJson(res, 200, {
       ok: true,
@@ -154,4 +157,24 @@ async function handleChat(req, res) {
   }
 }
 
-module.exports = { handleChat, redactSensitive, retrieveKnowledge, _rateAllowed: rateAllowed };
+
+async function clearSessionHandler(req, res) {
+  if (req.method !== 'POST') {
+    res.setHeader('Allow', 'POST, OPTIONS');
+    return sendJson(res, 405, { error: 'Method not allowed.' });
+  }
+  try {
+    const body = await readJson(req);
+    const supplied = cleanText(body.sessionId, 80);
+    if (!/^[a-zA-Z0-9_-]{16,80}$/.test(supplied)) {
+      return sendJson(res, 400, { error: 'A valid session identifier is required.' });
+    }
+    clearSession(crypto.createHash('sha256').update(supplied).digest('hex'));
+    return sendJson(res, 200, { ok: true, memory: 'cleared' });
+  } catch (err) {
+    const status = Number.isInteger(err.status) ? err.status : 400;
+    return sendJson(res, status, { error: err.message || 'Unable to clear chat memory.' });
+  }
+}
+
+module.exports = { handleChat, clearSessionHandler, redactSensitive, retrieveKnowledge, _rateAllowed: rateAllowed };
