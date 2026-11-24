@@ -81,3 +81,21 @@ Unchecking the memory option immediately calls `POST /api/chat/session/clear`, r
 ## Production configuration notes
 
 The repository privacy protocol says confidential financial/client data must go only to an approved paid API configuration with the applicable data-use terms. Do not use public/free consumer chatbot endpoints for sensitive customer data. Use a dedicated chatbot API key where possible.
+
+## Run and test commands
+
+```bash
+npm install
+npm run test:chatbot
+npm run index:chatbot
+npm start
+``
+
+Then open the deployed site and send a test request:
+```bash
+curl -X POST https://bookmyrecords-api.onrender.com/api/chat/message \
+  -H "Content-Type: application/json" \
+  -d '{"message":"What does Book My Records offer for GST compliance?"}'
+``
+
+The endpoint returns HTTP 503 until the model API environment variables are configured.
