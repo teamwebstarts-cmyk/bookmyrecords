@@ -1,6 +1,6 @@
 'use strict';
 
-const { MongoClient } = require('mongodb');
+// Public website chat intentionally uses transient in-process memory only. Do not persist visitor transcripts until consent/retention policy is implemented.
 
 const MAX_TURNS = 10;
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 30;
