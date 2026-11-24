@@ -18,6 +18,8 @@ for (const sample of samples) {
 }
 
 assert(normalize('मुझे GST registration और टैक्स help चाहिए').includes('gst'));
+assert(normalize('मुझे GST return file करना है').includes('gst'));
+assert(redacted.length < 100);
 assert(tokens('the accounting and tax services').includes('accounting'));
 
 const redacted = redactSensitive('PAN ABCDE1234F and GSTIN 22AAAAA0000A1Z5');
