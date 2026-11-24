@@ -135,8 +135,10 @@ async function handleChat(req, res) {
     const history = getSessionHistory(sessionKey);
     const context = retrieveKnowledge(message, 5);
     const reply = await callModel({ message, history, context, pageContext });
-    appendTurn(sessionKey, 'user', redactSensitive(message));
-    appendTurn(sessionKey, 'assistant', reply);
+    if (body.memoryConsent === true) {
+      appendTurn(sessionKey, 'user', redactSensitive(message));
+      appendTurn(sessionKey, 'assistant', reply);
+    }
     return sendJson(res, 200, {
       ok: true,
       sessionId: sessionKey,
