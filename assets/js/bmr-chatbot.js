@@ -28,8 +28,16 @@ function mount() {
   const panel=root.querySelector('.bmr-chat-panel'), launcher=root.querySelector('.bmr-chat-launcher'), close=root.querySelector('.bmr-chat-close');
   const form=root.querySelector('.bmr-chat-composer'), input=root.querySelector('.bmr-chat-textarea'), messages=root.querySelector('.bmr-chat-messages'), send=root.querySelector('.bmr-chat-send'), mic=root.querySelector('.bmr-chat-mic');
   const config=window.BMR_CHAT_CONFIG||{}, apiBase=String(config.apiBase||'').replace(/\/$/,'');
-  const storageKey='bmr-chat-session-v1'; let sessionId='', busy=false, recognition=null, listening=false;
+  const storageKey='bmr-chat-session-v1'; let sessionId='', busy=false, recognition=null, listening=false, memoryConsent=false;
   try{sessionId=localStorage.getItem(storageKey)||'';}catch(_){}
+  const hint=root.querySelector('.bmr-chat-hint');
+  const consent=document.createElement('label');
+  consent.className='bmr-chat-consent';
+  consent.innerHTML='<input type="checkbox"> Remember this conversation on this browser for this session';
+  form.insertBefore(consent,hint);
+  const consentInput=consent.querySelector('input');
+  consentInput.addEventListener('change',()=>{memoryConsent=consentInput.checked;});
+
   function setOpen(open){panel.dataset.open=String(open);launcher.setAttribute('aria-expanded',String(open));launcher.hidden=open;if(open)input.focus();else{stopListening();launcher.hidden=false;launcher.focus();}}
   function scrollBottom(){messages.scrollTop=messages.scrollHeight;}
   function safePath(path){return /^\/(?:[a-z0-9_-]+(?:\.html)?|#lead)(?:[?#].*)?$/i.test(path)?path:null;}
@@ -49,7 +57,7 @@ function mount() {
     addMessage('user',message);input.value='';input.style.height='auto';setBusy(true);
     const typing=document.createElement('div');typing.className='bmr-chat-message assistant';typing.innerHTML='<div class="bmr-chat-typing" aria-label="Advisor is typing"><i></i><i></i><i></i></div>';messages.appendChild(typing);scrollBottom();
     try{
-      const response=await fetch(apiBase+'/api/chat/message',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message,sessionId,pageContext:document.title.slice(0,160),mode:'website'})});
+      const response=await fetch(apiBase+'/api/chat/message',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message,sessionId,pageContext:document.title.slice(0,160),mode:'website',memoryConsent})});
       const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.error||'Unable to send your message right now.');
       sessionId=data.sessionId||sessionId;try{if(sessionId)localStorage.setItem(storageKey,sessionId);}catch(_){}
       typing.remove();addMessage('assistant',data.reply||'I could not prepare an answer. Please contact our team.',data.sources);
