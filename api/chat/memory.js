@@ -25,6 +25,10 @@ function appendTurn(sessionId, role, content) {
   sessions.set(sessionId, session);
 }
 
+function clearSession(sessionId) {
+  sessions.delete(sessionId);
+}
+
 function prune() {
   const cutoff = Date.now() - TTL_MS;
   for (const [id, session] of sessions) {
@@ -33,4 +37,4 @@ function prune() {
 }
 setInterval(prune, 5 * 60 * 1000).unref();
 
-module.exports = { getSessionHistory, appendTurn, _memoryCache: sessions };
+module.exports = { getSessionHistory, appendTurn, clearSession, _memoryCache: sessions };
