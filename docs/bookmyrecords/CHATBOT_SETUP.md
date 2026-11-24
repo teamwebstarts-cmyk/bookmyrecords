@@ -77,3 +77,7 @@ Unchecking the memory option immediately calls `POST /api/chat/session/clear`, r
 - Responses are currently non-streaming JSON from an OpenAI-compatible chat-completions endpoint.
 - Voice input uses browser `SpeechRecognition` where available. There is no server-side Whisper fallback in this branch; unsupported browsers can still type messages.
 - Rate limiting is an in-process per-IP guard only. It is not distributed across multiple Render instances and the forwarded client IP header must be trusted only when set by your own reverse proxy.
+
+## Production configuration notes
+
+The repository privacy protocol says confidential financial/client data must go only to an approved paid API configuration with the applicable data-use terms. Do not use public/free consumer chatbot endpoints for sensitive customer data. Use a dedicated chatbot API key where possible.
