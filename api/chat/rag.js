@@ -50,20 +50,24 @@ function tokens(text) {
   return normalize(text).split(/\s+/).filter(token => token.length > 1 && !STOP.has(token));
 }
 
+function decodeEntities(value) {
+  return value
+    .replace(/&nbsp;|&#160;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;|&apos;/gi, "'")
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&#(\\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCodePoint(parseInt(n, 16)));
+}
+
 function extractText(file, raw) {
-  if (file.endsWith('.html')) {
-    return raw
-      .replace(/<!--[\s\S]*?-->/g, ' ')
-      .replace(/<(script|style|svg|noscript|iframe)[^>]*>[\s\S]*?<\/\1>/gi, ' ')
-      .replace(/<[^>]+>/g, ' ')
-      .replace(/&nbsp;|&#160;/gi, ' ')
-      .replace(/&amp;/gi, '&')
-      .replace(/&quot;/gi, '"')
-      .replace(/&#39;|&apos;/gi, "'")
-      .replace(/&lt;/gi, '<')
-      .replace(/&gt;/gi, '>');
-  }
-  return raw;
+  if (!file.endsWith('.html')) return raw;
+  return decodeEntities(raw
+    .replace(/<!--[\\s\\S]*?-->/g, ' ')
+    .replace(/<(script|style|svg|noscript|iframe|nav|footer|header)[^>]*>[\\s\\S]*?<\\/\\1>/gi, ' ')
+    .replace(/<[^>]+>/g, ' '));
 }
 
 function splitChunks(text, max = 950, overlap = 140) {
