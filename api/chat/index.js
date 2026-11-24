@@ -130,15 +130,18 @@ async function handleChat(req, res) {
 
     const sessionKey = getSessionKey(req, body.sessionId);
     const pageContext = cleanText(body.pageContext, 160);
+    const history = getSessionHistory(sessionKey);
     const context = retrieveKnowledge(message, 5);
-    const reply = await callModel({ message, history: [], context, pageContext });
+    const reply = await callModel({ message, history, context, pageContext });
+    appendTurn(sessionKey, 'user', redactSensitive(message));
+    appendTurn(sessionKey, 'assistant', reply);
     return sendJson(res, 200, {
       ok: true,
       sessionId: sessionKey,
       reply,
       sources: context.slice(0, 3).map(item => ({ title: item.title, service: item.service, path: item.source })),
       mode: 'website',
-      memory: 'disabled_until_privacy_consent_and_retention_policy'
+      memory: 'transient_session_only_30m'
     });
   } catch (err) {
     const status = Number.isInteger(err.status) && err.status >= 400 && err.status <= 599 ? err.status : 500;
