@@ -59,7 +59,9 @@ function mount() {
     try{
       const response=await fetch(apiBase+'/api/chat/message',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message,sessionId,pageContext:document.title.slice(0,160),mode:'website',memoryConsent})});
       const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.error||'Unable to send your message right now.');
-      sessionId=data.sessionId||sessionId;try{if(sessionId)localStorage.setItem(storageKey,sessionId);}catch(_){}
+      sessionId=data.sessionId||sessionId;
+      if(memoryConsent){try{if(sessionId)localStorage.setItem(storageKey,sessionId);}catch(_){}}
+      else{try{localStorage.removeItem(storageKey);}catch(_){}}
       typing.remove();addMessage('assistant',data.reply||'I could not prepare an answer. Please contact our team.',data.sources);
     }catch(error){typing.remove();const err=document.createElement('div');err.className='bmr-chat-error';err.textContent=error.message||'Connection problem. Please try again.';messages.appendChild(err);scrollBottom();}
     finally{setBusy(false);input.focus();}
