@@ -36,7 +36,16 @@ function mount() {
   consent.innerHTML='<input type="checkbox"> Remember this conversation on this browser for this session';
   form.insertBefore(consent,hint);
   const consentInput=consent.querySelector('input');
-  consentInput.addEventListener('change',()=>{memoryConsent=consentInput.checked;});
+  consentInput.addEventListener('change',async()=>{
+    memoryConsent=consentInput.checked;
+    if(!memoryConsent && sessionId){
+      try{
+        await fetch(apiBase+'/api/chat/session/clear',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId})});
+      }catch(_){}
+      sessionId='';
+      try{localStorage.removeItem(storageKey);}catch(_){}
+    }
+  });
 
   function setOpen(open){panel.dataset.open=String(open);launcher.setAttribute('aria-expanded',String(open));launcher.hidden=open;if(open)input.focus();else{stopListening();launcher.hidden=false;launcher.focus();}}
   function scrollBottom(){messages.scrollTop=messages.scrollHeight;}
