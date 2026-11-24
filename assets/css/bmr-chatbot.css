@@ -24,3 +24,6 @@
 @keyframes bmr-chat-pulse{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-4px);opacity:1}}
 @media(max-width:600px){#bmr-chat-root{right:14px;bottom:14px}.bmr-chat-launcher{width:56px;height:56px}.bmr-chat-panel{position:fixed;right:8px;bottom:78px;width:calc(100vw - 16px);height:min(650px,calc(100dvh - 100px));max-height:calc(100dvh - 100px);min-height:390px}}
 @media(prefers-reduced-motion:reduce){.bmr-chat-panel,.bmr-chat-launcher{transition:none}.bmr-chat-typing i{animation:none}}
+
+.bmr-chat-consent{display:flex;align-items:center;gap:7px;margin-top:8px;font:10px/1.4 Montserrat,Arial,sans-serif;color:#667085;cursor:pointer}
+.bmr-chat-consent input{accent-color:#0b5ed7;width:13px;height:13px;margin:0}
