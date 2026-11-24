@@ -28,6 +28,11 @@ function rateAllowed(key) {
   const now = Date.now();
   const bucket = ipBuckets.get(key);
   if (!bucket || now - bucket.startedAt >= WINDOW_MS) {
+    if (ipBuckets.size > 5000) {
+      for (const [ip, entry] of ipBuckets.entries()) {
+        if (now - entry.startedAt >= WINDOW_MS) ipBuckets.delete(ip);
+      }
+    }
     ipBuckets.set(key, { startedAt: now, count: 1 });
     return true;
   }
