@@ -5,6 +5,7 @@ const { getSessionHistory, appendTurn } = require('./memory');
 
 const MAX_MESSAGE = 2000;
 const MAX_BODY_BYTES = 24 * 1024;
+const MAX_PAGE_CONTEXT = 160;
 const WINDOW_MS = 60 * 1000;
 const MAX_REQUESTS_PER_WINDOW = 15;
 const ipBuckets = new Map();
@@ -129,7 +130,7 @@ async function handleChat(req, res) {
     if (message.length < 2) return sendJson(res, 400, { error: 'Please enter a little more detail.' });
 
     const sessionKey = getSessionKey(req, body.sessionId);
-    const pageContext = cleanText(body.pageContext, 160);
+    const pageContext = cleanText(body.pageContext, MAX_PAGE_CONTEXT);
     const history = getSessionHistory(sessionKey);
     const context = retrieveKnowledge(message, 5);
     const reply = await callModel({ message, history, context, pageContext });
