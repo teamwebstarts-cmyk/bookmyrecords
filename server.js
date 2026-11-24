@@ -132,6 +132,16 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  if (pathname === '/api/chat/session/clear') {
+    try {
+      const chat = require('./api/chat');
+      await chat.clearSessionHandler(req, res);
+    } catch (err) {
+      if (!res.writableEnded) res.status(500).json({ error: 'Unable to clear chat memory.' });
+    }
+    return;
+  }
+
   // 1. Core Checkup Endpoints
   if (pathname === '/api/checkup/analyze') {
     try {
