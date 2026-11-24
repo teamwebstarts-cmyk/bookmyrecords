@@ -70,3 +70,10 @@ The widget includes an unchecked opt-in checkbox for short-lived conversation co
 
 ### Opt-out behavior
 Unchecking the memory option immediately calls `POST /api/chat/session/clear`, removes the browser session token, and clears the matching in-process history. Requests made while unchecked do not load prior-turn context. Re-enable the unchecked consent box to start a new opt-in session.
+
+## Current feature boundaries
+
+- Retrieval is local lexical/IDF matching over source-linked chunks. It is not yet embeddings + vector search; do not describe it as dense-vector RAG.
+- Responses are currently non-streaming JSON from an OpenAI-compatible chat-completions endpoint.
+- Voice input uses browser `SpeechRecognition` where available. There is no server-side Whisper fallback in this branch; unsupported browsers can still type messages.
+- Rate limiting is an in-process per-IP guard only. It is not distributed across multiple Render instances and the forwarded client IP header must be trusted only when set by your own reverse proxy.
