@@ -3,6 +3,7 @@
 const assert = require('assert');
 const { splitChunks, normalize, tokens } = require('../api/chat/rag');
 const { redactSensitive, _rateAllowed } = require('../api/chat');
+const { appendTurn, getSessionHistory, clearSession } = require('../api/chat/memory');
 
 const samples = [
   'Book My Records provides accounting outsourcing and bookkeeping.',
@@ -24,6 +25,14 @@ assert(tokens('the accounting and tax services').includes('accounting'));
 const redacted = redactSensitive('PAN ABCDE1234F and GSTIN 22AAAAA0000A1Z5');
 assert(!redacted.includes('22AAAAA0000A1Z5'), 'GSTIN should be redacted');
 assert(!redacted.includes('ABCDE1234F'), 'PAN should be redacted');
+
+
+const session = 'test-session-' + Date.now();
+appendTurn(session, 'user', 'first turn');
+appendTurn(session, 'assistant', 'first reply');
+assert.strictEqual(getSessionHistory(session).length, 2, 'opt-in memory should retain recent turns');
+clearSession(session);
+assert.strictEqual(getSessionHistory(session).length, 0, 'memory opt-out should clear session');
 
 const ipKey = 'test-' + Date.now();
 assert.strictEqual(_rateAllowed(ipKey), true);
