@@ -67,3 +67,6 @@ Public website sessions use process-local, short-lived conversation context (30 
 
 ## Conversation memory consent
 The widget includes an unchecked opt-in checkbox for short-lived conversation context. When checked, only redacted user messages and assistant text are retained in the current server process for up to 30 minutes (maximum 10 turns). When unchecked, requests are answered without prior-turn context. The session key is a hash of the browser token, not an authenticated identity. This memory is volatile and is not durable across Render restarts or multiple instances. Do not use this public session memory for personal financial records, reports, filings or dashboard data.
+
+### Opt-out behavior
+Unchecking the memory option immediately calls `POST /api/chat/session/clear`, removes the browser session token, and clears the matching in-process history. Requests made while unchecked do not load prior-turn context. Re-enable the unchecked consent box to start a new opt-in session.
