@@ -22,7 +22,6 @@ assert(normalize('मुझे GST return file करना है').includes('g
 assert(tokens('the accounting and tax services').includes('accounting'));
 
 const redacted = redactSensitive('PAN ABCDE1234F and GSTIN 22AAAAA0000A1Z5');
-assert(!redacted.includes('ABCDE1234F'), 'PAN should be redacted');
 assert(!redacted.includes('22AAAAA0000A1Z5'), 'GSTIN should be redacted');
 assert(!redacted.includes('ABCDE1234F'), 'PAN should be redacted');
 
