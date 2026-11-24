@@ -58,15 +58,15 @@ function decodeEntities(value) {
     .replace(/&#39;|&apos;/gi, "'")
     .replace(/&lt;/gi, '<')
     .replace(/&gt;/gi, '>')
-    .replace(/&#(\\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
+    .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
     .replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCodePoint(parseInt(n, 16)));
 }
 
 function extractText(file, raw) {
   if (!file.endsWith('.html')) return raw;
   return decodeEntities(raw
-    .replace(/<!--[\\s\\S]*?-->/g, ' ')
-    .replace(/<(script|style|svg|noscript|iframe|nav|footer|header)[^>]*>[\\s\\S]*?<\\/\\1>/gi, ' ')
+    .replace(/<!--[\s\S]*?-->/g, ' ')
+    .replace(/<(script|style|svg|noscript|iframe|nav|footer|header)[^>]*>[\s\S]*?<\/\1>/gi, ' ')
     .replace(/<[^>]+>/g, ' '));
 }
 
