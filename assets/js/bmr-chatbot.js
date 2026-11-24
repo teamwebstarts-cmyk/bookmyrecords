@@ -66,7 +66,7 @@ function mount() {
     addMessage('user',message);input.value='';input.style.height='auto';setBusy(true);
     const typing=document.createElement('div');typing.className='bmr-chat-message assistant';typing.innerHTML='<div class="bmr-chat-typing" aria-label="Advisor is typing"><i></i><i></i><i></i></div>';messages.appendChild(typing);scrollBottom();
     try{
-      const response=await fetch(apiBase+'/api/chat/message',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message,sessionId,pageContext:document.title.slice(0,160),mode:'website',memoryConsent})});
+      const response=await fetch(apiBase+'/api/chat/message',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message,sessionId:memoryConsent?sessionId:'',pageContext:document.title.slice(0,160),mode:'website',memoryConsent})});
       const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.error||'Unable to send your message right now.');
       sessionId=data.sessionId||sessionId;
       if(memoryConsent){try{if(sessionId)localStorage.setItem(storageKey,sessionId);}catch(_){}}
