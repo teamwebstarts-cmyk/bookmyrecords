@@ -137,7 +137,8 @@ async function handleChat(req, res) {
       sessionId: sessionKey,
       reply,
       sources: context.slice(0, 3).map(item => ({ title: item.title, service: item.service, path: item.source })),
-      mode: 'website'
+      mode: 'website',
+      memory: 'disabled_until_privacy_consent_and_retention_policy'
     });
   } catch (err) {
     const status = Number.isInteger(err.status) && err.status >= 400 && err.status <= 599 ? err.status : 500;
