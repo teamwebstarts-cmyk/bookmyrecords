@@ -130,12 +130,8 @@ async function handleChat(req, res) {
 
     const sessionKey = getSessionKey(req, body.sessionId);
     const pageContext = cleanText(body.pageContext, 160);
-    const history = await getSessionHistory(sessionKey);
     const context = retrieveKnowledge(message, 5);
-    const reply = await callModel({ message, history, context, pageContext });
-
-    await appendTurn(sessionKey, 'user', redactSensitive(message));
-    await appendTurn(sessionKey, 'assistant', reply);
+    const reply = await callModel({ message, history: [], context, pageContext });
     return sendJson(res, 200, {
       ok: true,
       sessionId: sessionKey,
