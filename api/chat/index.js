@@ -2,6 +2,7 @@
 
 const { retrieveKnowledge } = require('./rag');
 const { getSessionHistory, appendTurn } = require('./memory');
+const crypto = require('crypto');
 
 const MAX_MESSAGE = 2000;
 const MAX_BODY_BYTES = 24 * 1024;
@@ -36,8 +37,8 @@ function rateAllowed(key) {
 
 function getSessionKey(req, supplied) {
   const candidate = cleanText(supplied, 80);
-  if (/^[a-zA-Z0-9_-]{16,80}$/.test(candidate)) return candidate;
-  return require('crypto').randomBytes(18).toString('base64url');
+  if (/^[a-zA-Z0-9_-]{16,80}$/.test(candidate)) return crypto.createHash('sha256').update(candidate).digest('hex');
+  return crypto.randomBytes(18).toString('hex');
 }
 
 function sendJson(res, status, body) {
