@@ -121,7 +121,7 @@ async function handleChat(req, res) {
     res.setHeader('Allow', 'POST, OPTIONS');
     return sendJson(res, 405, { error: 'Method not allowed.' });
   }
-  const ip = String(req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown').split(',')[0].trim();
+  const ip = String(req.socket && req.socket.remoteAddress || 'unknown').trim();
   if (!rateAllowed(ip)) return sendJson(res, 429, { error: 'Too many messages. Please wait a minute and try again.' });
 
   try {
