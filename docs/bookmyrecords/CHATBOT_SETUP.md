@@ -60,3 +60,7 @@ The homepage has been updated to load:
 - `assets/js/bmr-chatbot.js`
 
 Include the same assets before `</body>` on any additional public page that needs the widget. The excluded `admin.html` stays excluded until it has a separate authenticated dashboard chatbot design and authorization contract.
+
+### Session and transcript policy
+
+Public website sessions use process-local, short-lived conversation context (30 minutes) only. Chat transcripts are not persisted to MongoDB or Supabase in this release. The session identifier is an anonymous browser continuity token, not authentication. Render restarts or multiple instances may reset/fragment this memory. Persistent memory must be introduced only with an explicit privacy notice/consent, retention/deletion controls, authenticated user identity and tenant isolation.
