@@ -8,7 +8,9 @@
     "test": "node verify_m2.js && node verify_m3.js && node verify_m4.js && node verify_e2e.js && node verify_ai_flow.js",
     "test:live": "node verify_ai_flow.js --live",
     "smoke": "node scripts/smoke-ai-flow.js",
-    "handover": "node scripts/generate-handover-pdf.js"
+    "handover": "node scripts/generate-handover-pdf.js",
+    "test:chatbot": "node scripts/test-chatbot.js",
+    "index:chatbot": "node scripts/index-chatbot.js"
   },
   "keywords": [],
   "author": "WebStarts",
