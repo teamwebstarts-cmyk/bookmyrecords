@@ -121,7 +121,9 @@ async function handleChat(req, res) {
     res.setHeader('Allow', 'POST, OPTIONS');
     return sendJson(res, 405, { error: 'Method not allowed.' });
   }
-  const ip = String(req.socket && req.socket.remoteAddress || 'unknown').trim();
+  // The deployment proxy may hide visitor IPs; this per-process limiter is a basic guard, not a distributed production quota.
+  const forwarded = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim();
+  const ip = forwarded || String(req.socket && req.socket.remoteAddress || 'unknown').trim();
   if (!rateAllowed(ip)) return sendJson(res, 429, { error: 'Too many messages. Please wait a minute and try again.' });
 
   try {
