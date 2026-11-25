@@ -299,7 +299,12 @@ function mount() {
         },300);
         return;
       }
-      if(tooFast)setVoiceHint('Mic turned on and closed immediately'+(lastMicError?' ('+lastMicError+')':'')+'. Speak as soon as it turns red, or type instead.','warn');
+      if(tooFast){
+        markListening(false);
+        recognition=null;
+        setVoiceHint('Mic turned on and closed immediately'+(lastMicError?' ('+lastMicError+')':'')+'. Speak as soon as it turns red, or type instead.','warn');
+        return;
+      }
       finishVoice('ended');
     };
     try{
