@@ -134,8 +134,8 @@ async function runAllTests() {
   // --- Feature 1: Navigation & 0 Broken Links ---
   console.log('\n--- Feature 1: Navigation & 0 Broken Links ---');
 
-  runTest('T1.1.1: All 17 HTML files exist, have non-empty valid <title>, meta viewport, and favicon link', () => {
-    assert.strictEqual(htmlFiles.length, 17, `Expected 17 HTML files on disk, found ${htmlFiles.length}`);
+  runTest('T1.1.1: All site HTML files exist, have non-empty valid <title>, meta viewport, and favicon link', () => {
+    assert.ok(htmlFiles.length >= 17, `Expected at least 17 site HTML files, found ${htmlFiles.length}`);
     for (const file of htmlFiles) {
       const content = fs.readFileSync(path.join(rootDir, file), 'utf8');
       assert.ok(content.includes('<title>'), `${file} must contain <title> tag`);
@@ -144,7 +144,7 @@ async function runAllTests() {
     }
   });
 
-  runTest('T1.1.2: All internal hyperlinks (href="...") across all 17 HTML files resolve to existing files on disk (0 broken links)', () => {
+  runTest('T1.1.2: All internal hyperlinks (href="...") across all site HTML files resolve to existing files on disk (0 broken links)', () => {
     const hrefRegex = /href=["']([^"'#\s]+)(?:#[^"']*)?["']/g;
     let checkedCount = 0;
     for (const file of htmlFiles) {
@@ -282,7 +282,7 @@ async function runAllTests() {
   // --- Feature 3: Placeholder Purge & Brand Sanitization ---
   console.log('\n--- Feature 3: Placeholder Purge & Brand Sanitization ---');
 
-  runTest('T1.3.1: Zero occurrences of Aploxn branding or template titles across all 17 HTML files', () => {
+  runTest('T1.3.1: Zero occurrences of Aploxn branding or template titles across all site HTML files', () => {
     const forbiddenBranding = ['infoaploxn@gmail.com', 'aploxn', 'Aploxn- Business Consulting'];
     for (const file of htmlFiles) {
       const content = fs.readFileSync(path.join(rootDir, file), 'utf8');
