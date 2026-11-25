@@ -23,7 +23,8 @@ function redactSensitive(text) {
     .replace(/\b(?:\d[ -]*?){13,19}\b/g, '[REDACTED_NUMBER]')
     .replace(/\b(?:account|a\/c|bank account)\s*(?:no\.?|number|#)?\s*[:=-]?\s*\d{9,18}\b/gi, 'Account: [REDACTED]')
     .replace(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi, '[REDACTED_EMAIL]')
-    .replace(/\b(?:\+?91[\s-]?)?[6-9]\d{9}\b/g, '[REDACTED_PHONE]');
+    .replace(/\+91[\s-]?[6-9]\d{9}\b/g, '[REDACTED_PHONE]')
+    .replace(/\b[6-9]\d{9}\b/g, '[REDACTED_PHONE]');
 }
 
 function rateAllowed(key) {
