@@ -21,7 +21,9 @@ function redactSensitive(text) {
     .replace(/\b[A-Z]{5}[0-9]{4}[A-Z]\b/gi, '[REDACTED_PAN]')
     .replace(/\b[2-9][0-9]{3}[\s-]?[0-9]{4}[\s-]?[0-9]{4}\b/g, '[REDACTED_ID]')
     .replace(/\b(?:\d[ -]*?){13,19}\b/g, '[REDACTED_NUMBER]')
-    .replace(/\b(?:account|a\/c|bank account)\s*(?:no\.?|number|#)?\s*[:=-]?\s*\d{9,18}\b/gi, 'Account: [REDACTED]');
+    .replace(/\b(?:account|a\/c|bank account)\s*(?:no\.?|number|#)?\s*[:=-]?\s*\d{9,18}\b/gi, 'Account: [REDACTED]')
+    .replace(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi, '[REDACTED_EMAIL]')
+    .replace(/\b(?:\+?91[\s-]?)?[6-9]\d{9}\b/g, '[REDACTED_PHONE]');
 }
 
 function rateAllowed(key) {
@@ -109,8 +111,11 @@ async function callModel({ message, history, context, pageContext }) {
       signal: controller.signal
     });
     if (!response.ok) {
-      const detail = (await response.text()).slice(0, 200);
-      throw Object.assign(new Error('AI provider returned HTTP ' + response.status + (detail ? ': ' + detail : '')), { status: response.status === 429 ? 429 : 502 });
+      // Do not return upstream provider response bodies or infrastructure details to public visitors.
+      throw Object.assign(
+        new Error(response.status === 429 ? 'The assistant is busy right now. Please try again in a moment.' : 'The assistant service is temporarily unavailable. Please try again later.'),
+        { status: response.status === 429 ? 429 : 502 }
+      );
     }
     const data = await response.json();
     const reply = data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
@@ -160,7 +165,10 @@ async function handleChat(req, res) {
   } catch (err) {
     const status = Number.isInteger(err.status) && err.status >= 400 && err.status <= 599 ? err.status : 500;
     if (status >= 500) console.error('[Chatbot] request failed:', err.name || 'Error', status);
-    return sendJson(res, status, { error: status === 500 ? 'The assistant could not respond right now. Please try again or contact our team.' : err.message });
+    const publicMessage = status >= 500
+      ? (status === 429 ? 'The assistant is busy right now. Please try again in a moment.' : 'The assistant could not respond right now. Please try again or contact our team.')
+      : err.message;
+    return sendJson(res, status, { error: publicMessage });
   }
 }
 
