@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main, feature/chatbot]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Node.js test and chatbot retrieval checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # Non-secret test-only values: the offline suite validates configuration parsing but never calls the provider.
+      AI_BASE_URL: https://api.deepseek.com/v1
+      AI_MODEL: deepseek-chat-ci
+      AI_API_KEY: ci-test-placeholder-not-a-secret
+      AI_MOCK_MODE: "true"
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Run regression and chatbot unit tests
+        run: npm test
+
+      - name: Evaluate chatbot knowledge retrieval
+        run: npm run index:chatbot

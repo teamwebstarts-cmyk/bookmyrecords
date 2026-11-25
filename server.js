@@ -120,6 +120,28 @@ const server = http.createServer(async (req, res) => {
   const parsedUrl = new URL(req.url, 'http://localhost');
   const pathname = parsedUrl.pathname;
 
+  // 0. Public BookMyRecords chatbot API (same Node server; public-mode only)
+  if (pathname === '/api/chat/message') {
+    try {
+      const chat = require('./api/chat');
+      await chat.handleChat(req, res);
+    } catch (err) {
+      console.error('[Chatbot] route error:', err.name || 'Error');
+      if (!res.writableEnded) res.status(500).json({ error: 'Chat service unavailable. Please try again.' });
+    }
+    return;
+  }
+
+  if (pathname === '/api/chat/session/clear') {
+    try {
+      const chat = require('./api/chat');
+      await chat.clearSessionHandler(req, res);
+    } catch (err) {
+      if (!res.writableEnded) res.status(500).json({ error: 'Unable to clear chat memory.' });
+    }
+    return;
+  }
+
   // 1. Core Checkup Endpoints
   if (pathname === '/api/checkup/analyze') {
     try {
