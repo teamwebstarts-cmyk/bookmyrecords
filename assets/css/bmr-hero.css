@@ -154,6 +154,10 @@
   backface-visibility: hidden;
 }
 
+.bmr-hero__title-inline {
+  display: inline;
+}
+
 .bmr-hero__title-line--navy {
   color: #0c1e45;
 }
