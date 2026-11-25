@@ -78,7 +78,8 @@ function mount() {
     panel.inert=!open;
     launcher.setAttribute('aria-expanded',String(open));
     launcher.hidden=open;
-    if(open){warmApi();input.focus();}
+    document.documentElement.classList.toggle('bmr-chat-scroll-lock',open);
+    if(open){warmApi();scrollBottom();input.focus();}
     else{stopListening(true);launcher.hidden=false;launcher.focus();}
   }
   function scrollBottom(){messages.scrollTop=messages.scrollHeight;}
