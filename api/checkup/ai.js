@@ -21,11 +21,16 @@ function getKeys() {
 }
 
 function getAiConfig() {
-  const baseUrl = clean(process.env.AI_BASE_URL).replace(/\/+$/, '');
-  const model = clean(process.env.AI_MODEL) || 'deepseek-v4.1-flash-free';
-  const keys = getKeys();
+  const groqKey = clean(process.env.GROQ_API_KEY);
+  const groqBase = clean(process.env.GROQ_BASE_URL).replace(/\/+$/, '');
+  const useGroq = !!(groqKey && groqBase);
+  const baseUrl = useGroq ? groqBase : clean(process.env.AI_BASE_URL).replace(/\/+$/, '');
+  const model = useGroq
+    ? (clean(process.env.GROQ_MODEL) || 'openai/gpt-oss-120b')
+    : (clean(process.env.AI_MODEL) || 'deepseek-v4.1-flash-free');
+  const keys = useGroq ? [groqKey] : getKeys();
   const mock = process.env.AI_MOCK_MODE === 'true';
-  return { baseUrl, model, keys, mock, enabled: !mock && !!baseUrl && keys.length > 0 };
+  return { baseUrl, model, keys, mock, enabled: !mock && !!baseUrl && keys.length > 0, provider: useGroq ? 'groq' : 'configured' };
 }
 
 function isAiEnabled() {

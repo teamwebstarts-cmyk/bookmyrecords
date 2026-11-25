@@ -762,7 +762,7 @@ function validateReportSchema(report) {
  */
 async function callAiApi(promptText, systemPrompt) {
   return ai.callAiJson({
-    system: systemPrompt || 'You are a senior Indian business consultant. Return only the requested JSON object.',
+    system: systemPrompt || 'You are a senior consultant at Book My Records. Write a business finance, tax and operations report only. This is not a medical checkup. Use only facts in the user message, and do not invent figures, prices or legal outcomes. Return only the requested JSON object.',
     user: promptText,
     timeoutMs: 120000
   });
