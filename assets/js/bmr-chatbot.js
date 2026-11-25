@@ -303,7 +303,7 @@ function mount() {
     const response=await fetch(url,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({audioBase64,mime,lang:'en'})
+      body:JSON.stringify({audioBase64,mime:String(mime||'audio/webm').split(';')[0],lang:'en'})
     });
     const data=await response.json().catch(()=>({}));
     if(!response.ok)throw new Error(data.error||'Could not convert voice. Please type your message.');

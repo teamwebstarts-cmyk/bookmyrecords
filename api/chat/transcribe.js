@@ -111,7 +111,7 @@ async function handleTranscribe(req, res) {
 
   try {
     const body = await readJson(req);
-    const mime = String(body.mime || 'audio/webm').trim().toLowerCase();
+    const mime = String(body.mime || 'audio/webm').split(';')[0].trim().toLowerCase();
     if (!/^audio\/(webm|mp4|mpeg|wav|x-wav|ogg)$/.test(mime)) {
       return sendJson(res, 400, { error: 'Unsupported audio format.' });
     }
