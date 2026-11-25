@@ -35,9 +35,11 @@ function mount() {
     memoryConsent=sessionStorage.getItem(consentKey)==='true';
   }catch(_){}
   const hint=root.querySelector('.bmr-chat-hint');
+  const defaultHint=hint.textContent;
   const quick=root.querySelector('.bmr-chat-quick');
   const statusLine=root.querySelector('.bmr-chat-heading span');
   const idleStatus=statusLine.innerHTML;
+  let hintResetTimer=0;
   const consent=document.createElement('label');
   consent.className='bmr-chat-consent';
   consent.innerHTML='<input type="checkbox" aria-label="Remember this chat"><span><strong>Remember this chat</strong><em>This tab only, for up to 30 minutes</em></span>';
@@ -67,7 +69,7 @@ function mount() {
     launcher.setAttribute('aria-expanded',String(open));
     launcher.hidden=open;
     if(open) input.focus();
-    else{stopListening();launcher.hidden=false;launcher.focus();}
+    else{stopListening(true);launcher.hidden=false;launcher.focus();}
   }
   function scrollBottom(){messages.scrollTop=messages.scrollHeight;}
   function safePath(path){return /^\/(?:[a-z0-9_-]+(?:\.html)?|#lead)(?:[?#].*)?$/i.test(path)?path:null;}
@@ -113,24 +115,125 @@ function mount() {
     }catch(error){typing.remove();const err=document.createElement('div');err.className='bmr-chat-error';err.textContent=error.message||'Connection problem. Please try again.';messages.appendChild(err);scrollBottom();}
     finally{setBusy(false);input.focus();}
   }
-  function startListening(){
-    const Speech=window.SpeechRecognition||window.webkitSpeechRecognition;
-    if(!Speech){addMessage('assistant','Voice typing is not supported in this browser. Please use Chrome or Edge, or type your message.');return;}
-    if(listening){stopListening();return;}
-    recognition=new Speech();recognition.lang=(document.documentElement.lang||'en').toLowerCase().startsWith('hi')?'hi-IN':'en-IN';recognition.interimResults=true;recognition.continuous=false;
-    let finalText='';
-    recognition.onstart=()=>{listening=true;mic.setAttribute('aria-pressed','true');mic.setAttribute('aria-label','Stop voice input');};
-    recognition.onresult=event=>{let interim='';for(let i=event.resultIndex;i<event.results.length;i++){const t=event.results[i][0].transcript;if(event.results[i].isFinal)finalText+=t+' ';else interim+=t;}input.value=(finalText+interim).trim();input.dispatchEvent(new Event('input'));};
-    recognition.onerror=()=>stopListening();
-    recognition.onend=()=>{listening=false;mic.setAttribute('aria-pressed','false');mic.setAttribute('aria-label','Speak your message');if(finalText.trim()){input.focus();input.setSelectionRange(input.value.length,input.value.length);}recognition=null;};
-    try{recognition.start();}catch(_){stopListening();}
+  function setVoiceHint(text,mode){
+    clearTimeout(hintResetTimer);
+    hint.textContent=text;
+    hint.classList.toggle('bmr-chat-hint--voice',mode==='voice');
+    hint.classList.toggle('bmr-chat-hint--warn',mode==='warn');
+    if(mode==='warn'){
+      hintResetTimer=setTimeout(()=>resetVoiceHint(),8000);
+    }
   }
-  function stopListening(){if(recognition){try{recognition.stop();}catch(_){}recognition=null;}listening=false;mic.setAttribute('aria-pressed','false');mic.setAttribute('aria-label','Speak your message');}
+  function resetVoiceHint(){
+    clearTimeout(hintResetTimer);
+    hint.textContent=defaultHint;
+    hint.classList.remove('bmr-chat-hint--voice','bmr-chat-hint--warn');
+  }
+  function voiceErrorMessage(code){
+    switch(code){
+      case 'not-allowed':return 'Microphone is blocked. Open site settings (lock icon in the address bar) and allow the microphone.';
+      case 'service-not-allowed':return 'Voice input needs a secure page. Open https://bookmyrecords.vercel.app in Chrome or Edge.';
+      case 'audio-capture':return 'No microphone was found. Check that a mic is connected and enabled.';
+      case 'network':return 'Voice service could not connect. Check internet and try again, or type your message.';
+      case 'no-speech':return 'Did not hear speech. Tap mic and try again.';
+      default:return 'Voice input failed. Try again or type your message.';
+    }
+  }
+  function getSpeechRecognition(){
+    return window.SpeechRecognition||window.webkitSpeechRecognition||null;
+  }
+  async function ensureMicrophoneAccess(){
+    if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)return true;
+    try{
+      const stream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});
+      stream.getTracks().forEach(track=>track.stop());
+      return true;
+    }catch(error){
+      const denied=error&& (error.name==='NotAllowedError'||error.name==='PermissionDeniedError');
+      setVoiceHint(denied?voiceErrorMessage('not-allowed'):voiceErrorMessage('audio-capture'),'warn');
+      return false;
+    }
+  }
+  async function startListening(event){
+    if(event){event.preventDefault();event.stopPropagation();}
+    if(busy)return;
+    const Speech=getSpeechRecognition();
+    if(!window.isSecureContext){
+      setVoiceHint(voiceErrorMessage('service-not-allowed'),'warn');
+      return;
+    }
+    if(!Speech){
+      setVoiceHint('Voice typing needs Chrome or Edge on desktop. You can still type here.','warn');
+      return;
+    }
+    if(listening){stopListening(true);return;}
+    setVoiceHint('Allow microphone if asked, then speak…','voice');
+    mic.classList.add('bmr-chat-mic--pending');
+    const allowed=await ensureMicrophoneAccess();
+    mic.classList.remove('bmr-chat-mic--pending');
+    if(!allowed)return;
+    recognition=new Speech();
+    recognition.lang=(document.documentElement.lang||'en').toLowerCase().startsWith('hi')?'hi-IN':'en-IN';
+    recognition.interimResults=true;
+    recognition.continuous=false;
+    let finalText='';
+    recognition.onstart=()=>{
+      listening=true;
+      mic.setAttribute('aria-pressed','true');
+      mic.setAttribute('aria-label','Stop voice input');
+      mic.classList.add('bmr-chat-mic--listening');
+      setVoiceHint('Listening… speak now. Tap mic again to stop.','voice');
+    };
+    recognition.onresult=ev=>{
+      let interim='';
+      for(let i=ev.resultIndex;i<ev.results.length;i++){
+        const t=ev.results[i][0].transcript;
+        if(ev.results[i].isFinal)finalText+=t+' ';
+        else interim+=t;
+      }
+      input.value=(finalText+interim).trim();
+      input.dispatchEvent(new Event('input'));
+    };
+    recognition.onerror=ev=>{
+      const code=ev&&ev.error?ev.error:'';
+      if(code && code!=='aborted'){
+        if(code==='no-speech')setVoiceHint(voiceErrorMessage('no-speech'),'warn');
+        else setVoiceHint(voiceErrorMessage(code),'warn');
+      }
+      stopListening();
+    };
+    recognition.onend=()=>{
+      stopListening();
+      if(finalText.trim()){
+        input.focus();
+        input.setSelectionRange(input.value.length,input.value.length);
+      }
+      resetVoiceHint();
+    };
+    try{
+      recognition.start();
+    }catch(error){
+      setVoiceHint('Could not start voice input. Tap mic again or type your message.','warn');
+      stopListening();
+    }
+  }
+  function stopListening(fromUser){
+    if(recognition){
+      try{recognition.stop();}catch(_){}
+      try{recognition.abort();}catch(_){}
+      recognition=null;
+    }
+    listening=false;
+    mic.setAttribute('aria-pressed','false');
+    mic.setAttribute('aria-label','Speak your message');
+    mic.classList.remove('bmr-chat-mic--listening','bmr-chat-mic--pending');
+    if(fromUser)resetVoiceHint();
+  }
   launcher.addEventListener('click',()=>setOpen(true));close.addEventListener('click',()=>setOpen(false));
   form.addEventListener('submit',e=>{e.preventDefault();sendMessage(input.value);});
   input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();form.requestSubmit();}});
   input.addEventListener('input',()=>{input.style.height='auto';input.style.height=Math.min(input.scrollHeight,100)+'px';});
-  mic.addEventListener('click',startListening);
+  mic.addEventListener('click',e=>{startListening(e);});
   root.querySelectorAll('[data-prompt]').forEach(button=>button.addEventListener('click',()=>sendMessage(button.dataset.prompt)));
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&panel.dataset.open==='true')setOpen(false);});
 }
