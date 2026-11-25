@@ -181,7 +181,31 @@
       }
     });
 
-    // ── 5. Magnetic Back-to-Top Button ───────────────────────────────────────
+    // ── 5. Lazy-load walkthrough preview video (saves ~19MB on first paint) ───
+    var walkVideo = document.querySelector('.project-walkthrough-video__media[data-src]');
+    if (walkVideo) {
+      var playPreview = function () {
+        if (walkVideo.dataset.bmrLazyLoaded) return;
+        walkVideo.dataset.bmrLazyLoaded = '1';
+        walkVideo.src = walkVideo.getAttribute('data-src');
+        walkVideo.load();
+        walkVideo.play().catch(function () {});
+      };
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (entries, obs) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              playPreview();
+              obs.disconnect();
+            }
+          });
+        }, { rootMargin: '120px' }).observe(walkVideo);
+      } else {
+        playPreview();
+      }
+    }
+
+    // ── 6. Magnetic Back-to-Top Button ───────────────────────────────────────
     var backToTop = document.querySelector('.scroll-top, .back-to-top, .scroll-up');
     if (backToTop) {
       backToTop.addEventListener('click', function (e) {
