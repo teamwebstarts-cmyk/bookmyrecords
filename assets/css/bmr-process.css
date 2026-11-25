@@ -198,10 +198,11 @@
   .bmr-journey{padding:48px 0 16px}
 }
 .bmr-journey__intro,
-.bmr-phase,
 .bmr-close{
   animation:bmr-rise .7s ease both;
 }
+.bmr-phase{animation:bmr-fade .7s ease both}
+@keyframes bmr-fade{from{opacity:0}to{opacity:1}}
 .bmr-phase:nth-child(2){animation-delay:.1s}
 .bmr-phase:nth-child(3){animation-delay:.2s}
 .bmr-close{animation-delay:.15s}
