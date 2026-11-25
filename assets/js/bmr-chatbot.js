@@ -195,7 +195,7 @@ function mount() {
   function voiceErrorMessage(code){
     switch(code){
       case 'not-allowed':return 'Microphone is blocked. Open site settings (lock icon in the address bar) and allow the microphone.';
-      case 'service-not-allowed':return 'Voice input needs a secure page. Open https://bookmyrecords.vercel.app in Chrome or Edge.';
+      case 'service-not-allowed':return 'Voice input needs a secure page. Open this site in Chrome or Edge (https).';
       case 'audio-capture':return 'No microphone was found. Check that a mic is connected and enabled.';
       case 'network':return 'Voice service could not connect. Check internet and try again, or type your message.';
       case 'no-speech':return 'Did not hear speech. Tap mic and try again.';
@@ -205,6 +205,8 @@ function mount() {
   const micLog=[];
   let stopRequested=false;
   let lastMicError='';
+  let langFallbackTried=false;
+  let micCooldownUntil=0;
   function logMic(event, detail){
     const line=event+(detail?' · '+detail:'');
     micLog.push(new Date().toISOString().slice(11,19)+' '+line);
@@ -236,9 +238,86 @@ function mount() {
     }
     if(reason==='ended')setVoiceHint('Mic closed before any words were captured. Tap it and speak right away.','warn');
   }
+  function beginRecognition(lang){
+    const Speech=getSpeechRecognition();
+    if(!Speech)return;
+    stopRequested=false;
+  lastMicError='';
+    let finalText='';
+    let startedAt=0;
+    const session=recognition=new Speech();
+    session.lang=lang;
+    session.interimResults=true;
+    session.continuous=false;
+    session.maxAlternatives=1;
+    session.onstart=()=>{
+      startedAt=Date.now();
+      logMic('start',lang);
+      markListening(true);
+      setVoiceHint('Listening… speak now. Pause when you finish, or tap the mic to stop.','voice');
+    };
+    session.onresult=ev=>{
+      let interim='';
+      for(let i=ev.resultIndex;i<ev.results.length;i++){
+        const t=ev.results[i][0].transcript;
+        if(ev.results[i].isFinal)finalText+=t+' ';
+        else interim+=t;
+      }
+      const heard=(finalText+interim).trim();
+      if(heard){
+        logMic('result',heard.slice(0,80));
+        input.value=heard;
+        input.dispatchEvent(new Event('input'));
+      }
+    };
+    session.onerror=ev=>{
+      lastMicError=ev&&ev.error?ev.error:'unknown';
+      logMic('error',lastMicError);
+      if(lastMicError==='aborted'||lastMicError==='no-speech')return;
+      if(lastMicError==='network')micCooldownUntil=Date.now()+4000;
+      setVoiceHint(voiceErrorMessage(lastMicError)+' ('+lastMicError+')','warn');
+    };
+    session.onend=()=>{
+      const elapsed=startedAt?Date.now()-startedAt:0;
+      logMic('end',(lastMicError||'clean')+' '+elapsed+'ms');
+      if(recognition!==session)return;
+      recognition=null;
+      if(stopRequested){markListening(false);return;}
+      if(lastMicError==='network'&&lang==='en-IN'&&!langFallbackTried){
+        langFallbackTried=true;
+        lastMicError='';
+        logMic('lang-fallback','en-US');
+        setVoiceHint('Retrying voice with English (US)…','voice');
+        window.setTimeout(()=>{if(!stopRequested&&!listening)beginRecognition('en-US');},400);
+        return;
+      }
+      const fatal=lastMicError==='not-allowed'||lastMicError==='network'||lastMicError==='audio-capture';
+      if(fatal){finishVoice('ended');return;}
+      const heard=String(input.value||'').trim();
+      if(heard){finishVoice('ended');return;}
+      if(elapsed>0&&elapsed<1200&&!fatal){
+        setVoiceHint('Did not catch speech. Tap the mic and speak clearly, or type your message.','warn');
+      }
+      finishVoice('ended');
+    };
+    try{
+      logMic('starting',lang);
+      setVoiceHint('Starting microphone…','voice');
+      session.start();
+    }catch(error){
+      logMic('start-failed',error&&error.message);
+      recognition=null;
+      setVoiceHint('Could not start voice input. Tap the mic again or type your message.','warn');
+      finishVoice('ended');
+    }
+  }
   function startListening(event){
     if(event){event.preventDefault();event.stopPropagation();}
     if(busy)return;
+    if(Date.now()<micCooldownUntil){
+      setVoiceHint('Voice service is reconnecting. Wait a few seconds or type your message.','warn');
+      return;
+    }
     const Speech=getSpeechRecognition();
     if(!window.isSecureContext){
       logMic('blocked','insecure');
@@ -251,72 +330,8 @@ function mount() {
       return;
     }
     if(listening){stopRequested=true;logMic('stop','user');stopListening(true);return;}
-    stopRequested=false;
-    lastMicError='';
-    recognition=new Speech();
-    recognition.lang='en-IN';
-    recognition.interimResults=true;
-    recognition.continuous=true;
-    let finalText='';
-    let startedAt=0;
-    let restarts=0;
-    recognition.onstart=()=>{
-      startedAt=Date.now();
-      logMic('start');
-      markListening(true);
-      setVoiceHint('Listening… speak now. Tap the mic again when you finish.','voice');
-    };
-    recognition.onresult=ev=>{
-      let interim='';
-      for(let i=ev.resultIndex;i<ev.results.length;i++){
-        const t=ev.results[i][0].transcript;
-        if(ev.results[i].isFinal)finalText+=t+' ';
-        else interim+=t;
-      }
-      const heard=(finalText+interim).trim();
-      logMic('result',heard.slice(0,80));
-      input.value=heard;
-      input.dispatchEvent(new Event('input'));
-    };
-    recognition.onerror=ev=>{
-      lastMicError=ev&&ev.error?ev.error:'unknown';
-      logMic('error',lastMicError);
-      if(lastMicError==='aborted'||lastMicError==='no-speech')return;
-      setVoiceHint(voiceErrorMessage(lastMicError)+' ('+lastMicError+')','warn');
-    };
-    recognition.onend=()=>{
-      const elapsed=startedAt?Date.now()-startedAt:0;
-      logMic('end',(lastMicError||'clean')+' '+elapsed+'ms');
-      if(stopRequested){markListening(false);recognition=null;return;}
-      const fatal=lastMicError==='not-allowed'||lastMicError==='network'||lastMicError==='audio-capture';
-      const tooFast=elapsed>0&&elapsed<900&&!finalText;
-      if(!fatal&&!tooFast&&restarts<2){
-        const session=recognition;
-        restarts+=1;
-        lastMicError='';
-        window.setTimeout(()=>{
-          if(stopRequested||recognition!==session)return;
-          try{logMic('restart',String(restarts));session.start();}catch(error){logMic('restart-failed',error&&error.message);finishVoice('ended');}
-        },300);
-        return;
-      }
-      if(tooFast){
-        markListening(false);
-        recognition=null;
-        setVoiceHint('Mic turned on and closed immediately'+(lastMicError?' ('+lastMicError+')':'')+'. Speak as soon as it turns red, or type instead.','warn');
-        return;
-      }
-      finishVoice('ended');
-    };
-    try{
-      logMic('starting','en-IN continuous');
-      setVoiceHint('Starting microphone…','voice');
-      recognition.start();
-    }catch(error){
-      logMic('start-failed',error&&error.message);
-      setVoiceHint('Could not start voice input. Tap the mic again or type your message.','warn');
-      finishVoice('ended');
-    }
+    langFallbackTried=false;
+    beginRecognition('en-IN');
   }
   function stopListening(fromUser){
     stopRequested=true;
