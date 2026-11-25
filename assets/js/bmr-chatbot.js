@@ -201,50 +201,69 @@ function mount() {
       default:return 'Voice input failed. Try again or type your message.';
     }
   }
+  const micLog=[];
+  let stopRequested=false;
+  let lastMicError='';
+  function logMic(event, detail){
+    const line=event+(detail?' · '+detail:'');
+    micLog.push(new Date().toISOString().slice(11,19)+' '+line);
+    if(micLog.length>20)micLog.shift();
+    console.info('[bmr-mic]', line);
+  }
   function getSpeechRecognition(){
     return window.SpeechRecognition||window.webkitSpeechRecognition||null;
   }
-  async function ensureMicrophoneAccess(){
-    if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)return true;
-    try{
-      const stream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});
-      stream.getTracks().forEach(track=>track.stop());
-      return true;
-    }catch(error){
-      const denied=error&& (error.name==='NotAllowedError'||error.name==='PermissionDeniedError');
-      setVoiceHint(denied?voiceErrorMessage('not-allowed'):voiceErrorMessage('audio-capture'),'warn');
-      return false;
-    }
+  function markListening(on){
+    listening=on;
+    mic.setAttribute('aria-pressed',on?'true':'false');
+    mic.setAttribute('aria-label',on?'Stop voice input':'Speak your message');
+    mic.classList.toggle('bmr-chat-mic--listening',on);
+    mic.classList.remove('bmr-chat-mic--pending');
   }
-  async function startListening(event){
+  function finishVoice(reason){
+    markListening(false);
+    recognition=null;
+    if(reason==='user'){resetVoiceHint();return;}
+    if(lastMicError && lastMicError!=='aborted' && lastMicError!=='no-speech'){
+      setVoiceHint(voiceErrorMessage(lastMicError)+' ('+lastMicError+')','warn');
+      return;
+    }
+    if(String(input.value||'').trim()){
+      setVoiceHint('Heard you. Press send when the text looks right.','voice');
+      hintResetTimer=setTimeout(()=>resetVoiceHint(),5000);
+      return;
+    }
+    if(reason==='ended')setVoiceHint('Mic closed before any words were captured. Tap it and speak right away.','warn');
+  }
+  function startListening(event){
     if(event){event.preventDefault();event.stopPropagation();}
     if(busy)return;
     const Speech=getSpeechRecognition();
     if(!window.isSecureContext){
+      logMic('blocked','insecure');
       setVoiceHint(voiceErrorMessage('service-not-allowed'),'warn');
       return;
     }
     if(!Speech){
+      logMic('blocked','no-api');
       setVoiceHint('Voice typing needs Chrome or Edge on desktop. You can still type here.','warn');
       return;
     }
-    if(listening){stopListening(true);return;}
-    setVoiceHint('Allow microphone if asked, then speak…','voice');
-    mic.classList.add('bmr-chat-mic--pending');
-    const allowed=await ensureMicrophoneAccess();
-    mic.classList.remove('bmr-chat-mic--pending');
-    if(!allowed)return;
+    if(listening){stopRequested=true;logMic('stop','user');stopListening(true);return;}
+    stopRequested=false;
+    lastMicError='';
     recognition=new Speech();
-    recognition.lang=(document.documentElement.lang||'en').toLowerCase().startsWith('hi')?'hi-IN':'en-IN';
+    recognition.lang='en-IN';
     recognition.interimResults=true;
-    recognition.continuous=false;
+    recognition.continuous=true;
     let finalText='';
+    let startedAt=0;
+    let restarts=0;
     recognition.onstart=()=>{
-      listening=true;
-      mic.setAttribute('aria-pressed','true');
-      mic.setAttribute('aria-label','Stop voice input');
-      mic.classList.add('bmr-chat-mic--listening');
-      setVoiceHint('Listening… speak now. Tap mic again to stop.','voice');
+      startedAt=Date.now();
+      logMic('start');
+      markListening(true);
+      setVoiceHint('Listening… speak now. Tap the mic again when you finish.','voice');
     };
     recognition.onresult=ev=>{
       let interim='';
@@ -253,43 +272,52 @@ function mount() {
         if(ev.results[i].isFinal)finalText+=t+' ';
         else interim+=t;
       }
-      input.value=(finalText+interim).trim();
+      const heard=(finalText+interim).trim();
+      logMic('result',heard.slice(0,80));
+      input.value=heard;
       input.dispatchEvent(new Event('input'));
     };
     recognition.onerror=ev=>{
-      const code=ev&&ev.error?ev.error:'';
-      if(code && code!=='aborted'){
-        if(code==='no-speech')setVoiceHint(voiceErrorMessage('no-speech'),'warn');
-        else setVoiceHint(voiceErrorMessage(code),'warn');
-      }
-      stopListening();
+      lastMicError=ev&&ev.error?ev.error:'unknown';
+      logMic('error',lastMicError);
+      if(lastMicError==='aborted'||lastMicError==='no-speech')return;
+      setVoiceHint(voiceErrorMessage(lastMicError)+' ('+lastMicError+')','warn');
     };
     recognition.onend=()=>{
-      stopListening();
-      if(finalText.trim()){
-        input.focus();
-        input.setSelectionRange(input.value.length,input.value.length);
+      const elapsed=startedAt?Date.now()-startedAt:0;
+      logMic('end',(lastMicError||'clean')+' '+elapsed+'ms');
+      if(stopRequested){markListening(false);recognition=null;return;}
+      const fatal=lastMicError==='not-allowed'||lastMicError==='network'||lastMicError==='audio-capture';
+      const tooFast=elapsed>0&&elapsed<900&&!finalText;
+      if(!fatal&&!tooFast&&restarts<2){
+        const session=recognition;
+        restarts+=1;
+        lastMicError='';
+        window.setTimeout(()=>{
+          if(stopRequested||recognition!==session)return;
+          try{logMic('restart',String(restarts));session.start();}catch(error){logMic('restart-failed',error&&error.message);finishVoice('ended');}
+        },300);
+        return;
       }
-      resetVoiceHint();
+      if(tooFast)setVoiceHint('Mic turned on and closed immediately'+(lastMicError?' ('+lastMicError+')':'')+'. Speak as soon as it turns red, or type instead.','warn');
+      finishVoice('ended');
     };
     try{
+      logMic('starting','en-IN continuous');
+      setVoiceHint('Starting microphone…','voice');
       recognition.start();
     }catch(error){
-      setVoiceHint('Could not start voice input. Tap mic again or type your message.','warn');
-      stopListening();
+      logMic('start-failed',error&&error.message);
+      setVoiceHint('Could not start voice input. Tap the mic again or type your message.','warn');
+      finishVoice('ended');
     }
   }
   function stopListening(fromUser){
-    if(recognition){
-      try{recognition.stop();}catch(_){}
-      try{recognition.abort();}catch(_){}
-      recognition=null;
-    }
-    listening=false;
-    mic.setAttribute('aria-pressed','false');
-    mic.setAttribute('aria-label','Speak your message');
-    mic.classList.remove('bmr-chat-mic--listening','bmr-chat-mic--pending');
-    if(fromUser)resetVoiceHint();
+    stopRequested=true;
+    const session=recognition;
+    recognition=null;
+    if(session){try{session.stop();}catch(_){}}
+    finishVoice(fromUser?'user':'ended');
   }
   launcher.addEventListener('click',()=>setOpen(true));close.addEventListener('click',()=>setOpen(false));
   form.addEventListener('submit',e=>{e.preventDefault();sendMessage(input.value);});
