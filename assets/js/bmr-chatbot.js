@@ -4,7 +4,7 @@ function mount() {
   if (document.getElementById('bmr-chat-root')) return;
   const root=document.createElement('div'); root.id='bmr-chat-root';
   root.innerHTML=`
-    <section class="bmr-chat-panel" data-open="false" role="dialog" aria-label="Book My Records service advisor" aria-modal="false">
+    <section class="bmr-chat-panel" data-open="false" role="dialog" aria-label="Book My Records service advisor" aria-modal="false" aria-hidden="true">
       <header class="bmr-chat-header"><div class="bmr-chat-avatar" aria-hidden="true">BMR</div>
         <div class="bmr-chat-heading"><strong>Book My Records Advisor</strong><span><i class="bmr-chat-status"></i>Here to help with your business</span></div>
         <button class="bmr-chat-close" type="button" aria-label="Close chat">×</button>
@@ -28,26 +28,44 @@ function mount() {
   const panel=root.querySelector('.bmr-chat-panel'), launcher=root.querySelector('.bmr-chat-launcher'), close=root.querySelector('.bmr-chat-close');
   const form=root.querySelector('.bmr-chat-composer'), input=root.querySelector('.bmr-chat-textarea'), messages=root.querySelector('.bmr-chat-messages'), send=root.querySelector('.bmr-chat-send'), mic=root.querySelector('.bmr-chat-mic');
   const config=window.BMR_CHAT_CONFIG||{}, apiBase=String(config.apiBase||'').replace(/\/$/,'');
-  const storageKey='bmr-chat-session-v1'; let sessionId='', busy=false, recognition=null, listening=false, memoryConsent=false;
-  try{sessionId=localStorage.getItem(storageKey)||'';}catch(_){}
+  const storageKey='bmr-chat-session-v1', consentKey='bmr-chat-memory-consent-v1';
+  let sessionId='', busy=false, recognition=null, listening=false, memoryConsent=false;
+  try{
+    sessionId=sessionStorage.getItem(storageKey)||'';
+    memoryConsent=sessionStorage.getItem(consentKey)==='true';
+  }catch(_){}
   const hint=root.querySelector('.bmr-chat-hint');
   const consent=document.createElement('label');
   consent.className='bmr-chat-consent';
-  consent.innerHTML='<input type="checkbox"> Remember this conversation on this browser for this session';
+  consent.innerHTML='<input type="checkbox"> Remember this conversation in this tab for up to 30 minutes';
   form.insertBefore(consent,hint);
   const consentInput=consent.querySelector('input');
+  consentInput.checked=memoryConsent;
+  panel.inert=true;
   consentInput.addEventListener('change',async()=>{
     memoryConsent=consentInput.checked;
+    try{
+      if(memoryConsent) sessionStorage.setItem(consentKey,'true');
+      else sessionStorage.removeItem(consentKey);
+    }catch(_){}
     if(!memoryConsent && sessionId){
       try{
         await fetch(apiBase+'/api/chat/session/clear',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId})});
       }catch(_){}
       sessionId='';
-      try{localStorage.removeItem(storageKey);}catch(_){}
+      try{sessionStorage.removeItem(storageKey);}catch(_){}
     }
   });
 
-  function setOpen(open){panel.dataset.open=String(open);launcher.setAttribute('aria-expanded',String(open));launcher.hidden=open;if(open)input.focus();else{stopListening();launcher.hidden=false;launcher.focus();}}
+  function setOpen(open){
+    panel.dataset.open=String(open);
+    panel.setAttribute('aria-hidden',String(!open));
+    panel.inert=!open;
+    launcher.setAttribute('aria-expanded',String(open));
+    launcher.hidden=open;
+    if(open) input.focus();
+    else{stopListening();launcher.hidden=false;launcher.focus();}
+  }
   function scrollBottom(){messages.scrollTop=messages.scrollHeight;}
   function safePath(path){return /^\/(?:[a-z0-9_-]+(?:\.html)?|#lead)(?:[?#].*)?$/i.test(path)?path:null;}
   function formatText(text){
@@ -60,7 +78,7 @@ function mount() {
     if(role==='assistant'&&Array.isArray(sources)&&sources.length){const box=document.createElement('div');box.className='bmr-chat-sources';box.textContent='Based on: ';sources.forEach(s=>{const tag=document.createElement('span');tag.textContent=s.service||s.title||'Book My Records';box.appendChild(tag);});node.appendChild(box);}
     messages.appendChild(node);scrollBottom();return node;
   }
-  function setBusy(value){busy=value;send.disabled=value;input.disabled=value;root.setAttribute('aria-busy',String(value));}
+  function setBusy(value){busy=value;send.disabled=value;input.disabled=value;mic.disabled=value;root.setAttribute('aria-busy',String(value));}
   async function sendMessage(text){
     const message=String(text||'').trim();if(!message||busy)return;
     addMessage('user',message);input.value='';input.style.height='auto';setBusy(true);
@@ -69,8 +87,8 @@ function mount() {
       const response=await fetch(apiBase+'/api/chat/message',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message,sessionId:memoryConsent?sessionId:'',pageContext:document.title.slice(0,160),mode:'website',memoryConsent})});
       const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.error||'Unable to send your message right now.');
       sessionId=data.sessionId||sessionId;
-      if(memoryConsent){try{if(sessionId)localStorage.setItem(storageKey,sessionId);}catch(_){}}
-      else{try{localStorage.removeItem(storageKey);}catch(_){}}
+      if(memoryConsent){try{if(sessionId)sessionStorage.setItem(storageKey,sessionId);}catch(_){}}
+      else{try{sessionStorage.removeItem(storageKey);}catch(_){}}
       typing.remove();addMessage('assistant',data.reply||'I could not prepare an answer. Please contact our team.',data.sources);
     }catch(error){typing.remove();const err=document.createElement('div');err.className='bmr-chat-error';err.textContent=error.message||'Connection problem. Please try again.';messages.appendChild(err);scrollBottom();}
     finally{setBusy(false);input.focus();}
