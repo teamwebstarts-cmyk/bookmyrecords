@@ -27,7 +27,17 @@ function mount() {
   document.body.appendChild(root);
   const panel=root.querySelector('.bmr-chat-panel'), launcher=root.querySelector('.bmr-chat-launcher'), close=root.querySelector('.bmr-chat-close');
   const form=root.querySelector('.bmr-chat-composer'), input=root.querySelector('.bmr-chat-textarea'), messages=root.querySelector('.bmr-chat-messages'), send=root.querySelector('.bmr-chat-send'), mic=root.querySelector('.bmr-chat-mic');
-  const config=window.BMR_CHAT_CONFIG||{}, apiBase=String(config.apiBase||'').replace(/\/$/,'');
+  const config=window.BMR_CHAT_CONFIG||{};
+  const PRODUCTION_API='https://bookmyrecords-api.onrender.com';
+  function resolveApiBase(cfg){
+    const fromCfg=String(cfg.apiBase||'').replace(/\/$/,'');
+    if(fromCfg)return fromCfg;
+    const host=location.hostname;
+    if(host==='localhost'||host==='127.0.0.1')return '';
+    if(host.includes('bookmyrecords'))return PRODUCTION_API;
+    return '';
+  }
+  const apiBase=resolveApiBase(config);
   const storageKey='bmr-chat-session-v1', consentKey='bmr-chat-memory-consent-v1';
   let sessionId='', busy=false, recognition=null, listening=false, memoryConsent=false;
   try{
@@ -68,10 +78,63 @@ function mount() {
     panel.inert=!open;
     launcher.setAttribute('aria-expanded',String(open));
     launcher.hidden=open;
-    if(open) input.focus();
+    if(open){warmApi();input.focus();}
     else{stopListening(true);launcher.hidden=false;launcher.focus();}
   }
   function scrollBottom(){messages.scrollTop=messages.scrollHeight;}
+  function sleep(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
+  let warmInFlight=false;
+  function warmApi(){
+    const url=(apiBase||'')+'/api/checkup/health';
+    if(!url||warmInFlight)return;
+    warmInFlight=true;
+    fetch(url,{cache:'no-store',credentials:'omit'}).catch(()=>{}).finally(()=>{warmInFlight=false;});
+  }
+  function friendlyChatError(status,data,offline){
+    if(data&&data.error)return data.error;
+    if(offline)return 'Connection problem. Check internet and try again.';
+    if(status===429)return 'Too many messages. Please wait a minute.';
+    if(status===502||status===503||status===504)return 'Server is waking up. Wait a few seconds and try again.';
+    return 'Unable to send your message right now.';
+  }
+  async function postChatMessage(payload,typingNode,attempt){
+    const maxAttempts=4;
+    if(attempt>0){
+      const note=typingNode&&typingNode.querySelector('.bmr-chat-typing span');
+      if(note)note.textContent=attempt===1?'Connecting to server…':'Still trying ('+(attempt+1)+'/'+maxAttempts+')…';
+    }
+    let response;
+    try{
+      const controller=new AbortController();
+      const timer=setTimeout(()=>controller.abort(),90000);
+      response=await fetch(apiBase+'/api/chat/message',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(payload),
+        signal:controller.signal,
+        credentials:'omit'
+      });
+      clearTimeout(timer);
+    }catch(_){
+      if(attempt+1<maxAttempts){
+        await sleep(1500+attempt*2000);
+        warmApi();
+        return postChatMessage(payload,typingNode,attempt+1);
+      }
+      throw new Error(friendlyChatError(0,{},true));
+    }
+    const data=await response.json().catch(()=>({}));
+    const retryable=response.status===502||response.status===503||response.status===504;
+    if(!response.ok){
+      if(retryable&&attempt+1<maxAttempts){
+        await sleep(1500+attempt*2000);
+        warmApi();
+        return postChatMessage(payload,typingNode,attempt+1);
+      }
+      throw new Error(friendlyChatError(response.status,data,false));
+    }
+    return data;
+  }
   function safePath(path){return /^\/(?:[a-z0-9_-]+(?:\.html)?|#lead)(?:[?#].*)?$/i.test(path)?path:null;}
   function formatText(text, role){
     const cleaned=String(text).replace(/\r\n/g,'\n').replace(/\*\*|__|~~|`+/g,'').replace(/^\s{0,3}#{1,6}\s+/gm,'').replace(/\*/g,'');
@@ -106,8 +169,7 @@ function mount() {
     addMessage('user',message);input.value='';input.style.height='auto';setBusy(true);
     const typing=document.createElement('div');typing.className='bmr-chat-message assistant bmr-chat-message--typing';typing.innerHTML='<div class="bmr-chat-typing" aria-label="Advisor is typing"><i></i><i></i><i></i><span>Typing</span></div>';messages.appendChild(typing);scrollBottom();
     try{
-      const response=await fetch(apiBase+'/api/chat/message',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message,sessionId:memoryConsent?sessionId:'',pageContext:document.title.slice(0,160),mode:'website',memoryConsent})});
-      const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.error||'Unable to send your message right now.');
+      const data=await postChatMessage({message,sessionId:memoryConsent?sessionId:'',pageContext:document.title.slice(0,160),mode:'website',memoryConsent},typing,0);
       sessionId=data.sessionId||sessionId;
       if(memoryConsent){try{if(sessionId)sessionStorage.setItem(storageKey,sessionId);}catch(_){}}
       else{try{sessionStorage.removeItem(storageKey);}catch(_){}}
@@ -236,6 +298,7 @@ function mount() {
   mic.addEventListener('click',e=>{startListening(e);});
   root.querySelectorAll('[data-prompt]').forEach(button=>button.addEventListener('click',()=>sendMessage(button.dataset.prompt)));
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&panel.dataset.open==='true')setOpen(false);});
+  if(apiBase)warmApi();
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
 })();
