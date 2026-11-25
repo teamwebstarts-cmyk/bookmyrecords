@@ -34,6 +34,11 @@ assert.strictEqual(getSessionHistory(session).length, 2, 'opt-in memory should r
 clearSession(session);
 assert.strictEqual(getSessionHistory(session).length, 0, 'memory opt-out should clear session');
 
+const redactedContacts = redactSensitive('Email founder@example.com or call +91 98765 43210 / 9876543210');
+assert(!redactedContacts.includes('founder@example.com'), 'email addresses should be redacted');
+assert(!redactedContacts.includes('98765 43210'), 'Indian phone with country prefix should be redacted');
+assert(!redactedContacts.includes('9876543210'), 'Indian phone without country prefix should be redacted');
+
 const ipKey = 'test-' + Date.now();
 assert.strictEqual(_rateAllowed(ipKey), true);
 console.log('Chatbot unit smoke checks passed.');
