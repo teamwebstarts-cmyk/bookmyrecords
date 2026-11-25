@@ -41,7 +41,17 @@ html.bmr-chat-scroll-lock,html.bmr-chat-scroll-lock body{overflow:hidden;overscr
 .bmr-chat-icon-btn,.bmr-chat-send{flex:0 0 auto;width:35px;height:35px;border:0;border-radius:7px;display:grid;place-items:center;cursor:pointer}.bmr-chat-icon-btn{background:#f0f4fa;color:#34445e}.bmr-chat-icon-btn[aria-pressed=true]{background:#ffeded;color:#c12d3b}.bmr-chat-send{background:#0b5ed7;color:#fff}.bmr-chat-send:disabled{opacity:.45;cursor:not-allowed}.bmr-chat-icon-btn svg,.bmr-chat-send svg{width:17px;height:17px}
 .bmr-chat-hint{text-align:center;font-size:10px;color:#98a2b3;margin-top:6px;line-height:1.45;padding:0 4px}.bmr-chat-hint--voice{color:#0b5ed7;font-weight:600}.bmr-chat-hint--warn{color:#b42318;font-weight:600}
 .bmr-chat-mic--pending{opacity:.65;animation:bmr-chat-pulse 1s infinite}
-.bmr-chat-mic--listening{background:#ffeded!important;color:#c12d3b!important;box-shadow:0 0 0 3px #c12d3b1f}
+.bmr-chat-mic--listening{background:#ffeded!important;color:#c12d3b!important;box-shadow:0 0 0 3px #c12d3b1f;animation:bmr-mic-live 1.2s ease-in-out infinite}
+.bmr-chat-mic--transcribing{background:#eef4ff!important;color:#0b5ed7!important;animation:bmr-chat-pulse 0.9s infinite}
+.bmr-chat-input-wrap--recording{border-color:#c12d3b!important;box-shadow:0 0 0 3px #c12d3b1f}
+.bmr-chat-voice-live{display:flex;align-items:center;gap:10px;margin-bottom:8px;padding:9px 11px;background:linear-gradient(90deg,#fff5f5,#fff);border:1px solid #ffd8d8;border-radius:10px}
+.bmr-chat-voice-bars{display:flex;align-items:flex-end;gap:3px;height:22px;flex:0 0 auto}
+.bmr-chat-voice-bars span{display:block;width:4px;height:6px;border-radius:3px;background:#c12d3b;transition:height .08s linear}
+.bmr-chat-voice-timer{font:700 11px/1 Montserrat,Arial,sans-serif;color:#c12d3b;min-width:36px;flex:0 0 auto;font-variant-numeric:tabular-nums}
+.bmr-chat-voice-caption{font:600 11px/1.35 Montserrat,Arial,sans-serif;color:#5c3b3b;flex:1;min-width:0}
+.bmr-chat-textarea--heard{animation:bmr-chat-text-flash .85s ease}
+@keyframes bmr-mic-live{0%,100%{box-shadow:0 0 0 3px #c12d3b1f}50%{box-shadow:0 0 0 6px #c12d3b38}}
+@keyframes bmr-chat-text-flash{0%,100%{background:transparent}35%{background:#e8f2ff}}
 .bmr-chat-icon-btn:disabled{opacity:.45;cursor:not-allowed}
 .bmr-chat-error{color:#b42318;background:#fff3f1;border:1px solid #ffd5ce;padding:9px 11px;font-size:12px;border-radius:8px}
 .bmr-chat-typing{display:flex;align-items:center;gap:5px;min-height:18px}.bmr-chat-typing i{width:7px;height:7px;background:#0b5ed7;border-radius:50%;animation:bmr-chat-pulse 1s infinite}.bmr-chat-typing i:nth-child(2){animation-delay:.15s}.bmr-chat-typing i:nth-child(3){animation-delay:.3s}.bmr-chat-typing span{margin-left:4px;font-size:12px;color:#667085}

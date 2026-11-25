@@ -15,7 +15,11 @@ function mount() {
         <button type="button" data-prompt="I need help choosing a business registration structure.">Business registration</button>
         <button type="button" data-prompt="How does the Business Health Checkup work?">Health checkup</button>
       </div>
-      <form class="bmr-chat-composer"><div class="bmr-chat-input-wrap">
+      <form class="bmr-chat-composer"><div class="bmr-chat-voice-live" hidden aria-live="polite">
+        <div class="bmr-chat-voice-bars" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <span class="bmr-chat-voice-timer">0:00</span>
+        <span class="bmr-chat-voice-caption">Recording — speak now</span>
+      </div><div class="bmr-chat-input-wrap">
         <button class="bmr-chat-icon-btn bmr-chat-mic" type="button" aria-label="Speak your message" title="Speak your message">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3m-4 0h8"/></svg>
         </button>
@@ -27,6 +31,7 @@ function mount() {
   document.body.appendChild(root);
   const panel=root.querySelector('.bmr-chat-panel'), launcher=root.querySelector('.bmr-chat-launcher'), close=root.querySelector('.bmr-chat-close');
   const form=root.querySelector('.bmr-chat-composer'), input=root.querySelector('.bmr-chat-textarea'), messages=root.querySelector('.bmr-chat-messages'), send=root.querySelector('.bmr-chat-send'), mic=root.querySelector('.bmr-chat-mic');
+  const voiceLive=root.querySelector('.bmr-chat-voice-live'), voiceTimer=root.querySelector('.bmr-chat-voice-timer'), voiceCaption=root.querySelector('.bmr-chat-voice-caption'), voiceBars=root.querySelector('.bmr-chat-voice-bars'), inputWrap=root.querySelector('.bmr-chat-input-wrap');
   const config=window.BMR_CHAT_CONFIG||{};
   const PRODUCTION_API='https://bookmyrecords-api.onrender.com';
   function resolveApiBase(cfg){
@@ -39,7 +44,9 @@ function mount() {
   }
   const apiBase=resolveApiBase(config);
   const storageKey='bmr-chat-session-v1', consentKey='bmr-chat-memory-consent-v1';
-  let sessionId='', busy=false, recognition=null, listening=false, memoryConsent=false;
+  let sessionId='', busy=false, recognition=null, listening=false, transcribing=false, memoryConsent=false;
+  let mediaStream=null, mediaRecorder=null, audioChunks=[], audioCtx=null, analyser=null, meterRaf=0, recordTimer=0, recordStartedAt=0;
+  const MAX_RECORD_MS=90000;
   try{
     sessionId=sessionStorage.getItem(storageKey)||'';
     memoryConsent=sessionStorage.getItem(consentKey)==='true';
@@ -80,7 +87,7 @@ function mount() {
     launcher.hidden=open;
     document.documentElement.classList.toggle('bmr-chat-scroll-lock',open);
     if(open){warmApi();scrollBottom();input.focus();}
-    else{stopListening(true);launcher.hidden=false;launcher.focus();}
+    else{abortVoiceCapture(true);launcher.hidden=false;launcher.focus();}
   }
   function scrollBottom(){messages.scrollTop=messages.scrollHeight;}
   function sleep(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
@@ -163,7 +170,7 @@ function mount() {
     if(role==='assistant'&&Array.isArray(sources)&&sources.length){const box=document.createElement('div');box.className='bmr-chat-sources';box.textContent='Based on: ';const seen=new Set();sources.forEach(s=>{const label=String(s.service||s.title||'Book My Records').replace(/[-_]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());if(seen.has(label))return;seen.add(label);const tag=document.createElement('span');tag.textContent=label;box.appendChild(tag);});node.appendChild(box);}
     messages.appendChild(node);scrollBottom();return node;
   }
-  function setBusy(value){busy=value;send.disabled=value;input.disabled=value;mic.disabled=value;root.setAttribute('aria-busy',String(value));statusLine.innerHTML=value?'<i class="bmr-chat-status bmr-chat-status--live"></i>Typing…':idleStatus;}
+  function setBusy(value){busy=value;send.disabled=value;input.disabled=value||transcribing;mic.disabled=value||transcribing;root.setAttribute('aria-busy',String(value||transcribing));statusLine.innerHTML=value?'<i class="bmr-chat-status bmr-chat-status--live"></i>Typing…':transcribing?'<i class="bmr-chat-status bmr-chat-status--live"></i>Converting voice…':idleStatus;}
   async function sendMessage(text){
     const message=String(text||'').trim();if(!message||busy)return;
     if(quick) quick.hidden=true;
@@ -192,153 +199,235 @@ function mount() {
     hint.textContent=defaultHint;
     hint.classList.remove('bmr-chat-hint--voice','bmr-chat-hint--warn');
   }
-  function voiceErrorMessage(code){
-    switch(code){
-      case 'not-allowed':return 'Microphone is blocked. Open site settings (lock icon in the address bar) and allow the microphone.';
-      case 'service-not-allowed':return 'Voice input needs a secure page. Open this site in Chrome or Edge (https).';
-      case 'audio-capture':return 'No microphone was found. Check that a mic is connected and enabled.';
-      case 'network':return 'Voice service could not connect. Check internet and try again, or type your message.';
-      case 'no-speech':return 'Did not hear speech. Tap mic and try again.';
-      default:return 'Voice input failed. Try again or type your message.';
-    }
-  }
   const micLog=[];
-  let stopRequested=false;
-  let lastMicError='';
-  let langFallbackTried=false;
-  let micCooldownUntil=0;
   function logMic(event, detail){
     const line=event+(detail?' · '+detail:'');
     micLog.push(new Date().toISOString().slice(11,19)+' '+line);
     if(micLog.length>20)micLog.shift();
     console.info('[bmr-mic]', line);
   }
-  function getSpeechRecognition(){
-    return window.SpeechRecognition||window.webkitSpeechRecognition||null;
+  function formatRecordTime(ms){
+    const total=Math.max(0,Math.floor(ms/1000));
+    const m=Math.floor(total/60);
+    const s=total%60;
+    return m+':'+String(s).padStart(2,'0');
+  }
+  function pickRecorderMime(){
+    if(!window.MediaRecorder)return '';
+    const options=['audio/webm;codecs=opus','audio/webm','audio/mp4'];
+    for(let i=0;i<options.length;i++){
+      if(MediaRecorder.isTypeSupported(options[i]))return options[i];
+    }
+    return '';
   }
   function markListening(on){
     listening=on;
     mic.setAttribute('aria-pressed',on?'true':'false');
-    mic.setAttribute('aria-label',on?'Stop voice input':'Speak your message');
+    mic.setAttribute('aria-label',on?'Stop recording and convert to text':'Record voice message');
     mic.classList.toggle('bmr-chat-mic--listening',on);
+    mic.classList.toggle('bmr-chat-mic--transcribing',transcribing);
     mic.classList.remove('bmr-chat-mic--pending');
+    inputWrap.classList.toggle('bmr-chat-input-wrap--recording',on);
+    if(voiceLive)voiceLive.hidden=!on;
+    if(on){
+      if(voiceCaption)voiceCaption.textContent='Recording — your voice is being captured';
+      statusLine.innerHTML='<i class="bmr-chat-status bmr-chat-status--live"></i>Recording voice…';
+    }else if(!transcribing&&!busy){
+      statusLine.innerHTML=idleStatus;
+    }
   }
-  function finishVoice(reason){
+  function stopMeter(){
+    if(meterRaf)cancelAnimationFrame(meterRaf);
+    meterRaf=0;
+    if(audioCtx){try{audioCtx.close();}catch(_){}}
+    audioCtx=null;
+    analyser=null;
+    if(voiceBars)voiceBars.querySelectorAll('span').forEach(bar=>{bar.style.height='6px';});
+  }
+  function startMeter(stream){
+    if(!voiceBars||!stream)return;
+    const bars=Array.from(voiceBars.querySelectorAll('span'));
+    try{
+      audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+      const source=audioCtx.createMediaStreamSource(stream);
+      analyser=audioCtx.createAnalyser();
+      analyser.fftSize=64;
+      source.connect(analyser);
+      const data=new Uint8Array(analyser.frequencyBinCount);
+      const step=()=>{
+        if(!analyser){return;}
+        analyser.getByteFrequencyData(data);
+        let sum=0;
+        for(let i=0;i<data.length;i++)sum+=data[i];
+        const level=sum/data.length;
+        bars.forEach((bar,i)=>{
+          const boost=Math.max(0,data[i%data.length]-60);
+          const h=6+Math.min(16,Math.round(boost/8)+(level>8?4:0));
+          bar.style.height=h+'px';
+        });
+        meterRaf=requestAnimationFrame(step);
+      };
+      step();
+    }catch(err){logMic('meter-failed',err&&err.message);}
+  }
+  function cleanupStream(){
+    stopMeter();
+    if(recordTimer){clearInterval(recordTimer);recordTimer=0;}
+    if(mediaStream){
+      mediaStream.getTracks().forEach(track=>{try{track.stop();}catch(_){}});
+    }
+    mediaStream=null;
+    mediaRecorder=null;
+    audioChunks=[];
+    recordStartedAt=0;
+  }
+  function flashHeardInput(){
+    input.classList.add('bmr-chat-textarea--heard');
+    window.setTimeout(()=>input.classList.remove('bmr-chat-textarea--heard'),900);
+  }
+  function blobToBase64(blob){
+    return new Promise((resolve,reject)=>{
+      const reader=new FileReader();
+      reader.onloadend=()=>{
+        const data=String(reader.result||'');
+        resolve(data.includes(',')?data.split(',')[1]:'');
+      };
+      reader.onerror=reject;
+      reader.readAsDataURL(blob);
+    });
+  }
+  async function uploadTranscribe(blob,mime){
+    const url=(apiBase||'')+'/api/chat/transcribe';
+    if(!url)throw new Error('Voice needs the site server. Type your message instead.');
+    const audioBase64=await blobToBase64(blob);
+    const response=await fetch(url,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({audioBase64,mime,lang:'en'})
+    });
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok)throw new Error(data.error||'Could not convert voice. Please type your message.');
+    return String(data.text||'').trim();
+  }
+  function setTranscribing(on){
+    transcribing=on;
+    mic.classList.toggle('bmr-chat-mic--transcribing',on);
+    mic.disabled=on||busy;
+    if(on){
+      if(voiceCaption)voiceCaption.textContent='Converting your voice to text…';
+      if(voiceLive)voiceLive.hidden=false;
+      statusLine.innerHTML='<i class="bmr-chat-status bmr-chat-status--live"></i>Converting voice…';
+      setVoiceHint('Turning your recording into text…','voice');
+    }
+  }
+  function applyTranscript(text){
+    if(!text)return;
+    const prior=String(input.value||'').trim();
+    input.value=prior?(prior+' '+text):text;
+    input.dispatchEvent(new Event('input'));
+    flashHeardInput();
+    setVoiceHint('Your message is ready. Edit if needed, then press send.','voice');
+    hintResetTimer=setTimeout(()=>resetVoiceHint(),7000);
+    input.focus();
+  }
+  async function finalizeRecording(){
+    const chunks=audioChunks.slice();
+    const mime=mediaRecorder&&mediaRecorder.mimeType?mediaRecorder.mimeType:'audio/webm';
+    cleanupStream();
     markListening(false);
-    recognition=null;
-    if(reason==='user'){resetVoiceHint();return;}
-    if(lastMicError && lastMicError!=='aborted' && lastMicError!=='no-speech'){
-      setVoiceHint(voiceErrorMessage(lastMicError)+' ('+lastMicError+')','warn');
+    if(!chunks.length){
+      setVoiceHint('No audio captured. Tap the mic, speak, then tap again to stop.','warn');
       return;
     }
-    if(String(input.value||'').trim()){
-      setVoiceHint('Heard you. Press send when the text looks right.','voice');
-      hintResetTimer=setTimeout(()=>resetVoiceHint(),5000);
+    const blob=new Blob(chunks,{type:mime});
+    if(blob.size<800){
+      setVoiceHint('Recording was too short. Hold the mic longer and speak clearly.','warn');
       return;
     }
-    if(reason==='ended')setVoiceHint('Mic closed before any words were captured. Tap it and speak right away.','warn');
+    setTranscribing(true);
+    try{
+      logMic('transcribe',mime+' '+blob.size);
+      const text=await uploadTranscribe(blob,mime);
+      logMic('transcribed',text.slice(0,80));
+      applyTranscript(text);
+    }catch(err){
+      logMic('transcribe-failed',err&&err.message);
+      setVoiceHint(err.message||'Voice failed. Please type your message.','warn');
+    }finally{
+      setTranscribing(false);
+      if(voiceLive)voiceLive.hidden=true;
+      statusLine.innerHTML=idleStatus;
+      setBusy(busy);
+    }
   }
-  function beginRecognition(lang){
-    const Speech=getSpeechRecognition();
-    if(!Speech)return;
-    stopRequested=false;
-  lastMicError='';
-    let finalText='';
-    let startedAt=0;
-    const session=recognition=new Speech();
-    session.lang=lang;
-    session.interimResults=true;
-    session.continuous=false;
-    session.maxAlternatives=1;
-    session.onstart=()=>{
-      startedAt=Date.now();
-      logMic('start',lang);
-      markListening(true);
-      setVoiceHint('Listening… speak now. Pause when you finish, or tap the mic to stop.','voice');
-    };
-    session.onresult=ev=>{
-      let interim='';
-      for(let i=ev.resultIndex;i<ev.results.length;i++){
-        const t=ev.results[i][0].transcript;
-        if(ev.results[i].isFinal)finalText+=t+' ';
-        else interim+=t;
-      }
-      const heard=(finalText+interim).trim();
-      if(heard){
-        logMic('result',heard.slice(0,80));
-        input.value=heard;
-        input.dispatchEvent(new Event('input'));
-      }
-    };
-    session.onerror=ev=>{
-      lastMicError=ev&&ev.error?ev.error:'unknown';
-      logMic('error',lastMicError);
-      if(lastMicError==='aborted'||lastMicError==='no-speech')return;
-      if(lastMicError==='network')micCooldownUntil=Date.now()+4000;
-      setVoiceHint(voiceErrorMessage(lastMicError)+' ('+lastMicError+')','warn');
-    };
-    session.onend=()=>{
-      const elapsed=startedAt?Date.now()-startedAt:0;
-      logMic('end',(lastMicError||'clean')+' '+elapsed+'ms');
-      if(recognition!==session)return;
-      recognition=null;
-      if(stopRequested){markListening(false);return;}
-      if(lastMicError==='network'&&lang==='en-IN'&&!langFallbackTried){
-        langFallbackTried=true;
-        lastMicError='';
-        logMic('lang-fallback','en-US');
-        setVoiceHint('Retrying voice with English (US)…','voice');
-        window.setTimeout(()=>{if(!stopRequested&&!listening)beginRecognition('en-US');},400);
+  function startRecording(){
+    if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+      setVoiceHint('Microphone recording is not supported in this browser. Type your message instead.','warn');
+      return;
+    }
+    mic.classList.add('bmr-chat-mic--pending');
+    setVoiceHint('Allow microphone access, then speak…','voice');
+    navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}}).then(stream=>{
+      mic.classList.remove('bmr-chat-mic--pending');
+      const mime=pickRecorderMime();
+      if(!mime||!window.MediaRecorder){
+        stream.getTracks().forEach(t=>t.stop());
+        setVoiceHint('Recording is not supported here. Type your message instead.','warn');
         return;
       }
-      const fatal=lastMicError==='not-allowed'||lastMicError==='network'||lastMicError==='audio-capture';
-      if(fatal){finishVoice('ended');return;}
-      const heard=String(input.value||'').trim();
-      if(heard){finishVoice('ended');return;}
-      if(elapsed>0&&elapsed<1200&&!fatal){
-        setVoiceHint('Did not catch speech. Tap the mic and speak clearly, or type your message.','warn');
-      }
-      finishVoice('ended');
-    };
-    try{
-      logMic('starting',lang);
-      setVoiceHint('Starting microphone…','voice');
-      session.start();
-    }catch(error){
-      logMic('start-failed',error&&error.message);
-      recognition=null;
-      setVoiceHint('Could not start voice input. Tap the mic again or type your message.','warn');
-      finishVoice('ended');
+      mediaStream=stream;
+      audioChunks=[];
+      mediaRecorder=new MediaRecorder(stream,{mimeType:mime});
+      mediaRecorder.ondataavailable=ev=>{if(ev.data&&ev.data.size)audioChunks.push(ev.data);};
+      mediaRecorder.onerror=()=>{
+        logMic('recorder-error');
+        abortVoiceCapture(false);
+        setVoiceHint('Recording failed. Try again or type your message.','warn');
+      };
+      mediaRecorder.onstop=()=>{finalizeRecording();};
+      mediaRecorder.start(200);
+      recordStartedAt=Date.now();
+      markListening(true);
+      startMeter(stream);
+      recordTimer=window.setInterval(()=>{
+        if(voiceTimer&&recordStartedAt)voiceTimer.textContent=formatRecordTime(Date.now()-recordStartedAt);
+        if(recordStartedAt&&Date.now()-recordStartedAt>MAX_RECORD_MS)stopRecording(false);
+      },250);
+      logMic('record-start',mime);
+      setVoiceHint('Recording… tap the red mic when you finish speaking.','voice');
+    }).catch(err=>{
+      mic.classList.remove('bmr-chat-mic--pending');
+      logMic('permission',err&&err.name);
+      const denied=err&&(err.name==='NotAllowedError'||err.name==='PermissionDeniedError');
+      setVoiceHint(denied?'Microphone is blocked. Allow the mic in browser settings (lock icon in the address bar).':'Could not open the microphone. Try again or type your message.','warn');
+    });
+  }
+  function stopRecording(fromUser){
+    logMic('record-stop',fromUser?'user':'auto');
+    if(!mediaRecorder||mediaRecorder.state==='inactive'){
+      abortVoiceCapture(fromUser);
+      return;
     }
+    if(voiceCaption)voiceCaption.textContent='Finishing capture…';
+    setVoiceHint('Finishing recording…','voice');
+    try{mediaRecorder.stop();}catch(_){abortVoiceCapture(fromUser);}
+  }
+  function abortVoiceCapture(fromUser){
+    cleanupStream();
+    markListening(false);
+    setTranscribing(false);
+    if(voiceLive)voiceLive.hidden=true;
+    if(fromUser)resetVoiceHint();
   }
   function startListening(event){
     if(event){event.preventDefault();event.stopPropagation();}
-    if(busy)return;
-    if(Date.now()<micCooldownUntil){
-      setVoiceHint('Voice service is reconnecting. Wait a few seconds or type your message.','warn');
-      return;
-    }
-    const Speech=getSpeechRecognition();
+    if(busy||transcribing)return;
     if(!window.isSecureContext){
-      logMic('blocked','insecure');
-      setVoiceHint(voiceErrorMessage('service-not-allowed'),'warn');
+      setVoiceHint('Voice needs HTTPS. Open the live site link in Chrome or Edge.','warn');
       return;
     }
-    if(!Speech){
-      logMic('blocked','no-api');
-      setVoiceHint('Voice typing needs Chrome or Edge on desktop. You can still type here.','warn');
-      return;
-    }
-    if(listening){stopRequested=true;logMic('stop','user');stopListening(true);return;}
-    langFallbackTried=false;
-    beginRecognition('en-IN');
-  }
-  function stopListening(fromUser){
-    stopRequested=true;
-    const session=recognition;
-    recognition=null;
-    if(session){try{session.stop();}catch(_){}}
-    finishVoice(fromUser?'user':'ended');
+    if(listening){stopRecording(true);return;}
+    startRecording();
   }
   launcher.addEventListener('click',()=>setOpen(true));close.addEventListener('click',()=>setOpen(false));
   form.addEventListener('submit',e=>{e.preventDefault();sendMessage(input.value);});

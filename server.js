@@ -142,6 +142,17 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  if (pathname === '/api/chat/transcribe') {
+    try {
+      const { handleTranscribe } = require('./api/chat/transcribe');
+      await handleTranscribe(req, res);
+    } catch (err) {
+      console.error('[Chatbot] transcribe route error:', err.name || 'Error');
+      if (!res.writableEnded) res.status(500).json({ error: 'Voice service unavailable. Please type your message.' });
+    }
+    return;
+  }
+
   // 1. Core Checkup Endpoints
   if (pathname === '/api/checkup/analyze') {
     try {
