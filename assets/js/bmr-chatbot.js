@@ -19,7 +19,7 @@ function mount() {
         <div class="bmr-chat-voice-bars" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <span class="bmr-chat-voice-timer">0:00</span>
         <span class="bmr-chat-voice-caption">Recording — speak now</span>
-      </div><div class="bmr-chat-input-wrap">
+      </div><div class="bmr-chat-suggest" role="group" aria-label="Suggested questions" hidden></div><div class="bmr-chat-input-wrap">
         <button class="bmr-chat-icon-btn bmr-chat-mic" type="button" aria-label="Speak your message" title="Speak your message">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3m-4 0h8"/></svg>
         </button>
@@ -54,6 +54,8 @@ function mount() {
   const hint=root.querySelector('.bmr-chat-hint');
   const defaultHint=hint.textContent;
   const quick=root.querySelector('.bmr-chat-quick');
+  const suggest=root.querySelector('.bmr-chat-suggest');
+  let activeSuggests=[];
   const statusLine=root.querySelector('.bmr-chat-heading span');
   const idleStatus=statusLine.innerHTML;
   let hintResetTimer=0;
@@ -86,8 +88,8 @@ function mount() {
     launcher.setAttribute('aria-expanded',String(open));
     launcher.hidden=open;
     document.documentElement.classList.toggle('bmr-chat-scroll-lock',open);
-    if(open){warmApi();scrollBottom();input.focus();}
-    else{abortVoiceCapture(true);launcher.hidden=false;launcher.focus();}
+    if(open){warmApi();scrollBottom();input.focus();refreshFollowUps(getLastAssistantText());}
+    else{abortVoiceCapture(true);hideFollowUps();launcher.hidden=false;launcher.focus();}
   }
   function scrollBottom(){messages.scrollTop=messages.scrollHeight;}
   function sleep(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
@@ -170,10 +172,100 @@ function mount() {
     if(role==='assistant'&&Array.isArray(sources)&&sources.length){const box=document.createElement('div');box.className='bmr-chat-sources';box.textContent='Based on: ';const seen=new Set();sources.forEach(s=>{const label=String(s.service||s.title||'Book My Records').replace(/[-_]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());if(seen.has(label))return;seen.add(label);const tag=document.createElement('span');tag.textContent=label;box.appendChild(tag);});node.appendChild(box);}
     messages.appendChild(node);scrollBottom();return node;
   }
+  const FOLLOW_UP_RULES=[
+    {re:/health|checkup|diagnostic|scorecard/i,items:[
+      {label:'Start free checkup',prompt:'How do I start the free Business Health Checkup?'},
+      {label:'What it includes',prompt:'What does the Business Health Checkup cover?'}
+    ]},
+    {re:/regist|incorporat|LLP|private limited|GST/i,items:[
+      {label:'Registration options',prompt:'Which business registration structure should I choose?'},
+      {label:'Timeline & documents',prompt:'What documents do I need for business registration?'}
+    ]},
+    {re:/CFO|fractional|advisor|consult/i,items:[
+      {label:'CFO services',prompt:'What does fractional CFO support include?'},
+      {label:'Book a call',prompt:'I want to book a consultation with your team.'}
+    ]},
+    {re:/tax|GST|compliance|filing/i,items:[
+      {label:'Tax support',prompt:'What taxation and compliance services do you offer?'},
+      {label:'Stay compliant',prompt:'How do you help businesses stay GST compliant?'}
+    ]},
+    {re:/account|bookkeep|payroll/i,items:[
+      {label:'Accounting scope',prompt:'What is included in accounting outsourcing?'},
+      {label:'Pricing approach',prompt:'How does pricing work for bookkeeping support?'}
+    ]},
+    {re:/loan|finance|working capital/i,items:[
+      {label:'Loan assistance',prompt:'How do you help with business loans and financing?'},
+      {label:'Eligibility',prompt:'What do lenders usually ask for during financing?'}
+    ]},
+    {re:/IPR|trademark|patent|copyright/i,items:[
+      {label:'IPR registration',prompt:'What IPR registration services do you provide?'},
+      {label:'Why register IP',prompt:'Why should a small business register its brand?'}
+    ]}
+  ];
+  const DEFAULT_FOLLOW_UPS=[
+    {label:'Explore services',prompt:'What services does Book My Records provide?'},
+    {label:'Book consultation',prompt:'How can I book a consultation with your team?'}
+  ];
+  function getLastAssistantText(){
+    const nodes=messages.querySelectorAll('.bmr-chat-message.assistant:not(.bmr-chat-message--typing)');
+    if(!nodes.length)return '';
+    return (nodes[nodes.length-1].textContent||'').trim();
+  }
+  function pickFollowUps(text){
+    const body=String(text||'');
+    for(let i=0;i<FOLLOW_UP_RULES.length;i++){
+      if(FOLLOW_UP_RULES[i].re.test(body))return FOLLOW_UP_RULES[i].items.slice(0,2);
+    }
+    if(/\?/.test(body)){
+      return [
+        {label:'Yes — next step',prompt:'Yes, please guide me on the next step.'},
+        {label:'Contact options',prompt:'What are your phone and email for support?'}
+      ];
+    }
+    return DEFAULT_FOLLOW_UPS.slice(0,2);
+  }
+  function canShowFollowUps(){
+    return !(busy||listening||transcribing||String(input.value||'').trim());
+  }
+  function hideFollowUps(){
+    if(!suggest)return;
+    suggest.hidden=true;
+    suggest.replaceChildren();
+  }
+  function paintFollowUps(items){
+    if(!suggest)return;
+    suggest.replaceChildren();
+    if(!items||!items.length||!canShowFollowUps()){
+      suggest.hidden=true;
+      return;
+    }
+    activeSuggests=items;
+    const label=document.createElement('span');
+    label.className='bmr-chat-suggest-label';
+    label.textContent='Try asking:';
+    suggest.appendChild(label);
+    items.forEach(item=>{
+      const btn=document.createElement('button');
+      btn.type='button';
+      btn.className='bmr-chat-suggest-btn';
+      btn.textContent=item.label;
+      btn.addEventListener('click',()=>sendMessage(item.prompt));
+      suggest.appendChild(btn);
+    });
+    suggest.hidden=false;
+  }
+  function refreshFollowUps(text){
+    paintFollowUps(pickFollowUps(text||getLastAssistantText()));
+  }
+  function syncFollowUpVisibility(){
+    if(canShowFollowUps())paintFollowUps(activeSuggests.length?activeSuggests:pickFollowUps(getLastAssistantText()));
+    else hideFollowUps();
+  }
   function setBusy(value){busy=value;send.disabled=value;input.disabled=value||transcribing;mic.disabled=value||transcribing;root.setAttribute('aria-busy',String(value||transcribing));statusLine.innerHTML=value?'<i class="bmr-chat-status bmr-chat-status--live"></i>Typing…':transcribing?'<i class="bmr-chat-status bmr-chat-status--live"></i>Converting voice…':idleStatus;}
   async function sendMessage(text){
     const message=String(text||'').trim();if(!message||busy)return;
     if(quick) quick.hidden=true;
+    hideFollowUps();
     addMessage('user',message);input.value='';input.style.height='auto';setBusy(true);
     const typing=document.createElement('div');typing.className='bmr-chat-message assistant bmr-chat-message--typing';typing.innerHTML='<div class="bmr-chat-typing" aria-label="Advisor is typing"><i></i><i></i><i></i><span>Typing</span></div>';messages.appendChild(typing);scrollBottom();
     try{
@@ -181,9 +273,11 @@ function mount() {
       sessionId=data.sessionId||sessionId;
       if(memoryConsent){try{if(sessionId)sessionStorage.setItem(storageKey,sessionId);}catch(_){}}
       else{try{sessionStorage.removeItem(storageKey);}catch(_){}}
-      typing.remove();addMessage('assistant',data.reply||'I could not prepare an answer. Please contact our team.',data.sources);
-    }catch(error){typing.remove();const err=document.createElement('div');err.className='bmr-chat-error';err.textContent=error.message||'Connection problem. Please try again.';messages.appendChild(err);scrollBottom();}
-    finally{setBusy(false);input.focus();}
+      const reply=data.reply||'I could not prepare an answer. Please contact our team.';
+      typing.remove();addMessage('assistant',reply,data.sources);
+      refreshFollowUps(reply);
+    }catch(error){typing.remove();const err=document.createElement('div');err.className='bmr-chat-error';err.textContent=error.message||'Connection problem. Please try again.';messages.appendChild(err);scrollBottom();refreshFollowUps('');}
+    finally{setBusy(false);input.focus();syncFollowUpVisibility();}
   }
   function setVoiceHint(text,mode){
     clearTimeout(hintResetTimer);
@@ -432,7 +526,7 @@ function mount() {
   launcher.addEventListener('click',()=>setOpen(true));close.addEventListener('click',()=>setOpen(false));
   form.addEventListener('submit',e=>{e.preventDefault();sendMessage(input.value);});
   input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();form.requestSubmit();}});
-  input.addEventListener('input',()=>{input.style.height='auto';input.style.height=Math.min(input.scrollHeight,100)+'px';});
+  input.addEventListener('input',()=>{input.style.height='auto';input.style.height=Math.min(input.scrollHeight,100)+'px';syncFollowUpVisibility();});
   mic.addEventListener('click',e=>{startListening(e);});
   root.querySelectorAll('[data-prompt]').forEach(button=>button.addEventListener('click',()=>sendMessage(button.dataset.prompt)));
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&panel.dataset.open==='true')setOpen(false);});
