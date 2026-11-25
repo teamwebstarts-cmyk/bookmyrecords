@@ -8224,3 +8224,13 @@ body.page-checkup #btn-analyze-submit[aria-disabled="true"] {
 .bmr-report .bmr-report-lockcard--clone .bmr-report-lockcard__body {
   font-size: 12.5px;
 }
+
+#project-walkthrough .bmr-walkthrough-cta {
+  margin-top: 22px;
+  align-self: flex-start;
+}
+@media (max-width: 991px) {
+  #project-walkthrough .bmr-walkthrough-cta {
+    margin-top: 18px;
+  }
+}
