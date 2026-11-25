@@ -30,7 +30,7 @@ ${header}
                     <div class="banner-content">
                         <h1>How your business moves, step by step</h1>
                         <ul class="breadcrumb-list">
-                            <li><a href="index.html">Home</a></li>
+                            <li><a href="/">Home</a></li>
                             <li>How we work</li>
                         </ul>
                     </div>
@@ -64,7 +64,7 @@ ${header}
                 <li>You get a score out of 100, a first view of strengths and gaps, and the areas worth looking at first.</li>
                 <li>Nothing is promised as a legal outcome or a guaranteed growth number.</li>
               </ul>
-              <div class="bmr-step__links"><a class="bmr-chip" href="checkup.html">Start the free checkup</a><a class="bmr-chip" href="business-health-checkup.html">What the checkup covers</a></div>
+              <div class="bmr-step__links"><a class="bmr-chip" href="/checkup">Start the free checkup</a><a class="bmr-chip" href="/business-health-checkup">What the checkup covers</a></div>
             </div>
           </article>
 
@@ -79,7 +79,7 @@ ${header}
                 <li>The advisor walks the report with you, line by line, and explains the score in plain language.</li>
                 <li>Together you mark the first cash and compliance fixes, and whether a deeper diagnostic is needed.</li>
               </ul>
-              <div class="bmr-step__links"><a class="bmr-chip" href="contact.html">Book the one-on-one</a></div>
+              <div class="bmr-step__links"><a class="bmr-chip" href="/contact">Book the one-on-one</a></div>
             </div>
           </article>
 
@@ -93,7 +93,7 @@ ${header}
                 <li>You receive a gap view and a practical order of work: what to fix now, in 30 days, and in 90 days.</li>
                 <li>The point is a clear cause, not another generic report.</li>
               </ul>
-              <div class="bmr-step__links"><a class="bmr-chip" href="business-health-diagnostic.html">Business Health Diagnostic</a></div>
+              <div class="bmr-step__links"><a class="bmr-chip" href="/business-health-diagnostic">Business Health Diagnostic</a></div>
             </div>
           </article>
 
@@ -117,13 +117,13 @@ ${header}
                 </article>
               </div>
               <div class="bmr-step__links">
-                <a class="bmr-chip" href="cfo-services.html">CFO services</a>
-                <a class="bmr-chip" href="hands-on-consulting-growth-support.html">Hands-on consulting</a>
-                <a class="bmr-chip" href="accounting-outsourcing.html">Accounting</a>
-                <a class="bmr-chip" href="taxation.html">Taxation</a>
-                <a class="bmr-chip" href="business-registration.html">Registration</a>
-                <a class="bmr-chip" href="ipr-registration.html">IPR</a>
-                <a class="bmr-chip" href="loan-financing.html">Loan paperwork</a>
+                <a class="bmr-chip" href="/cfo-services">CFO services</a>
+                <a class="bmr-chip" href="/hands-on-consulting-growth-support">Hands-on consulting</a>
+                <a class="bmr-chip" href="/accounting-outsourcing">Accounting</a>
+                <a class="bmr-chip" href="/taxation">Taxation</a>
+                <a class="bmr-chip" href="/business-registration">Registration</a>
+                <a class="bmr-chip" href="/ipr-registration">IPR</a>
+                <a class="bmr-chip" href="/loan-financing">Loan paperwork</a>
               </div>
             </div>
           </article>
@@ -148,7 +148,7 @@ ${header}
             <h2>Start at step one, or talk to us first.</h2>
             <p>The checkup is free. The one-on-one is how we decide what should happen next.</p>
           </div>
-          <a class="primary-btn1 btn-hover" href="checkup.html">
+          <a class="primary-btn1 btn-hover" href="/checkup">
             Start free checkup
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
               <path fill-rule="evenodd" clip-rule="evenodd" d="M10.1865 1.06237L0 11.2484L0.751627 12L10.9376 1.81347V8.85645H12V0H3.14355V1.06237H10.1865Z"></path>

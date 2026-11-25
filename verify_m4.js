@@ -95,9 +95,9 @@ async function runAllTests() {
     assert.ok(indexContent.includes('Governance'), 'Must have Governance pillar badge');
   });
 
-  runTest('Teaser contains prominent CTA linking directly to checkup.html with "Get Free Health Assessment"', () => {
-    const ctaRegex = /<a[^>]+href=["']checkup\.html["'][^>]*>[\s\S]*?Get Free Health Assessment[\s\S]*?<\/a>/i;
-    assert.ok(ctaRegex.test(indexContent), 'Must have CTA link to checkup.html with "Get Free Health Assessment" text');
+  runTest('Teaser contains prominent CTA linking directly to /checkup with "Get Free Health Assessment"', () => {
+    const ctaRegex = /<a[^>]+href=["']\/checkup["'][^>]*>[\s\S]*?Get Free Health Assessment[\s\S]*?<\/a>/i;
+    assert.ok(ctaRegex.test(indexContent), 'Must have CTA link to /checkup with "Get Free Health Assessment" text');
   });
 
   // ===========================================================================

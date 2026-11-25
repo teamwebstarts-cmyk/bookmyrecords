@@ -281,8 +281,26 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // 4. Static File Serving
-  let relativePath = pathname === '/' ? 'index.html' : pathname.replace(/^\//, '');
+  // 4. Static file serving (clean URLs — no .html in the address bar)
+  const requestQuery = parsedUrl.search || '';
+  if (pathname.endsWith('.html') && !pathname.startsWith('/api/')) {
+    const without = pathname.slice(0, -5) || '/index';
+    const location = (without === '/index' ? '/' : without) + requestQuery;
+    res.writeHead(301, { Location: location, 'Cache-Control': 'no-store' });
+    res.end();
+    return;
+  }
+
+  let relativePath;
+  if (pathname === '/' || pathname === '') {
+    relativePath = 'index.html';
+  } else if (path.extname(pathname)) {
+    relativePath = pathname.replace(/^\//, '');
+  } else {
+    const segment = pathname.replace(/^\//, '');
+    relativePath = segment.startsWith('assets/') ? segment : `${segment}.html`;
+  }
+
   let safePath = path.normalize(path.join(PUBLIC_DIR, relativePath));
   if (safePath !== PUBLIC_DIR && !safePath.startsWith(PUBLIC_DIR + path.sep)) {
     res.statusCode = 403;
@@ -325,5 +343,5 @@ const HOST = '0.0.0.0'; // Essential for Render and Docker cloud deployments!
 server.listen(PORT, HOST, () => {
   console.log(`[BookMyRecords Server] Listening on http://${HOST}:${PORT}`);
   console.log(`  Storage Driver: ${storage.driver()}`);
-  console.log(`  Admin Dashboard: http://localhost:${PORT}/admin.html`);
+  console.log(`  Admin Dashboard: http://localhost:${PORT}/admin`);
 });

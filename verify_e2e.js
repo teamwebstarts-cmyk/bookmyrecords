@@ -144,8 +144,21 @@ async function runAllTests() {
     }
   });
 
+  function resolveInternalHref(href) {
+    const base = href.split('?')[0].split('#')[0];
+    if (!base || base === '/') return path.join(rootDir, 'index.html');
+    if (base.startsWith('/')) {
+      const slug = base.replace(/^\//, '');
+      if (slug.startsWith('assets/')) return path.join(rootDir, slug);
+      if (!path.extname(slug)) return path.join(rootDir, `${slug}.html`);
+      return path.join(rootDir, slug);
+    }
+    if (!path.extname(base)) return path.join(rootDir, `${base}.html`);
+    return path.resolve(rootDir, base);
+  }
+
   runTest('T1.1.2: All internal hyperlinks (href="...") across all site HTML files resolve to existing files on disk (0 broken links)', () => {
-    const hrefRegex = /href=["']([^"'#\s]+)(?:#[^"']*)?["']/g;
+    const hrefRegex = /href=["']([^"']+)["']/g;
     let checkedCount = 0;
     for (const file of htmlFiles) {
       const content = fs.readFileSync(path.join(rootDir, file), 'utf8');
@@ -164,8 +177,7 @@ async function runAllTests() {
         ) {
           continue;
         }
-        const filePathOnly = rawTarget.split('?')[0];
-        const resolved = path.resolve(rootDir, filePathOnly);
+        const resolved = resolveInternalHref(rawTarget);
         assert.ok(fs.existsSync(resolved), `Broken link in ${file}: target "${rawTarget}" not found at ${resolved}`);
         checkedCount++;
       }
@@ -193,14 +205,14 @@ async function runAllTests() {
     assert.ok(checkedScripts > 50, `Expected over 50 local script references checked, verified: ${checkedScripts}`);
   });
 
-  runTest('T1.1.4: Header navigation consistency: brand logo routes to index.html and core menu links exist', () => {
+  runTest('T1.1.4: Header navigation consistency: brand logo routes home and core menu links exist', () => {
     const mainPages = ['index.html', 'about.html', 'cfo-services.html', 'contact.html', 'faq.html', 'pricing.html'];
     for (const page of mainPages) {
       const content = fs.readFileSync(path.join(rootDir, page), 'utf8');
-      assert.ok(content.includes('href="index.html"'), `${page} must contain home link to index.html`);
-      assert.ok(content.includes('href="about.html"'), `${page} must contain link to about.html`);
-      assert.ok(content.includes('href="contact.html"'), `${page} must contain link to contact.html`);
-      assert.ok(content.includes('href="cfo-services.html"'), `${page} must contain link to cfo-services.html in services menu`);
+      assert.ok(content.includes('href="/"'), `${page} must contain home link to /`);
+      assert.ok(content.includes('href="/about"'), `${page} must contain link to /about`);
+      assert.ok(content.includes('href="/contact"'), `${page} must contain link to /contact`);
+      assert.ok(content.includes('href="/cfo-services"'), `${page} must contain link to /cfo-services in services menu`);
     }
   });
 
@@ -208,7 +220,7 @@ async function runAllTests() {
     const pagesToCheck = ['index.html', 'cfo-services.html', 'accounting-outsourcing.html', 'contact.html', 'about.html'];
     for (const page of pagesToCheck) {
       const content = fs.readFileSync(path.join(rootDir, page), 'utf8');
-      assert.ok(content.includes('href="terms-conditions.html"'), `${page} footer must link to terms-conditions.html`);
+      assert.ok(content.includes('href="/terms-conditions"'), `${page} footer must link to /terms-conditions`);
       assert.ok(content.includes('info@bookmyrecords.com'), `${page} footer must contain info@bookmyrecords.com`);
       assert.ok(content.includes('96696'), `${page} footer must contain telephone number`);
     }
@@ -251,7 +263,7 @@ async function runAllTests() {
     assert.ok(cfoContent.includes('Fractional CFO') || cfoContent.includes('Strategic Financial Leadership'), 'Must describe service nature');
     assert.ok(cfoContent.includes('Who Needs') || cfoContent.includes('Growing businesses') || cfoContent.includes('MSME'), 'Must explain target audience');
     assert.ok(cfoContent.includes('Deliverables') || cfoContent.includes('What You Receive') || cfoContent.includes('What We Deliver'), 'Must describe deliverables');
-    assert.ok(cfoContent.includes('href="checkup.html"') || cfoContent.includes('href="contact.html"'), 'Must have relevant next action CTA');
+    assert.ok(cfoContent.includes('href="/checkup"') || cfoContent.includes('href="/contact"'), 'Must have relevant next action CTA');
   });
 
   runTest('T1.2.4: Dedicated service pages have consistent breadcrumbs, service navigation, and consultation CTAs', () => {
@@ -831,7 +843,7 @@ async function runAllTests() {
     const checkupContent = fs.readFileSync(path.join(rootDir, 'checkup.html'), 'utf8');
 
     // Teaser CTA points to checkup.html
-    assert.ok(indexContent.includes('href="checkup.html"'), 'Teaser CTA must route to checkup.html');
+    assert.ok(indexContent.includes('href="/checkup"'), 'Teaser CTA must route to /checkup');
 
     // checkup.html Step 1 contains active pane on load
     assert.ok(checkupContent.includes('class="wizard-step-pane active" data-step="1"'), 'Step 1 must be active on initial load');
@@ -839,8 +851,8 @@ async function runAllTests() {
 
   runTest('T3.3: Service Page Card Click -> Contact Form Prefill & Checkup Linking', () => {
     const cfoContent = fs.readFileSync(path.join(rootDir, 'cfo-services.html'), 'utf8');
-    assert.ok(cfoContent.includes('href="checkup.html"'), 'CFO service page must link to checkup.html');
-    assert.ok(cfoContent.includes('href="contact.html?service=diagnostic"') || cfoContent.includes('href="contact.html"'), 'Service page must route to contact form with context');
+    assert.ok(cfoContent.includes('href="/checkup"'), 'CFO service page must link to /checkup');
+    assert.ok(cfoContent.includes('href="/contact?service=diagnostic"') || cfoContent.includes('href="/contact"'), 'Service page must route to contact form with context');
   });
 
   runTest('T3.4: Intake Submission -> Step 3 Processing Animation -> Preliminary Report state machine', () => {

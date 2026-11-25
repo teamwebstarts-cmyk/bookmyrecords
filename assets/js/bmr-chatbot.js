@@ -145,11 +145,14 @@ function mount() {
     }
     return data;
   }
-  function safePath(path){return /^\/(?:[a-z0-9_-]+(?:\.html)?|#lead)(?:[?#].*)?$/i.test(path)?path:null;}
+  function safePath(href){
+    const clean=String(href||'').replace(/\.html(?=$|[?#])/i,'');
+    return /^\/(?:[a-z0-9_-]+|#lead)(?:[?#].*)?$/i.test(clean)?clean:null;
+  }
   function formatText(text, role){
     const cleaned=String(text).replace(/\r\n/g,'\n').replace(/\*\*|__|~~|`+/g,'').replace(/^\s{0,3}#{1,6}\s+/gm,'').replace(/\*/g,'');
     const escaped=cleaned.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-    const linked=escaped.replace(/\/(?:[a-z0-9_-]+\.html|#lead)/gi,m=>{const href=safePath(m);return href?'<a href="'+href+'">'+m+'</a>':m;});
+    const linked=escaped.replace(/\/(?:[a-z0-9_-]+)(?:\.html)?(?=[\s?#,.)]|$)|\/#lead/gi,m=>{const href=safePath(m);return href?'<a href="'+href+'">'+m+'</a>':m;});
     const blocks=linked.split(/\n{2,}/).map(block=>block.trim()).filter(Boolean);
     return blocks.map(block=>{
       const lines=block.split('\n').map(line=>line.trim()).filter(Boolean);
@@ -261,7 +264,7 @@ function mount() {
     if(canShowFollowUps())paintFollowUps(activeSuggests.length?activeSuggests:pickFollowUps(getLastAssistantText()));
     else hideFollowUps();
   }
-  function setBusy(value){busy=value;send.disabled=value;input.disabled=value||transcribing;mic.disabled=value||transcribing;root.setAttribute('aria-busy',String(value||transcribing));statusLine.innerHTML=value?'<i class="bmr-chat-status bmr-chat-status--live"></i>Typing…':transcribing?'<i class="bmr-chat-status bmr-chat-status--live"></i>Converting voice…':idleStatus;}
+  function setBusy(value){busy=value;send.disabled=value;input.disabled=value||transcribing;mic.disabled=value||transcribing;root.setAttribute('aria-busy',String(value||transcribing));statusLine.innerHTML=value?'<i class="bmr-chat-status bmr-chat-status--live"></i>Typing…':transcribing?'<i class="bmr-chat-status bmr-chat-status--live"></i>Converting voice…':idleStatus;if(!value&&!transcribing&&!listening)syncFollowUpVisibility();}
   async function sendMessage(text){
     const message=String(text||'').trim();if(!message||busy)return;
     if(quick) quick.hidden=true;
