@@ -29,7 +29,7 @@ const HINDI_MAP = {
   लेखा:'accounting', अकाउंटिंग:'accounting', बहीखाता:'bookkeeping',
   लोन:'loan', ऋण:'loan', कर्ज:'loan', ट्रेडमार्क:'trademark', पेटेंट:'patent',
   सलाह:'consultation', फीस:'pricing', कीमत:'pricing', प्राइस:'pricing',
-  checkup:'health checkup', जांच:'health checkup', स्वास्थ्य:'health', इनकम:'income', कर:'tax', दस्तावेज:'documents'
+  checkup:'health checkup', जांच:'health checkup', स्वास्थ्य:'health', इनकम:'income', दस्तावेज:'documents'
 };
 
 function normalize(text) {
@@ -60,7 +60,7 @@ function extractText(file, raw) {
   if (!file.endsWith('.html')) return raw;
   return decodeEntities(raw
     .replace(/<!--[\s\S]*?-->/g, ' ')
-    .replace(/<(script|style|svg|noscript|iframe|nav|footer|header)[^>]*>[\s\S]*?<\/\1>/gi, ' ')
+    .replace(/<(head|script|style|svg|noscript|iframe|nav|footer|header)[^>]*>[\s\S]*?<\/\1>/gi, ' ')
     .replace(/<[^>]+>/g, ' '));
 }
 
