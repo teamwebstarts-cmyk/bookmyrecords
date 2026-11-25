@@ -5,17 +5,11 @@ const path = require('path');
 
 const SOURCES = [
   ['docs/bookmyrecords/SERVICE_MAP.md', 'service-map'],
-  ['docs/bookmyrecords/USER_FLOW.md', 'user-flow'],
-  ['docs/bookmyrecords/CONSULTATION_BOOKING.md', 'consultation'],
-  ['docs/bookmyrecords/AI_DATA_PRIVACY.md', 'privacy'],
-  ['docs/bookmyrecords/TECHNICAL_FLOW.md', 'technical'],
-  ['docs/bookmyrecords/PROJECT_CONTEXT.md', 'project'],
-  ['docs/bookmyrecords/CONTENT_STRATEGY.md', 'content'],
-  ['README.md', 'general'],
   ['pricing.html', 'pricing'],
   ['faq.html', 'faq'],
   ['about.html', 'about'],
   ['contact.html', 'contact'],
+  ['terms-conditions.html', 'terms'],
   ['accounting-outsourcing.html', 'accounting'],
   ['business-registration.html', 'registration'],
   ['business-health-checkup.html', 'health-checkup'],
@@ -28,14 +22,14 @@ const SOURCES = [
   ['taxation.html', 'taxation']
 ];
 
-const STOP = new Set(('a an and are as at be by for from has have how i in is it of on or our the this to we what when where which with you your').split(' '));
+const STOP = new Set(('a an and are as at be by can could do does for from get has have how i in is it of on or our the this to we what when where which with you your mujhe mera meri mere kya hai hain ka ki ke ko se mein me aur ya chahiye karna karo krna ho hoga hogi batao btao please want need tell').split(' '));
 const HINDI_MAP = {
   gst:'gst', जीएसटी:'gst', tax:'taxation', टैक्स:'taxation', आयकर:'income tax',
   कंपनी:'company', रजिस्ट्रेशन:'registration', पंजीकरण:'registration',
   लेखा:'accounting', अकाउंटिंग:'accounting', बहीखाता:'bookkeeping',
   लोन:'loan', ऋण:'loan', कर्ज:'loan', ट्रेडमार्क:'trademark', पेटेंट:'patent',
   सलाह:'consultation', फीस:'pricing', कीमत:'pricing', प्राइस:'pricing',
-  checkup:'health checkup', जांच:'health checkup', स्वास्थ्य:'health'
+  checkup:'health checkup', जांच:'health checkup', स्वास्थ्य:'health', इनकम:'income', कर:'tax', दस्तावेज:'documents'
 };
 
 function normalize(text) {
